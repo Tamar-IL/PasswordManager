@@ -6,10 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
+using IBL;
+
 
 namespace BL
 {
-    class BBSRandomGenerator
+    public class BBSRandomGenerator : IBBSRandomGenerator
     {
         private BigInteger seed;
         private BigInteger modulus;
@@ -48,7 +50,7 @@ namespace BL
             return (int)(seed % max);
            
         }
-        private static bool IsPrime(BigInteger number)
+        public  bool IsPrime(BigInteger number)
         {
             if (number < 2) return false;
             //run loop until i*i <= number ,

@@ -4,12 +4,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
+using IBL;
 
 
-namespace BL
+ namespace BL
 {
     //לבדוק איך עובד לוקים והמפתחות ולסדר את ה מחולל מפתחות פסאודו אקראיים 
-    public class KeyGeneration : IKeyGeneration
+    public class KeyGeneration : IkeyGeneration
     {
         private BigInteger p;
         private BigInteger q;
@@ -27,7 +28,7 @@ namespace BL
             this.q = q;
             modulus = p * q;
         }
-        private async Task<List<int>> ConvertMessage(String message, int n)
+        public async Task<List<int>> ConvertMessage(String message, int n)
         {
             if (string.IsNullOrEmpty(message))
                 throw new ArgumentException("Message cannot be null or empty", nameof(message));
@@ -43,7 +44,7 @@ namespace BL
 
         //חלוקת ההודעה ל k בלוקים
 
-        private async Task<List<List<int>>> parseMessage(List<int> cma, int k)
+        public async Task<List<List<int>>> parseMessage(List<int> cma, int k)
         {
             List<List<int>> blockset = new List<List<int>>();
             int lengthCma = cma.Count();
@@ -74,7 +75,7 @@ namespace BL
         }
         //בחירה רנדומלית של תו מבלוק
 
-        private async Task<int> getCharFromBlock(List<int> Blocki)
+        public async Task<int> getCharFromBlock(List<int> Blocki)
         {
             //הגרלת מיקום בתוך בלוק מסוים		
             Random randIndex = new Random();
@@ -83,14 +84,14 @@ namespace BL
             return i;
         }
 
-        private void addToVP(int c)
+        public void addToVP(int c)
         {
             VP.Add(c);
         }
 
         //מחזיר את הערך במיקום P במפתח KEK כאשר P מייצג את האסקי
         //של התו הרלונטי.נניח האסקי 65 אז ניגש למיקום 65 במערך הKEK
-        private async Task<int> getNbrFromKEK(List<int> KEK, int p)
+        public async Task<int> getNbrFromKEK(List<int> KEK, int p)
         {
             return KEK[p];
         }
@@ -112,7 +113,7 @@ namespace BL
 
 
         //יצירת וקטור SI בגודל 13 מ N שקיבלנו קודם ע"י BBS - מחולל מספרים פסאודו אקראיים
-        private async Task<int[]> generateSeed(BigInteger n)
+        public async Task<int[]> generateSeed(BigInteger n)
         {
             int[] si = new int[13];
 
@@ -123,7 +124,7 @@ namespace BL
             }
             return si;
         }
-        private async Task<int[][]> generateSubKey(int[] si)
+        public async Task<int[][]> generateSubKey(int[] si)
         {
             for (int i = 0; i < 13; i++)
             {
@@ -134,11 +135,11 @@ namespace BL
         }
 
         //מזין את SKi באמצעות מפתחות המשנה setSubKeys
-        private async Task putSubKey(int[][] subKey)
+        public async Task putSubKey(int[][] subKey)
         {
             subKeys.Add(subKey);
         }
-        private async Task<(List<int[][]>, List<int>)> generateKey(string message, int k, List<int> KEK)
+        public async Task<(List<int[][]>, List<int>)> generateKey(string message, int k, List<int> KEK)
         {
             List<int> cma = await ConvertMessage(message, message.Length);
             List<List<int>> blockSet = await parseMessage(cma, k);

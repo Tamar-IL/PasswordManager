@@ -10,3 +10,11 @@ C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\obj\Debug\net8.0\refint\DAL.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\obj\Debug\net8.0\DAL.pdb
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\obj\Debug\net8.0\ref\DAL.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\obj\Debug\net8.0\DAL.sourcelink.json
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\bin\Debug\net8.0\Entities.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\bin\Debug\net8.0\Entities.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\obj\Debug\net8.0\DAL.csproj.Up2Date
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\bin\Debug\net8.0\DTO.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\bin\Debug\net8.0\IDAL.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\bin\Debug\net8.0\IDAL.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DAL\bin\Debug\net8.0\DTO.pdb

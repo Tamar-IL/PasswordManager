@@ -1,0 +1,13 @@
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\bin\Debug\net8.0\DTO.deps.json
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\bin\Debug\net8.0\DTO.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\bin\Debug\net8.0\DTO.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.GeneratedMSBuildEditorConfig.editorconfig
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.AssemblyInfoInputs.cache
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.AssemblyInfo.cs
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.csproj.CoreCompileInputs.cache
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.sourcelink.json
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\refint\DTO.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\ref\DTO.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\DTO\obj\Debug\net8.0\DTO.csproj.AssemblyReference.cache

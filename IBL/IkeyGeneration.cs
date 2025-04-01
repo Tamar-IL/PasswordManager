@@ -1,15 +1,12 @@
-﻿using System;
+﻿using System.Numerics;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace IBL
 {
-    interface IkeyGeneration
+    public interface IkeyGeneration
     {
-        Task<List<int>> ConvertMessage(String message, int n);
+        Task<List<int>> ConvertMessage(string message, int n);
         Task<List<List<int>>> parseMessage(List<int> cma, int k);
         Task<int> getCharFromBlock(List<int> Blocki);
         void addToVP(int c);
@@ -18,6 +15,5 @@ namespace IBL
         Task<int[][]> generateSubKey(int[] si);
         Task putSubKey(int[][] subKey);
         Task<(List<int[][]>, List<int>)> generateKey(string message, int k, List<int> KEK);
-
     }
 }

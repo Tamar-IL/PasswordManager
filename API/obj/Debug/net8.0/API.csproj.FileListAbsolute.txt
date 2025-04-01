@@ -44,6 +44,16 @@ C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\obj\Debug\net8.0\API.pdb
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\obj\Debug\net8.0\API.genruntimeconfig.cache
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\obj\Debug\net8.0\ref\API.dll
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\obj\Debug\net8.0\API.MvcApplicationPartsAssemblyInfo.cs
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\BL.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\BL.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\obj\Debug\net8.0\API.sourcelink.json
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\DTO.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\Entities.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\IBL.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\IDAL.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\DTO.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\Entities.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\IBL.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\IDAL.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\obj\Debug\net8.0\API.MvcApplicationPartsAssemblyInfo.cs
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\AutoMapper.dll
