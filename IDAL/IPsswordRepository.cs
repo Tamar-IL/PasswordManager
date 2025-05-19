@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DTO;
+using Entities.models;
+using MongoDB.Bson;
 
 namespace IDAL
 {
     public interface IPasswordsRepository
     {
-        Task<IEnumerable<PasswordsDTO>> GetAllPasswordsAsync();
-        Task<PasswordsDTO> GetPasswordByIdAsync(int id);
-        Task<PasswordsDTO> AddPasswordAsync(PasswordsDTO passwordDto);
-        Task<PasswordsDTO> UpdatePasswordAsync(int id, PasswordsDTO passwordDto);
-        Task<bool> DeletePasswordAsync(int id);
+        Task<IEnumerable<Passwords>> GetAllPasswordsAsync();
+        Task<Passwords> GetPasswordByIdAsync(ObjectId id);
+        Task<Passwords> GetPasswordBySiteIdAsync(ObjectId id);
+        Task<Passwords> UpdatePasswordAsync(ObjectId id, Passwords password);
+        Task<bool> DeletePasswordAsync(string id);
+        Task<Passwords> AddPasswordAsync(Passwords password);
     }
-
 
 }

@@ -8,12 +8,8 @@ namespace DTO
     public class WebSitesDTO
     {
         [BsonId]
-        [BsonRepresentation(BsonType.String)]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-
-        [BsonElement("SiteId")]
-
-        public int SiteId { get; set; }
 
         [BsonElement("name")]
 

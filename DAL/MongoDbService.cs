@@ -9,7 +9,7 @@ namespace DAL
     {
         private readonly IMongoDatabase _database;
 
-        public MongoDbService(String connectionString, String dbname)
+        public MongoDbService(string connectionString, string dbname)
         {
             var settings = MongoClientSettings.FromConnectionString(connectionString);
             settings.Credential = MongoCredential.CreateCredential("admin","swenlly152", "0LYyHg8NpDLxK2AV");
@@ -22,7 +22,7 @@ namespace DAL
 
         }
         public void CreateCollection()
-        { //ירקתי כי כבר התחבר ונוספו הטבלאות..שלא יוסיף בכל הרצה נתונים שכבר קיימים
+        { //יירקתי כי כבר התחבר ונוספו הטבלאות..שלא יוסיף בכל הרצה נתונים שכבר קיימים
             ////usercollection
             //var userCollection = _database.GetCollection<BsonDocument>("Users");
             //var userDoc = new BsonDocument

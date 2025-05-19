@@ -227,6 +227,10 @@
               "target": "Package",
               "version": "[14.0.0, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.3, )"
+            },
             "Microsoft.Extensions.Configuration": {
               "target": "Package",
               "version": "[9.0.3, )"
@@ -501,6 +505,9 @@
             "projectReferences": {
               "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\DTO\\DTO.csproj": {
                 "projectPath": "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\DTO\\DTO.csproj"
+              },
+              "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\Entities\\Entities.csproj": {
+                "projectPath": "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\Entities\\Entities.csproj"
               }
             }
           }
