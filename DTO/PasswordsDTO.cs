@@ -27,6 +27,7 @@ namespace DTO
 
         [BsonElement("LastDateUse")]
         public string LastDateUse { get; set; }
+        [BsonElement("Password")]
         public string Password { get; set; }
     }
 }

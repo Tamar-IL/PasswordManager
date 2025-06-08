@@ -21,9 +21,8 @@ namespace API
     {
         public static void Main(string[] args)
         {
+         
             string connectionString = "mongodb+srv://swenlly152:swenl152@cluster0.6yf8j.mongodb.net/?appName=Cluster0";
-            //string connectionString ="mongodb://swenlly152:swenl152@cluster0-shard-00-00.6yf8j.mongodb.net:27017,cluster0-shard-00-01.6yf8j.mongodb.net:27017,cluster0-shard-00-02.6yf8j.mongodb.net:27017/?replicaSet=atlas-jjkn9k-shard-0&ssl=true&authSource=admin&retryWrites=true&w=majority&appName=Cluster0";
-            //"mongodb + srv://swenlly152:swenl152@cluster0.6yf8j.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
             string dbName = "passwordManagement";
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -33,34 +32,22 @@ namespace API
             BigInteger p = new BigInteger(123);
             BigInteger q = new BigInteger(456);
             BigInteger s = new BigInteger(789);
-            builder.Services.AddLogging();
-            string privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
 
-            builder.Services.AddScoped<IRSAencryption>(provider => new RSAencryption(privateKeyPAth));
+            builder.Services.AddLogging();
+            string _privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
+
+            builder.Services.AddScoped<IRSAencryption>(provider => new RSAencryption(_privateKeyPAth));
 
             builder.Services.AddScoped<IkeyGeneration>(provider => new KeyGeneration(p, q, s));
             builder.Services.AddScoped<IBBSRandomGenerator>(provider => new BBSRandomGenerator(p, q, s));
-            //builder.Services.AddScoped<IEncryptionProcess, EncryptionProcess>();
-            builder.Services.AddScoped<IEncryptionProcess>(provider =>
-            {
-                 Random random = new Random();
-                 int[] keyEncryptionKey = new int[256]; // מערך בגודל 64
-
-                 // יצירת ערכים אקראיים בין 0 ל-99
-                 for (int i = 0; i < keyEncryptionKey.Length; i++)
-                 {
-                     keyEncryptionKey[i] = random.Next(0, 100); // ערך אקראי בין 0 ל-99
-                 }
-                 int[,] initMatrix = GenerateRandomMatrix(13, 13);
-
-
-                 return new EncryptionProcess(keyEncryptionKey, initMatrix);
-             });
-
+            builder.Services.AddScoped<IEncryptionProcess, EncryptionProcess>();
+          
             builder.Services.AddScoped<IWebSitesBL, WebSitesBL>();
             builder.Services.AddScoped<IUsersBL, UsersBL>();
             builder.Services.AddScoped<IPasswordsBL, PasswordsBL>();
-
+            
+            builder.Services.AddSingleton<IRSAencryption>(provider =>
+            new RSAencryption(builder.Configuration["cryptographySetting:PrivateKaeyPath"]));
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
             builder.Services.AddScoped<IWebSitesRepository, WebSitesRepository>();
             builder.Services.AddScoped<IPasswordsRepository, PasswordsRepository>();
@@ -73,7 +60,14 @@ namespace API
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    policy => policy
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -81,6 +75,9 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+           
+
+            app.UseCors("AllowAll");
 
             // יצירת מפתח ראשי
             //int[] masterKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>();
@@ -105,18 +102,15 @@ namespace API
             //        Console.WriteLine($"{(char)(i + 'a')}: {frequencyArray[i]}");
             //}
 
-            //----rsa--
+            ////----rsa--
             //string privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
-            RSAencryption rsaEncryption = new RSAencryption(privateKeyPAth);
-            var (publicKey, PrivateKay) = rsaEncryption.GeneratePairKey();
-            byte[] encrypteData = rsaEncryption.Encrypt("63727hdhshdg!@AA", publicKey);
-            string decryptText = rsaEncryption.Decrypt(encrypteData,PrivateKay);
-            Console.WriteLine("orginalData:\n"+ "63727hdhshdg!@AA"+"\nencryptData:\n" + encrypteData + "\ndecryptData : \n" + decryptText);
-            for(int i =0; i< encrypteData.Length;i++)
-            {
-                Console.Write(encrypteData[i]+" , ");
-            }
-            //--rsa----
+            //RSAencryption rsaEncryption = new RSAencryption(_privateKeyPAth);
+            //var (publicKey, PrivateKay) = rsaEncryption.GeneratePairKey();
+            //byte[] encrypteData = rsaEncryption.Encrypt("32!676gsgh$^&@hdg", publicKey);
+            //string decryptText = rsaEncryption.Decrypt(encrypteData,PrivateKay);
+            //Console.WriteLine("orginalData:\n"+ "32!676gsgh$^&@hdg" + "\nencryptData:\n" + encrypteData + "\ndecryptData : \n" + decryptText);
+            // מבחן מהיר - הוסף בתחילת הפונקציה Login
+           ////--rsa----
 
             Random random = new Random();
 
@@ -127,53 +121,56 @@ namespace API
             {
                 keyEncryptionKey[i] = random.Next(0, 100); // ערך אקראי בין 0 ל-99
             }
-            int[,] initMatrix = GenerateRandomMatrix(13, 13);
-            GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
-            generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
+            //int[,] initMatrix = GenerateRandomMatrix(13, 13);
+            int[,] initMatrix = GenerateRandomMatrix(5, 5);
+            //GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
+            //generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
             EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix);
-            DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryption1,generateKeyDecryption1,keyEncryptionKey,initMatrix);
-            Console.WriteLine("-----keyencey----"+keyEncryption1.ToString());
-            Console.WriteLine("---keydecrypt----"+generateKeyDecryption1.ToString());
-            for (int i =0;i< keyEncryptionKey.Length;i++){ Console.Write(keyEncryptionKey[ i]); }
+            DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix);
+           
+            Console.WriteLine("\n-----------------------------\n");
+            for (int i =0;i< keyEncryptionKey.Length;i++){ Console.Write(" "+keyEncryptionKey[ i]+", "); }
+            Console.WriteLine("\n-----------------------------\n");
+            
             // הודעה לדוגמה
-            string message = "----------" +
-                "this is me" +
-                             "ssage for " +
-                             "testhhhhhh" +
-                             
-                             "hhhhhhhhhf" +
-                             "yyyyyyyyyy" +
-                             "yyyyyyyyyy" +
-                             "yyyyyyyyyy" +
-                             "yyyggggggg" +
-                             "gggggggggg" +
-                             "gggggggggg" +
-                             "ggdhhhhhhh" +
-                             "hhhhhhhhhh" +
-                             "hhhhhhhhhh" +
-                             "hhhhhhhhhh" +
-                             "hhhheererj" +
-                             "dlakjfljhd" +
-                             "----------";
+            string message = "" +
+                "trfg6h8j9k" +
+                             //"ssage for " +
+                             //"testhhhhhh" +
+
+                             //"hhhhhhhhhf" +
+                             "55555";
+                             //"yyyyyyyyyy" +
+                             //"yyyyyyyyyy" +
+                             //"yyyggggggg" +
+                             //"gggggggggg" +
+                             //"gggggggggg" +
+                             //"ggdhhhhhhh" +
+                             //"hhhhhhhhhh" +
+                             //"hhhhhhhhhh" +
+                             //"hhhhhhhhhh" +
+                             //"hhhheererj" +
+                             //"dlakjfljhd" +
+                             //"----------";
             Console.WriteLine("Original message: " + message);
 
-            string message2 = "-----------" +
-                             "messe ag  2" +
-                             "Be for you today!" +
-                             "Be for you today!" +
-                             "Be for you today!" +
-                             "Be for you today!" +
-                             "Be for you today!" +
+            //string message2 = "-----------" +
+            //                 "messe ag  2" +
+            //                 "Be for you today!" +
+            //                 "Be for you today!" +
+            //                 "Be for you today!" +
+            //                 "Be for you today!" +
+            //                 "Be for you today!" +
 
-                             "Be for you today!" +
-                             "Be for you today!"+
-                            
-                             "@@!";
+            //                 "Be for you today!" +
+            //                 "Be for you today!"+
+
+            //                 "@@!";
             //int num = message2.Length;
-                              
+           
             // הצפנת ההודעה
-            //var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
-            var (encryptedData1, vectorOfPositions1) = cryptosystem.Encrypt(message2);
+            var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
+            //var (encryptedData1, vectorOfPositions1) = cryptosystem.Encrypt(message2);
 
             //Console.WriteLine("\nEncrypted data (first 20 values): " +
             //    string.Join(", ", encryptedData.Take(20)) + "...");
@@ -182,17 +179,17 @@ namespace API
             //    string.Join(", ", vectorOfPositions));
 
             // פענוח ההודעה
-            //string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
-            string decryptedMessage1 = decryptosystem.Decrypt(encryptedData1, vectorOfPositions1);
+            string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
+            //string decryptedMessage1 = decryptosystem.Decrypt(encryptedData1, vectorOfPositions1);
 
-            //Console.WriteLine("\nmessageenceypt: " + message);
-            //Console.WriteLine("\nmessage1: " + decryptedMessage);
-            Console.WriteLine("\nmessageencrypt1: " + message2);
-            Console.WriteLine("\nDecrypted message: " + decryptedMessage1);
+            Console.WriteLine("\nmessage encreypt: " + message + "--end");
+            Console.WriteLine("\nmessage: " + decryptedMessage+"--end");
+            //Console.WriteLine("\nmessageencrypt1: " + message2);
+            //Console.WriteLine("\nDecrypted message: " + decryptedMessage1);
 
             // בדיקה שההודעה המקורית זהה להודעה שפוענחה
             Console.WriteLine("\nOriginal equals decrypted: " +
-                (message == decryptedMessage1 ? "Yes" : "No"));
+                (message == decryptedMessage ? "Yes" : "No"));
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
@@ -245,7 +242,18 @@ namespace API
 
             return frequency;
         }
+        private static int[] GenerateMasterKey()
+        {
+            var masterKey = new int[256];
+            var rng = new Random();
 
+            for (int i = 0; i < masterKey.Length; i++)
+            {
+                masterKey[i] = rng.Next(1, 1001); // Values from 1 to 1000 as mentioned in paper
+            }
+
+            return masterKey;
+        }
 
     }
 }

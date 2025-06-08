@@ -7,6 +7,8 @@ using MongoDB.Driver;
 using DAL;
 using System.Threading.Tasks;
 using Entities.models;
+using System.Text.Json;
+using System.Text;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -30,7 +32,7 @@ public class UsersController : ControllerBase
         return Ok(users);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("by-id{id}")]
     public async Task<IActionResult> GetUserById(string id)
     {
         try
@@ -50,9 +52,41 @@ public class UsersController : ControllerBase
 
 
     }
+    [HttpGet("by-userName{userName}")]
+    public async Task<IActionResult> GetUserByUserName(string userName)
+    {
+        try
+        {
+            var user = await _usersService.GetUserByUserNameAsync(userName);
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while login the user");
+        }
+    }
+    [HttpPost("login")]
+    public async Task<IActionResult> GetUserByUserName([FromBody] JsonElement data)
+    {
+        try
+        {
+            string email = data.GetProperty("email").GetString();
+            string password = data.GetProperty("password").GetString();
+            var user1 = await _usersService.Login(email,password);
+            if (user1 == null)
+                return NotFound();
+            return Ok(user1);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("An error occurred while login the user");
+        }
+    }
 
     [HttpPost]
-    public async Task<IActionResult> AddUser(UsersDTO userDto)
+    public async Task<IActionResult> AddUser([FromBody]UsersDTO userDto)
     {
         try
         {
@@ -62,14 +96,15 @@ public class UsersController : ControllerBase
             {
                 ObjectId id = ObjectId.GenerateNewId();
                 userDto.Id = id.ToString();
-                Users convertuser = _mapper.Map<Users>(userDto);
+                
+                //Users convertuser = _mapper.Map<Users>(userDto);
                 var newUser = await _usersService.AddUserAsync(userDto);
-                return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, convertuser);
+                return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, newUser);
             }
         }
         catch(Exception ex)
         {
-            throw new Exception("An error occurred while adding the password", ex);
+            throw new Exception("An error occurred while adding the user", ex);
 
         }
     }

@@ -9,8 +9,11 @@ namespace IBL
     {
         Task<IEnumerable<UsersDTO>> GetAllUsersAsync();
         Task<UsersDTO> GetUserByIdAsync(ObjectId id);
+        Task<UsersDTO> GetUserByUserNameAsync(string userName);
         Task<UsersDTO> AddUserAsync(UsersDTO userDto);
         Task<UsersDTO> UpdateUserAsync(ObjectId id, UsersDTO userDto);
         Task<bool> DeleteUserAsync(ObjectId id);
+        Task<UsersDTO> Login(string email, string Password);
+
     }
 }

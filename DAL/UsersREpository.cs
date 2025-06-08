@@ -50,6 +50,25 @@ namespace DAL
 
             }
         }
+        public async Task<Users> GetUserByUserNameAsync(string userName)
+        {
+            try
+            {
+                //string stringId = id.ToString();
+                var collection = _dbService.GetCollection<Users>("Users");
+                //foreach(Users user in collection)
+                //{
+                //    if (user.UserName == userName)
+                //        return user;
+                //}
+                return await collection.Find(p => p.UserName == userName).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the password with ID {userName}.", ex);
+
+            }
+        }
 
         public async Task<Users> AddUserAsync(Users user)
         {
@@ -105,6 +124,6 @@ namespace DAL
             }
         }
 
-
+       
     }
 }

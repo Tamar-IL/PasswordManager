@@ -29,7 +29,7 @@ namespace DAL
         {
             try
             {
-                var webSites = await _dbService.GetCollection<WebSites>("websites").FindAsync(_ => true).Result.ToListAsync();
+                var webSites = await _dbService.GetCollection<WebSites>("WebSites").FindAsync(_ => true).Result.ToListAsync();
                 return _mapper.Map<IEnumerable<WebSites>>(webSites);
             }
             catch (Exception ex)
@@ -50,6 +50,18 @@ namespace DAL
                 throw new Exception($"An error occurred while ", ex);
             }
         }
+        public async Task<WebSites> GetWebSiteByUrlAsync(string url)
+        {
+            try
+            {
+                var site = _dbService.GetCollection<WebSites>("WebSites");
+                return await site.Find(p => p.baseAddress == url).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while ", ex);
+            }
+        }
         public async Task<WebSites> AddWebSiteAsync(WebSites site)
         {
             try
@@ -60,6 +72,7 @@ namespace DAL
                 }
                 //var site = _mapper.Map<WebSitesDTO>(siteDto);
                 await _dbService.GetCollection<WebSites>("WebSites").InsertOneAsync(site);
+               
                 return site;
             }
             catch (Exception ex)
@@ -93,7 +106,7 @@ namespace DAL
             try
             {
                 //var stringId = id.ToString();
-                var result = await _dbService.GetCollection<WebSites>("websites").DeleteOneAsync(p => p.Id == id);
+                var result = await _dbService.GetCollection<WebSites>("WebSites").DeleteOneAsync(p => p.Id == id);
                 return result.DeletedCount > 0;
             }
             catch (Exception ex)
@@ -109,7 +122,7 @@ namespace DAL
             {
                 //string Id = id.ToString();
                 var site = _dbService.GetCollection<WebSites>("WebSites");
-                var result = await site.Find(p => p.name == name).FirstOrDefaultAsync();
+                var result = await site.Find(p => p.Name == name).FirstOrDefaultAsync();
                 if (result != null)
                 {
                     return result;

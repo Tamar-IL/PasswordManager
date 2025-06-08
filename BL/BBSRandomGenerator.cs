@@ -20,10 +20,11 @@ namespace BL
             if(!IsPrime(p) || !IsPrime(q))
                 throw new ArgumentException("p and q must be prime numbers");
             modulus = p * q;
-            seed = GenerateSeed(s);
+            //seed = GenerateSeed(s);
         }
-        public BigInteger GenerateSeed(BigInteger s)
+        public BigInteger GenerateSeed( BigInteger s)
         {
+           
             // Use RNGCryptoServiceProvider for better security
             using (var rng = new RNGCryptoServiceProvider())
             {
@@ -62,6 +63,8 @@ namespace BL
             }
             return true;
         }
+
+      
     }
 
 }

@@ -13,10 +13,10 @@ namespace IBL
             Task<IEnumerable<PasswordsDTO>> GetAllPasswordsAsync();
             Task<PasswordsDTO> GetPasswordByIdAsync(ObjectId id); 
             Task<PasswordsDTO> GetPasswordBySiteIdAsync(ObjectId id);
-            Task<PasswordsDTO> AddPasswordAsync(string password);
+            Task<PasswordsDTO> AddPasswordAsync(PasswordsDTO password, string url);
             Task<PasswordsDTO> UpdatePasswordAsync(ObjectId id, PasswordsDTO passwordDto);
             Task<bool> DeletePasswordAsync(ObjectId id);
-       
+            Task<IEnumerable<PasswordsDTO>> GetAllPasswordsForUserByUserIdAsync(string id);
 
     }
 }

@@ -9,8 +9,7 @@ namespace IBL
 {
     public interface IBBSRandomGenerator
     {
-       //void BBSRandomGenerator(BigInteger p, BigInteger q, BigInteger s);
-
+       
         BigInteger GenerateSeed(BigInteger s);
         Task<int> Next(int max);
         bool IsPrime(BigInteger number);

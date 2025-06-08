@@ -27,9 +27,33 @@ namespace BL.NewFolder
             _logger = logger;
             _webSitesRepository = webSitesRepository;
             _mapper = mapper;
-         
-        }
 
+        }
+        public async Task<WebSitesDTO> GetPasswordByUrlSiteAsync(string url)
+        {
+            try
+            {
+                var website = await _webSitesRepository.GetAllWebSitesAsync();
+                if (website == null)
+                {
+                    return null;
+                }
+                foreach (var site in website)
+                {
+                    if (site.baseAddress == url)
+                        return _mapper.Map<WebSitesDTO>(site);
+                }
+                return new WebSitesDTO();
+
+
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, $"An error occurred while retrieving the password with url {url}.");
+                throw new Exception($"An error occurred while retrieving the password with url {url}.", ex);
+            }
+        }
+        
         public async Task<IEnumerable<WebSitesDTO>> GetAllWebSitesAsync()
         {
             try
@@ -39,7 +63,7 @@ namespace BL.NewFolder
                 var list = await _webSitesRepository.GetAllWebSitesAsync();
                 List<WebSitesDTO> convertedList = new List<WebSitesDTO>();
 
-                if (list.Count() == 0)
+                if (!list.Any())
                     throw new Exception("there is no websites yet.");
                 else
                 {
@@ -101,9 +125,18 @@ namespace BL.NewFolder
         {
             try
             {
+                siteDto.Name = GetSiteName(siteDto.baseAddress);
                 var webSite = _mapper.Map<WebSites>(siteDto);
-                await _webSitesRepository.AddWebSiteAsync(webSite);
-                return siteDto;
+                WebSitesDTO web = await GetPasswordByUrlSiteAsync(siteDto.baseAddress);
+                if (web.Id == null)                                  
+                     await _webSitesRepository.AddWebSiteAsync(webSite);                
+                else
+                {
+                    //siteDto.Id = web.Id;
+                    //return siteDto;
+                    return web;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -125,7 +158,7 @@ namespace BL.NewFolder
             {
                 _logger.LogError(ex, $"An error occurred while updating the password with ID {id}.");
                 throw new Exception($"An error occurred while updating the password with ID {id}.", ex);
-            }   
+            }
         }
 
         public async Task<bool> DeleteWebSiteAsync(ObjectId id)
@@ -139,6 +172,45 @@ namespace BL.NewFolder
             {
                 _logger.LogError(ex, $"An error occurred while deleting the password with ID {id}.");
                 throw new Exception($"An error occurred while deleting the password with ID {id}.", ex);
+            }
+        }
+        public String splitUrl(string url)
+        {
+
+            if (string.IsNullOrWhiteSpace(url))
+                return null;
+
+            try
+            {
+                Uri uri = new Uri(url);
+                return uri.GetLeftPart(UriPartial.Authority);
+            }
+            catch (UriFormatException)
+            {
+                return null;
+            }
+        }
+
+        public string GetSiteName(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return null;
+
+            try
+            {
+                Uri uri = new Uri(url);
+                string host = uri.Host.ToLower();
+
+                // הסר www.
+                if (host.StartsWith("www."))
+                    host = host.Substring(4);
+
+                // החזר החלק הראשון לפני הנקודה
+                return host.Split('.')[0];
+            }
+            catch (UriFormatException)
+            {
+                return null;
             }
         }
     }

@@ -17,5 +17,8 @@ namespace IBL
         Task<WebSitesDTO> AddWebSiteAsync(WebSitesDTO siteDto);
         Task<WebSitesDTO> UpdateWebSiteAsync(ObjectId id, WebSitesDTO siteDto);
         Task<bool> DeleteWebSiteAsync(ObjectId id);
+        Task<WebSitesDTO> GetPasswordByUrlSiteAsync(string url);
+        String splitUrl(string url);
+        string GetSiteName(string url);       
     }
 }

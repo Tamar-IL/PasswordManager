@@ -9,6 +9,7 @@ using DTO;
 using Entities.models;
 using IBL;
 using IDAL;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 
@@ -16,14 +17,18 @@ namespace BL.NewFolder
 {
     public class PasswordsBL : IPasswordsBL
     {
-        private readonly ILogger<PasswordsBL> _logger;
-        private readonly IPasswordsRepository _passwordsRepository;
-        private readonly IMapper _mapper;
 
+        readonly ILogger<PasswordsBL> _logger;
+        private readonly IPasswordsRepository _passwordsRepository;
+        private readonly IUsersBL _userBL;
+        private readonly IMapper _mapper;
+        private readonly IWebSitesBL _webSite;
         MapperConfiguration configPasswordConverter;
-        public PasswordsBL(IPasswordsRepository passwordsRepository, ILogger<PasswordsBL> logger, IMapper mapper)
+        public PasswordsBL(IWebSitesBL webSite, IUsersBL userBL, IPasswordsRepository passwordsRepository, ILogger<PasswordsBL> logger, IMapper mapper)
         {
+            _webSite = webSite;
             _logger = logger;
+            _userBL = userBL;
             _passwordsRepository = passwordsRepository;
             _mapper = mapper;
 
@@ -35,6 +40,26 @@ namespace BL.NewFolder
             //         .ForMember(x => x.Id, s => s.MapFrom(p => p.Id))
             //         // .ForMember(x => x.CustCity, s => s.MapFrom(p =>  p.CustCity.ToString() ))
             //         );
+        }
+
+        public async Task<IEnumerable<PasswordsDTO>> GetAllPasswordsForUserByUserIdAsync(string id)
+        {
+            try
+            {
+                var list = await _passwordsRepository.GetAllPasswordsAsync();
+                List<PasswordsDTO> convertedList = new List<PasswordsDTO>();
+                foreach (var item1 in list)
+                {
+                    if (item1.UserId == id)
+                        convertedList.Add(_mapper.Map<PasswordsDTO>(item1));
+                }
+                return convertedList;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error while retrieving passwords", ex);
+            }
         }
 
         public async Task<IEnumerable<PasswordsDTO>> GetAllPasswordsAsync()
@@ -84,6 +109,7 @@ namespace BL.NewFolder
                 throw new Exception($"An error occurred while retrieving the password with ID {id}.", ex);
             }
         }
+
         public async Task<PasswordsDTO> GetPasswordBySiteIdAsync(ObjectId id)
         {
             try
@@ -104,22 +130,32 @@ namespace BL.NewFolder
             }
         }
 
-        public async Task<PasswordsDTO> AddPasswordAsync(string password)
+        public async Task<PasswordsDTO> AddPasswordAsync(PasswordsDTO password, string url)
         {
             try
             {
-                PasswordsDTO passwordDto = new PasswordsDTO
-                {
-                    Password = password,
-                    Id = ObjectId.GenerateNewId().ToString(), // יצירת ID חדש
-                    DateReg = DateTime.UtcNow.ToString("yyyy-MM-dd"),
-                    LastDateUse = DateTime.UtcNow.ToString("yyyy-MM-dd")
-                };
-
-                var passwordEntity = _mapper.Map<Passwords>(passwordDto);
+                password.Id = ObjectId.GenerateNewId().ToString(); // Generate new ID
+                password.DateReg = DateTime.UtcNow.ToString("yyyy-MM-dd");
+                password.LastDateUse = DateTime.UtcNow.ToString("yyyy-MM-dd");
+                //-----
+                // Save the encrypted password, not plain password!
+                //-----
+                WebSitesDTO newSite = new WebSitesDTO();
+                //----4
+                //split the url to base address.
+                url = _webSite.splitUrl(url);
+                //----
+                newSite.baseAddress = url;
+                newSite.Id = ObjectId.GenerateNewId().ToString();
+                var web = _webSite.AddWebSiteAsync(newSite);
+                // if the site exist yet, take the id and if not put the new id
+                if (web.Id.ToString() == newSite.Id)
+                    password.SiteId = web.Id.ToString();
+                else
+                    password.SiteId = newSite.Id;
+                var passwordEntity = _mapper.Map<Passwords>(password);
                 await _passwordsRepository.AddPasswordAsync(passwordEntity);
-
-                return passwordDto;
+                return password;
             }
             catch (Exception ex)
             {
@@ -128,7 +164,6 @@ namespace BL.NewFolder
             }
         }
 
-
         public async Task<PasswordsDTO> UpdatePasswordAsync(ObjectId id, PasswordsDTO password)
         {
             try
@@ -136,7 +171,7 @@ namespace BL.NewFolder
                 //var stringId = id.ToString();
                 //Mapper mapper = new Mapper(configPasswordConverter);
                 var pas = _mapper.Map<Passwords>(password);
-                await _passwordsRepository.UpdatePasswordAsync(id,pas);
+                await _passwordsRepository.UpdatePasswordAsync(id, pas);
                 return password;
             }
             catch (Exception ex)
@@ -159,6 +194,7 @@ namespace BL.NewFolder
                 throw new Exception($"An error occurred while deleting the password with ID {id}.", ex);
             }
         }
+
         //public async Task<PasswordsDTO> AddPasswordWithSiteAsync(string password, string siteName, string siteBaseAddress, string userId)
         //{
         //    try
@@ -208,6 +244,7 @@ namespace BL.NewFolder
         //        throw new Exception("An error occurred while adding the password with site.", ex);
         //    }
         //}
+
 
     }
 

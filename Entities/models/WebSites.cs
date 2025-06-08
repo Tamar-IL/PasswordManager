@@ -15,7 +15,7 @@ namespace Entities.models
         public string Id { get; set; }
 
         [BsonElement("name")]
-        public string name { get; set; }
+        public string Name { get; set; }
         
         [BsonElement("baseAddress")]
         public string baseAddress { get; set; }

@@ -18,7 +18,7 @@ public class WebSitesController : ControllerBase
         _webSitesService = webSitesService;
         _dbService = dbService;
         _mapper = mapper;
-       
+
     }
 
     [HttpGet]
@@ -42,12 +42,21 @@ public class WebSitesController : ControllerBase
     [HttpGet("bysiteName{sitename}")]
     public async Task<IActionResult> GetWebSitesBySiteNAme(string siteName)
     {
-        if (siteName==null)
+        if (siteName == null)
             return BadRequest("cant be null.");
-         WebSitesDTO site = await _webSitesService.GetWebSitesByNameAsync(siteName);
+        WebSitesDTO site = await _webSitesService.GetWebSitesByNameAsync(siteName);
         if (site == null)
             return NotFound();
         return Ok(site);
+    }
+    [HttpGet("by-url{url}")]
+    public async Task<IActionResult> GetPasswordByUrlSite(string url)
+    {
+
+        var password = await _webSitesService.GetPasswordByUrlSiteAsync(url);
+        if (password == null)
+            return NotFound();
+        return Ok(password);
     }
     [HttpPost]
     public async Task<IActionResult> AddSite(WebSitesDTO siteDto)
@@ -58,9 +67,8 @@ public class WebSitesController : ControllerBase
                 return BadRequest("site cannot be null.");
             else
             {
-                //ObjectId id = ObjectId.GenerateNewId();
-                //siteDto.Id = id.ToString();
-                //WebSites convertsite = _mapper.Map<WebSites>(siteDto);
+                ObjectId id = ObjectId.GenerateNewId();
+                siteDto.Id = id.ToString();
                 var newUser = await _webSitesService.AddWebSiteAsync(siteDto);
                 return Ok(newUser);
             }

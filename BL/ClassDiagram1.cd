@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BL.decryption.DecryptionProcess">
+    <Position X="1.25" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEIIAAQAQAAAABIACGAQQAAAAAAAAIEACAAA=</HashCode>
+      <FileName>decryption\DecryptionProcess.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BL.decryption.generateKeyDecryption">
+    <Position X="5.75" Y="0.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACABAAAAAACAAAAACAAACAQQAgAAkAABAAAAAAA=</HashCode>
+      <FileName>decryption\generateKeyDecryption.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BL.encryption.EncryptionProcess">
+    <Position X="3.5" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQAAQAAAAYIAAQAAAAAgAIACGAQQAAAAAAAAIAABAAA=</HashCode>
+      <FileName>encryption\EncryptionProcess.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BL.GenerateKeyEncryption">
+    <Position X="8.5" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAQCAAAAgCIACCARQAAAAAAAAAAABAQA=</HashCode>
+      <FileName>encryption\GenerateKeyEncryption.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BL.NewFolder.PasswordsBL" BaseTypeListCollapsed="true">
+    <Position X="1.25" Y="5.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAQAAAAAACBAAQAIAAJAAQEAAAAAIAAAAI=</HashCode>
+      <FileName>NewFolder\PasswordsBL.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BL.NewFolder.UsersBL" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACgAAAgAAAAAQAAAAABAAAAIAABAAAACAAQAASAAAA=</HashCode>
+      <FileName>NewFolder\UsersBL.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BL.NewFolder.WebSitesBL" BaseTypeListCollapsed="true">
+    <Position X="6.75" Y="5.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAkAAAgAABAAAAAABABAhIAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>NewFolder\WebSitesBL.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="BL.RSAForMasterKay.RSAencryption">
+    <Position X="9.25" Y="5.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AQAABAFAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RSAForMasterKey\RSAencryption.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

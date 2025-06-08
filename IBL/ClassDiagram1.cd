@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="IBL.RSAForMasterKey.IRSAencryption">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAFAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RSAForMastreKey\IRSAencryption.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IBBSRandomGenerator">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>IBBSRandomGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IDecryptionProcess" Collapsed="true">
+    <Position X="5.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IDecryptionProcess.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IEncryptionProcess" Collapsed="true">
+    <Position X="7.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IEncryptionProcess.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IgenerateKeyDecryption" Collapsed="true">
+    <Position X="4" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IgenerateKeyDecryption.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IkeyGeneration">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAQAIAAICAAAAIAABAAAAAAAAAEACAAAAAAAAA=</HashCode>
+      <FileName>IkeyGeneration.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IPasswordsBL">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAQAAAAAACAAAQAAAABAAAEAAAAAIAAAAA=</HashCode>
+      <FileName>IPasswordsBL.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IUsersBL">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAQAAAAAAAAAAAAABAAAACAAQAASAAAA=</HashCode>
+      <FileName>IUsersBL.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="IBL.IWebSitesBL">
+    <Position X="7.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAkAAAgAABAAAAAAAABABAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>IWebSitesBL.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

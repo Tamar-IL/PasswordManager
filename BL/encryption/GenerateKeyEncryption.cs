@@ -18,13 +18,18 @@ namespace BL
         //private static int r = n % 78;
         //private static int k = r > 0 ? r : r + 1;     
 
-        private const int BLOCK_SIZE = 78;
-        private const int SUB_BLOCK_SIZE = 13;
-        private const int GRAPH_ORDER = 13;
+        //private const int BLOCK_SIZE = 78;
+        //private const int SUB_BLOCK_SIZE = 13;
+        //private const int GRAPH_ORDER = 13;
+        //private const int KEY_SIZE = 256;
+        private const int BLOCK_SIZE = 15;
+        private const int SUB_BLOCK_SIZE = 5;
+        private const int GRAPH_ORDER = 5;
         private const int KEY_SIZE = 256;
 
         public readonly int[] _keyEncryptionKey;
         public readonly int[,] _initializationMatrix;
+        public readonly IBBSRandomGenerator _bBSRandomGenerator;
 
         /// <summary>
         /// קונסטרקטור למערכת ההצפנה
@@ -42,6 +47,7 @@ namespace BL
 
             _keyEncryptionKey = keyEncryptionKey;
             _initializationMatrix = initializationMatrix;
+            //_bBSRandomGenerator = bBSRandomGenerator;
         }
 
         //#region אלגוריתם 1: יצירת תת-מפתחות בתהליך ההצפנה
@@ -55,17 +61,17 @@ namespace BL
         {
             // המרת ההודעה למערך של ערכי ASCII
             int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
-            Console.WriteLine("message as ascii ", string.Join(", ",messageAsAscii)); 
+            Console.WriteLine("message as ascii ", string.Join(", ", messageAsAscii));
             // חישוב מספר הבלוקים
             int messageLength = messageAsAscii.Length;
-          
+
             int remainder = messageLength % BLOCK_SIZE;
 
             int blocksCount = messageLength / BLOCK_SIZE + (remainder > 0 ? 1 : 0);
 
             // חלוקת ההודעה לבלוקים
             List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
-            Console.WriteLine("blocks ",string.Join(", ",blocks));
+            Console.WriteLine("blocks ", string.Join(", ", blocks));
             int[][,] subKeys = new int[blocksCount][,];
             List<int> vectorOfPositions = new List<int>();
 
@@ -84,7 +90,7 @@ namespace BL
 
                 // הוספה לוקטור המיקומים
                 vectorOfPositions.Add(selectedChar);
-                
+
                 // קבלת מספר מהמפתח הראשי
                 //למה לחחלק ל256? כי אם קיבלנו בסלקטצאר מספר יותר גדול מ256 
                 //אז אם נבצע חלוקה ב256 יכול להיות שנקבל מספר גדול מ256
@@ -104,19 +110,20 @@ namespace BL
 
                 // יצירת וקטור זרע באורך 13
                 int[] seedVector = GenerateSeed(n);
-                Console.WriteLine("seed vector: ",string.Join(", ",seedVector));
+                Console.WriteLine("seed vector: ", string.Join(", ", seedVector));
                 // יצירת תת-מפתח
                 subKeys[i] = GenerateSubKey(seedVector);
-                Console.WriteLine("subkey [",i,"]",string.Join(", ", subKeys[i]));
+                Console.WriteLine("subkey [", i, "]", string.Join(", ", subKeys[i]));
             }
             for (int i = 0; i < subKeys.Length; i++)
             {
-                for (int j = 0; j < subKeys.Length; j++)
+                for (int j = 0; j < GRAPH_ORDER; j++)        // ✅ 
                 {
-                    for (int k = 0; k < subKeys.Length; k++)
+                    for (int k = 0; k < GRAPH_ORDER; k++)    // ✅
                     {
                         Console.Write(subKeys[i][j, k]);
                     }
+
                     Console.WriteLine("---");
 
                 }
@@ -131,6 +138,8 @@ namespace BL
         /// </summary>
         private int[] GenerateSeed(int initialValue)
         {
+            //BigInteger p, q, s = new BigInteger;
+            //return _bBSRandomGenerator.GenerateSeed(p,q,s);
             return GenerateBBSSequence(initialValue, SUB_BLOCK_SIZE);
 
         }
@@ -180,18 +189,14 @@ namespace BL
                     subKey[i, j] = rowValues[j];
                 }
             }
-            Console.WriteLine("subkey length: ",subKey.Length);
+            Console.WriteLine("subkey length: ", subKey.Length);
             return subKey;
         }
 
         private List<int[]> ParseMessage(int[] message, int blocksCount)
         {
             List<int[]> blocks = new List<int[]>();
-            //----------------
-            // i think its not good. we need fill the key (length k - like the formula in the top of this page )
-            // we don't have to pass on the vP / only take value from VP by randomaly index.
-            // fix this loop!!(instead of int position in vectorOfPositions . write  for i =0 to k*13 by the article in algorithm 2 )
-
+          
             for (int i = 0; i < blocksCount; i++)
             {
                 int startIndex = i * BLOCK_SIZE;

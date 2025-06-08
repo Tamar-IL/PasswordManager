@@ -12,6 +12,9 @@ namespace IBL.RSAForMasterKey
         byte[] Encrypt(string PlainText, string PublicKey);
         string Decrypt(byte[] encryptData, string privateKey);
         string Decrypt(byte[] encryptData);
+        string GetPrivateKayFromSecureStorge();
+        string GetPublicKey();
+
 
     }
 }

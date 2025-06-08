@@ -9,16 +9,16 @@ namespace Entities.models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("UaerName")]
+        [BsonElement("UserName")]
         public string UserName { get; set; }
 
         [BsonElement("Password")]
-        public string Password { get; set; }
+        public byte[] Password { get; set; }
 
-        [BsonElement("email")]
+        [BsonElement("Email")]
         public string Email { get; set; }
 
-        [BsonElement("phone")]
+        [BsonElement("Phone")]
         public string Phone { get; set; }
     }
 }

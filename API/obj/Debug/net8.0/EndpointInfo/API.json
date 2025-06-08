@@ -22,13 +22,32 @@
         ],
         "parameters": [
           {
-            "name": "NewPassword",
+            "name": "url",
             "in": "query",
             "schema": {
               "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordsDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordsDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordsDTO"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -68,6 +87,27 @@
             "name": "siteid",
             "in": "path",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Passwords/byemail": {
+      "get": {
+        "tags": [
+          "Passwords"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
             "schema": {
               "type": "string"
             }
@@ -182,7 +222,7 @@
         }
       }
     },
-    "/api/Users/{id}": {
+    "/api/Users/by-id{id}": {
       "get": {
         "tags": [
           "Users"
@@ -202,7 +242,56 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Users/by-userName{userName}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { }
+            },
+            "text/json": {
+              "schema": { }
+            },
+            "application/*+json": {
+              "schema": { }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/{id}": {
       "put": {
         "tags": [
           "Users"
@@ -445,6 +534,28 @@
           }
         }
       }
+    },
+    "/api/WebSites/by-url{url}": {
+      "get": {
+        "tags": [
+          "WebSites"
+        ],
+        "parameters": [
+          {
+            "name": "url",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -486,7 +597,7 @@
             "type": "string",
             "nullable": true
           },
-          "uaerName": {
+          "userName": {
             "type": "string",
             "nullable": true
           },

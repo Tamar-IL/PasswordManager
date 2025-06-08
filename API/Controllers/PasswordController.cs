@@ -18,12 +18,15 @@ public class PasswordsController : ControllerBase
     //Service(BL)    DTO DTO
     //Repository(DAL)    Entity Entit
     private readonly IPasswordsBL _passwordsService;
+
     private readonly IMapper _mapper;
     private readonly MongoDbService _dbService;
+   
 
     public PasswordsController(IPasswordsBL passwordsService, MongoDbService dbService, IMapper mapper)
     {
         _passwordsService = passwordsService;
+        
         _mapper = mapper;
         _dbService = dbService;
     }
@@ -56,9 +59,19 @@ public class PasswordsController : ControllerBase
             return NotFound();
         return Ok(password);
     }
+    [HttpGet("byemail")]
+    public async Task<IActionResult> GetAllPasswordsForUserByUserIdAsync([FromQuery] string id)
+    {
+        var password = await _passwordsService.GetAllPasswordsForUserByUserIdAsync(id);
+        if (password == null)
+            return NotFound();
+        return Ok(password);
+    }
+    //[HttpGet("bysiteUrl{urlSite}")]
+   
 
     [HttpPost]
-    public async Task<IActionResult> AddPassword(string NewPassword)
+    public async Task<IActionResult> AddPassword([FromBody]PasswordsDTO NewPassword, [FromQuery] string url)
     {
         try
         {
@@ -66,8 +79,7 @@ public class PasswordsController : ControllerBase
                 return BadRequest("Password  cannot be null.");
             else
             {
-               
-                var password = await _passwordsService.AddPasswordAsync(NewPassword);
+                var password = await _passwordsService.AddPasswordAsync(NewPassword,url);
 
                 //await _dbService.GetCollection<Passwords>("passwords");
 
@@ -80,8 +92,6 @@ public class PasswordsController : ControllerBase
             throw new Exception("An error occurred while adding the password", ex);
         }
     }
-
-
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePassword(string id, PasswordsDTO passwordDto)

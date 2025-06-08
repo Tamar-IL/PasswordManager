@@ -27,6 +27,7 @@ namespace BL.decryption
         {
             _keyEncryptionKey = keyEncryptionKey;
             this.initMatrix = initMatrix;
+
         }
 
         /// <summary>
@@ -81,23 +82,13 @@ namespace BL.decryption
             Console.WriteLine("--------------------------------------------");
 
             //int keyLength = SUB_BLOCK_SIZE * vectorOfPositions.Count;
-            int keyLength = SUB_BLOCK_SIZE * k;
+            int keyLength = SUB_BLOCK_SIZE * vectorOfPositions.Count;
             int[] key = new int[keyLength];
             int index = 0;
-            //----------------
-            // i think its not good. we need fill the key (length k - like the formula in the top of this page )
-            // we don't have to pass on the vP / only take value from VP by randomaly index.
-            // fix this loop!!(instead of int position in vectorOfPositions . write  for i =0 to k*13 by the article in algorithm 2 )
-            while (index < key.Length)
+            foreach (int position in vectorOfPositions)  // לא במעגל!
             {
-                // חישוב ה-seed מתוך KEK ו-VP
-                int position = vectorOfPositions[index % vectorOfPositions.Count()];
                 int seed = keyEncryptionKey[position % keyEncryptionKey.Length];
-
-                // יצירת תת-מפתח
                 int[] values = GenerateBBSSequence(seed, SUB_BLOCK_SIZE);
-
-                // הוספה למפתח הסופי
                 Array.Copy(values, 0, key, index, SUB_BLOCK_SIZE);
                 index += SUB_BLOCK_SIZE;
             }

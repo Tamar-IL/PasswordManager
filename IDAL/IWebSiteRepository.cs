@@ -12,6 +12,8 @@ namespace IDAL
         Task<WebSites> UpdateWebSiteAsync(ObjectId id, WebSites siteDto);
         Task<bool> DeleteWebSiteAsync(string id);
         Task <WebSites> GetWebSiteBySiteNameAsync(string name);
+        Task<WebSites> GetWebSiteByUrlAsync(string url);
+
     }
 }
 

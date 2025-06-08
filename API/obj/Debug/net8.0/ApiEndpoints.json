@@ -19,6 +19,11 @@
     "Parameters": [
       {
         "Name": "NewPassword",
+        "Type": "DTO.PasswordsDTO",
+        "IsRequired": true
+      },
+      {
+        "Name": "url",
         "Type": "System.String",
         "IsRequired": false
       }
@@ -80,6 +85,22 @@
   },
   {
     "ContainingType": "PasswordsController",
+    "Method": "GetAllPasswordsForUserByUserIdAsync",
+    "RelativePath": "api/Passwords/byemail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PasswordsController",
     "Method": "GetPasswordBySiteId",
     "RelativePath": "api/Passwords/bysite{siteid}",
     "HttpMethod": "GET",
@@ -122,22 +143,6 @@
   },
   {
     "ContainingType": "UsersController",
-    "Method": "GetUserById",
-    "RelativePath": "api/Users/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "UsersController",
     "Method": "UpdateUser",
     "RelativePath": "api/Users/{id}",
     "HttpMethod": "PUT",
@@ -168,6 +173,54 @@
       {
         "Name": "id",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UsersController",
+    "Method": "GetUserById",
+    "RelativePath": "api/Users/by-id{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UsersController",
+    "Method": "GetUserByUserName",
+    "RelativePath": "api/Users/by-userName{userName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UsersController",
+    "Method": "GetUserByUserName",
+    "RelativePath": "api/Users/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "data",
+        "Type": "System.Text.Json.JsonElement",
         "IsRequired": true
       }
     ],
@@ -246,6 +299,22 @@
     "Parameters": [
       {
         "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebSitesController",
+    "Method": "GetPasswordByUrlSite",
+    "RelativePath": "api/WebSites/by-url{url}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "url",
         "Type": "System.String",
         "IsRequired": true
       }

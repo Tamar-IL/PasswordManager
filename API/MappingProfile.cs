@@ -2,6 +2,7 @@
 using DTO;
 using Entities.models;
 using MongoDB.Bson;
+using System.Text;
 
 public class MappingProfile : Profile
 {
@@ -14,9 +15,20 @@ public class MappingProfile : Profile
         CreateMap<UsersDTO, Users>()
            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => new ObjectId(src.Id)));
 
+        CreateMap<Users, UsersDTO>()
+      .ForMember(dest => dest.Password, opt => opt.Ignore());
+
+        CreateMap<UsersDTO, Users>()
+            .ForMember(dest => dest.Password, opt => opt.Ignore());
+
         CreateMap<WebSitesDTO, WebSites>()
            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => new ObjectId(src.Id)));
+       
+        
         Console.WriteLine("mappingProfile");
+        
+        
+        
         // Entity -> DTO (ממיר ObjectId ל-string)
         CreateMap<Passwords, PasswordsDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()));
