@@ -96,22 +96,6 @@ using IBL;
             return KEK[p];
         }
 
-        //BBS- יצירת מספר פסאודו אקראי ע”י הערך N
-        //private async Task< BigInteger> generateBBS(int N)
-        //{
-        //    // find s such that gcd(s, modulus) = 1  we want s will be coprime with modulus.
-        //    //This means they have no common divisors other than 1
-        //    Random random = new Random();
-        //    BigInteger randByBBS;
-        //    do
-        //    {
-        //        randByBBS = random.Next(2, (int)modulus -1);
-        //    }while(BigInteger.GreatestCommonDivisor(randByBBS, modulus) != 1);
-
-        //    return randByBBS;
-        //}
-
-
         //יצירת וקטור SI בגודל 13 מ N שקיבלנו קודם ע"י BBS - מחולל מספרים פסאודו אקראיים
         public async Task<int[]> generateSeed(BigInteger n)
         {

@@ -13,14 +13,14 @@ namespace BL.encryption
     {
         private GenerateKeyEncryption generateKeyEncryption;
 
-        private const int BLOCK_SIZE = 15;
-        private const int SUB_BLOCK_SIZE = 5;
-        private const int GRAPH_ORDER = 5;
-        private const int KEY_SIZE = 256;
-        //private const int BLOCK_SIZE = 78;
-        //private const int SUB_BLOCK_SIZE = 13;
-        //private const int GRAPH_ORDER = 13;
+        //private const int BLOCK_SIZE = 15;
+        //private const int SUB_BLOCK_SIZE = 5;
+        //private const int GRAPH_ORDER = 5;
         //private const int KEY_SIZE = 256;
+        private const int BLOCK_SIZE = 78;
+        private const int SUB_BLOCK_SIZE = 13;
+        private const int GRAPH_ORDER = 13;
+        private const int KEY_SIZE = 256;
         private readonly int[,] _initializationMatrix;
         private readonly int[] _keyEncryptionKey;
         /// <summary>
@@ -41,9 +41,11 @@ namespace BL.encryption
 
         public (int[] EncryptedMessage, List<int> VectorOfPositions) Encrypt(string clearMessage)
         {
+            clearMessage = AddSaltToMessageEnd(clearMessage);
+            Console.WriteLine("clearMessage:" + clearMessage);
             //by algorithm 2 יצירת תת-מפתחות
             var (subKeys, vectorOfPositions) = generateKeyEncryption.GenerateSubKeysForEncryption(clearMessage);
-
+            Console.WriteLine("subKeys:"+ subKeys);
             // המרת ההודעה למערך של ערכי ASCII
             int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
 
@@ -126,7 +128,7 @@ namespace BL.encryption
             int validLength = Math.Min(block.Length, BLOCK_SIZE);
 
             // חלוקה ל-6 תת-בלוקים באורך 13
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 6; i++)
             {
                 int[] subBlock = new int[SUB_BLOCK_SIZE];
                 int startIndex = i * SUB_BLOCK_SIZE;
@@ -185,7 +187,7 @@ namespace BL.encryption
                     int toVertex = path[i + 1];
 
                     adjacencyMatrix[fromVertex, toVertex] = value;
-                    adjacencyMatrix[toVertex, fromVertex] = value; // גרף לא מכוון
+                    //adjacencyMatrix[toVertex, fromVertex] = value; // גרף לא מכוון
                 }
 
                 // סגירת המעגל - חיבור בין הקדקוד האחרון לראשון
@@ -194,7 +196,7 @@ namespace BL.encryption
                 int firstVertex = path[0];
 
                 adjacencyMatrix[lastVertex, firstVertex] = lastValue;
-                adjacencyMatrix[firstVertex, lastVertex] = lastValue; // גרף לא מכוון
+                //adjacencyMatrix[firstVertex, lastVertex] = lastValue; // גרף לא מכוון
             }
 
             return adjacencyMatrix;
@@ -211,32 +213,32 @@ namespace BL.encryption
             // בפועל, לכל subBlockIndex יש מעגל קבוע מראש
             switch (subBlockIndex)
             {
-                //case 0:
-                //    return new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-                //case 1:
-                //    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 11, 9, 7, 5, 3, 1 };
-                //case 2:
-                //    return new List<int> { 0, 3, 6, 9, 12, 8, 4, 1, 5, 10, 7, 2, 11 };
-                //case 3:
-                //    return new List<int> { 0, 4, 8, 12, 7, 3, 10, 6, 2, 9, 5, 1, 11 };
-                //case 4:
-                //    return new List<int> { 0, 5, 10, 4, 9, 3, 8, 2, 7, 1, 6, 11, 12 };
-                //case 5:
-                //    return new List<int> { 0, 6, 1, 7, 12, 5, 11, 4, 10, 3, 9, 2, 8 };
-                //default:
                 case 0:
-                    return new List<int> { 0, 1, 2, 3, 4  };
+                    return new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
                 case 1:
-                    return new List<int> { 0, 2, 4, 3, 1 };
+                    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 11, 9, 7, 5, 3, 1 };
                 case 2:
-                    return new List<int> { 0, 3, 1, 2, 4 };
+                    return new List<int> { 0, 3, 6, 9, 12, 8, 4, 1, 5, 10, 7, 2, 11 };
                 case 3:
-                    return new List<int> { 0, 4, 3, 1, 2 };
+                    return new List<int> { 0, 4, 8, 12, 7, 3, 10, 6, 2, 9, 5, 1, 11 };
                 case 4:
-                    return new List<int> { 0, 3, 4, 2, 1 };
+                    return new List<int> { 0, 5, 10, 4, 9, 3, 8, 2, 7, 1, 6, 11, 12 };
                 case 5:
-                    return new List<int> { 0, 2, 1, 3, 4 };
+                    return new List<int> { 0, 6, 1, 7, 12, 5, 11, 4, 10, 3, 9, 2, 8 };
                 default:
+                //case 0:
+                //    return new List<int> { 0, 1, 2, 3, 4  };
+                //case 1:
+                //    return new List<int> { 0, 2, 4, 3, 1 };
+                //case 2:
+                //    return new List<int> { 0, 3, 1, 2, 4 };
+                //case 3:
+                //    return new List<int> { 0, 4, 3, 1, 2 };
+                //case 4:
+                //    return new List<int> { 0, 3, 4, 2, 1 };
+                //case 5:
+                //    return new List<int> { 0, 2, 1, 3, 4 };
+                //default:
                     throw new ArgumentException("Invalid sub-block index");
             }
         }
@@ -339,5 +341,26 @@ namespace BL.encryption
             return asciiValues;
 
         }
+        public static string AddSaltToMessageEnd(string message)
+        {
+            Random _random = new Random();
+            const int targetLength = 78;
+            const string saltChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            if (message.Length > targetLength)
+                throw new ArgumentException("ההודעה ארוכה מ-78 תווים.");
+
+            int saltLength = targetLength - message.Length;
+            StringBuilder saltBuilder = new StringBuilder(saltLength);
+
+            for (int i = 0; i < saltLength; i++)
+            {
+                char randomChar = saltChars[_random.Next(saltChars.Length)];
+                saltBuilder.Append(randomChar);
+            }
+
+            return message + saltBuilder.ToString();
+        }
     }
+
 }

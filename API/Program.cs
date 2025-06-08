@@ -114,15 +114,15 @@ namespace API
 
             Random random = new Random();
 
-            int[] keyEncryptionKey = new int[256]; // מערך בגודל 64
+            int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
 
             // יצירת ערכים אקראיים בין 0 ל-99
-            for (int i = 0; i < keyEncryptionKey.Length; i++)
-            {
-                keyEncryptionKey[i] = random.Next(0, 100); // ערך אקראי בין 0 ל-99
-            }
-            //int[,] initMatrix = GenerateRandomMatrix(13, 13);
-            int[,] initMatrix = GenerateRandomMatrix(5, 5);
+            //for (int i = 0; i < keyEncryptionKey.Length; i++)
+            //{
+            //    keyEncryptionKey[i] = random.Next(0, 100); // ערך אקראי בין 0 ל-99
+            //}
+            int[,] initMatrix = GenerateRandomMatrix(13, 13);
+            //int[,] initMatrix = GenerateRandomMatrix(5, 5);
             //GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
             //generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
             EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix);
@@ -134,12 +134,12 @@ namespace API
             
             // הודעה לדוגמה
             string message = "" +
-                "trfg6h8j9k" +
+                "trfg6h8j9k5E755sOQsA0X0lW0cvxS6IYgQqCAx" +
                              //"ssage for " +
                              //"testhhhhhh" +
 
                              //"hhhhhhhhhf" +
-                             "55555";
+                             "";
                              //"yyyyyyyyyy" +
                              //"yyyyyyyyyy" +
                              //"yyyggggggg" +

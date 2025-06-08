@@ -18,14 +18,14 @@ namespace BL
         //private static int r = n % 78;
         //private static int k = r > 0 ? r : r + 1;     
 
-        //private const int BLOCK_SIZE = 78;
-        //private const int SUB_BLOCK_SIZE = 13;
-        //private const int GRAPH_ORDER = 13;
-        //private const int KEY_SIZE = 256;
-        private const int BLOCK_SIZE = 15;
-        private const int SUB_BLOCK_SIZE = 5;
-        private const int GRAPH_ORDER = 5;
+        private const int BLOCK_SIZE = 78;
+        private const int SUB_BLOCK_SIZE = 13;
+        private const int GRAPH_ORDER = 13;
         private const int KEY_SIZE = 256;
+        //private const int BLOCK_SIZE = 15;
+        //private const int SUB_BLOCK_SIZE = 5;
+        //private const int GRAPH_ORDER = 5;
+        //private const int KEY_SIZE = 256;
 
         public readonly int[] _keyEncryptionKey;
         public readonly int[,] _initializationMatrix;
@@ -62,6 +62,11 @@ namespace BL
             // המרת ההודעה למערך של ערכי ASCII
             int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
             Console.WriteLine("message as ascii ", string.Join(", ", messageAsAscii));
+            for (int i=0;i<messageAsAscii.Count();i++)
+            {
+                Console.WriteLine("message as ascii ["+i+"]" +" "+ messageAsAscii[i].ToString());
+
+            }
             // חישוב מספר הבלוקים
             int messageLength = messageAsAscii.Length;
 
@@ -92,7 +97,7 @@ namespace BL
                 vectorOfPositions.Add(selectedChar);
 
                 // קבלת מספר מהמפתח הראשי
-                //למה לחחלק ל256? כי אם קיבלנו בסלקטצאר מספר יותר גדול מ256 
+                //למה לחלק ל256? כי אם קיבלנו בסלקטצאר מספר יותר גדול מ256 
                 //אז אם נבצע חלוקה ב256 יכול להיות שנקבל מספר גדול מ256
                 //לעומת זאת עם נבצע שארית 256 המספר הגדול ביותר שנוכל לקבל זה 255
                 //KEKואז ודאי לא תהיה חריגה מגודל המערך 

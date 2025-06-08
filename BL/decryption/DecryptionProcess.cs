@@ -19,14 +19,14 @@ namespace BL.decryption
     {
         //private GenerateKeyEncryption generateKeyEncryption;
         private generateKeyDecryption decryption;
-        //private const int BLOCK_SIZE = 78;
-        //private const int SUB_BLOCK_SIZE = 13;
-        //private const int GRAPH_ORDER = 13;
-        //private const int KEY_SIZE = 256;
-        private const int BLOCK_SIZE = 15;
-        private const int SUB_BLOCK_SIZE = 5;
-        private const int GRAPH_ORDER = 5;
+        private const int BLOCK_SIZE = 78;
+        private const int SUB_BLOCK_SIZE = 13;
+        private const int GRAPH_ORDER = 13;
         private const int KEY_SIZE = 256;
+        //private const int BLOCK_SIZE = 15;
+        //private const int SUB_BLOCK_SIZE = 5;
+        //private const int GRAPH_ORDER = 5;
+        //private const int KEY_SIZE = 256;
 
         private readonly int[] _keyEncryptionKey;
         private readonly int[,] _initializationMatrix;
@@ -227,32 +227,32 @@ namespace BL.decryption
             // בפועל, לכל subBlockIndex יש מעגל קבוע מראש
             switch (subBlockIndex)
             {
-                //case 0:
-                //    return new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-                //case 1:
-                //    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 11, 9, 7, 5, 3, 1 };
-                //case 2:
-                //    return new List<int> { 0, 3, 6, 9, 12, 8, 4, 1, 5, 10, 7, 2, 11 };
-                //case 3:
-                //    return new List<int> { 0, 4, 8, 12, 7, 3, 10, 6, 2, 9, 5, 1, 11 };
-                //case 4:
-                //    return new List<int> { 0, 5, 10, 4, 9, 3, 8, 2, 7, 1, 6, 11, 12 };
-                //case 5:
-                //    return new List<int> { 0, 6, 1, 7, 12, 5, 11, 4, 10, 3, 9, 2, 8 };
-                //default:
                 case 0:
-                    return new List<int> { 0, 1, 2, 3, 4 };
+                    return new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
                 case 1:
-                    return new List<int> { 0, 2, 4, 3, 1 };
+                    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 11, 9, 7, 5, 3, 1 };
                 case 2:
-                    return new List<int> { 0, 3, 1, 2, 4 };
+                    return new List<int> { 0, 3, 6, 9, 12, 8, 4, 1, 5, 10, 7, 2, 11 };
                 case 3:
-                    return new List<int> { 0, 4, 3, 1, 2 };
+                    return new List<int> { 0, 4, 8, 12, 7, 3, 10, 6, 2, 9, 5, 1, 11 };
                 case 4:
-                    return new List<int> { 0, 3, 4, 2, 1 };
+                    return new List<int> { 0, 5, 10, 4, 9, 3, 8, 2, 7, 1, 6, 11, 12 };
                 case 5:
-                    return new List<int> { 0, 2, 1, 3, 4 };
+                    return new List<int> { 0, 6, 1, 7, 12, 5, 11, 4, 10, 3, 9, 2, 8 };
                 default:
+                    //case 0:
+                    //    return new List<int> { 0, 1, 2, 3, 4 };
+                    //case 1:
+                    //    return new List<int> { 0, 2, 4, 3, 1 };
+                    //case 2:
+                    //    return new List<int> { 0, 3, 1, 2, 4 };
+                    //case 3:
+                    //    return new List<int> { 0, 4, 3, 1, 2 };
+                    //case 4:
+                    //    return new List<int> { 0, 3, 4, 2, 1 };
+                    //case 5:
+                    //    return new List<int> { 0, 2, 1, 3, 4 };
+                    //default:
                     throw new ArgumentException("Invalid sub-block index");
             }
         }

@@ -16,7 +16,7 @@ namespace BL.decryption
         private static int n=156;
         private static int r = n % 78;
         private static int k = r > 0 ? n/78+1 : n/78 ;
-        //private const int BLOCK_SIZE = 78;
+        private const int BLOCK_SIZE = 78;
         private const int SUB_BLOCK_SIZE = 13;
         private const int GRAPH_ORDER = 13;
         //private const int KEY_SIZE = 256;
