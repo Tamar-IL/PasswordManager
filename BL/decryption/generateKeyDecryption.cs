@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using IBL;
+using Microsoft.Extensions.Options;
+using MyProject.Common;
 
 namespace BL.decryption
 {
@@ -13,20 +16,19 @@ namespace BL.decryption
         // the formula of block's numbers : n=78k +r ----->
         // n-r = 78k ----> (n-r)/78 = 78k/78 ----> k=(n-r)/78 
         // n is the length of plainText , r = remainder of n over 78
-        private static int n=156;
-        private static int r = n % 78;
-        private static int k = r > 0 ? n/78+1 : n/78 ;
-        private const int BLOCK_SIZE = 78;
-        private const int SUB_BLOCK_SIZE = 13;
-        private const int GRAPH_ORDER = 13;
-        //private const int KEY_SIZE = 256;
+        // n=156;
+        // r = n % 78;
+        // k = r > 0 ? n/78+1 : n/78 ;
+       
         private readonly int[] _keyEncryptionKey;
         private int[,] initMatrix;
+        private readonly MySetting _setting;
 
-        public generateKeyDecryption(int[] keyEncryptionKey, int[,] initMatrix)
+        public generateKeyDecryption(int[] keyEncryptionKey, int[,] initMatrix, IOptions<MySetting> options)
         {
             _keyEncryptionKey = keyEncryptionKey;
             this.initMatrix = initMatrix;
+            _setting = options.Value;
 
         }
 
@@ -53,26 +55,26 @@ namespace BL.decryption
             {
                 subKeys[i] = GenerateSubKey(seedVectors[i]);
             }
-            for (int i = 0; i < subKeys.Length; i++)
-            {
-                for (int j = 0; j < subKeys.Length; j++)
-                {
-                    for (int k = 0; k < subKeys.Length; k++)
-                    {
-                        Console.Write(subKeys[i][j,k]);
-                    }
-                    Console.WriteLine("---");
-                }
-                Console.WriteLine("---");
+            //for (int i = 0; i < subKeys.Length; i++)
+            //{
+            //    for (int j = 0; j < subKeys.Length; j++)
+            //    {
+            //        for (int k = 0; k < subKeys.Length; k++)
+            //        {
+            //            Console.Write(subKeys[i][j,k]);
+            //        }
+            //        Console.WriteLine("---");
+            //    }
+            //    Console.WriteLine("---");
 
-            }
+            //}
             return subKeys;
         }
 
         /// <summary>
         /// מייצר מפתח מלא מתוך וקטור המיקומים והמפתח הראשי
         /// </summary>
-        private int[] GenerateKey(int[] keyEncryptionKey, List<int> vectorOfPositions)
+        public int[] GenerateKey(int[] keyEncryptionKey, List<int> vectorOfPositions)
         {
             Console.WriteLine("--------------------------------------------");
             for (int i =0; i < vectorOfPositions.Count(); i++)
@@ -82,16 +84,30 @@ namespace BL.decryption
             Console.WriteLine("--------------------------------------------");
 
             //int keyLength = SUB_BLOCK_SIZE * vectorOfPositions.Count;
-            int keyLength = SUB_BLOCK_SIZE * vectorOfPositions.Count;
+            int keyLength = _setting.subBlockSize * vectorOfPositions.Count;
             int[] key = new int[keyLength];
             int index = 0;
             foreach (int position in vectorOfPositions)  // לא במעגל!
             {
-                int seed = keyEncryptionKey[position % keyEncryptionKey.Length];
-                int[] values = GenerateBBSSequence(seed, SUB_BLOCK_SIZE);
-                Array.Copy(values, 0, key, index, SUB_BLOCK_SIZE);
-                index += SUB_BLOCK_SIZE;
+                //int seed = keyEncryptionKey[position % keyEncryptionKey.Length];
+
+                //int[] values = GenerateBBSSequence(seed, SUB_BLOCK_SIZE);
+                //Array.Copy(values, 0, key, index, SUB_BLOCK_SIZE);
+                //index += SUB_BLOCK_SIZE;
+                int keyIndex = position % _setting.keySize;
+                if (keyIndex < 0 || keyIndex >= keyEncryptionKey.Length)
+                {
+                    throw new ArgumentOutOfRangeException($"האינדקס {keyIndex} חורג מהמגבלה של המערך.");
+                }
+                int seed = keyEncryptionKey[keyIndex];
+                int[] values = GenerateBBSSequence(seed, _setting.subBlockSize);
+                Array.Copy(values, 0, key, index, _setting.subBlockSize);
+                index += _setting.subBlockSize;
             }
+
+            return key;
+
+        }
             //foreach (int position in vectorOfPositions)
             //{
             //    // קבלת ערך מהמפתח הראשי
@@ -105,8 +121,7 @@ namespace BL.decryption
             //    index += SUB_BLOCK_SIZE;
             //}
 
-            return key;
-        }
+        
 
         /// <summary>
         /// מחלק את המפתח לווקטורים
@@ -114,7 +129,7 @@ namespace BL.decryption
         /// ----------------
         // block count its k' , again, like i write in the top  this page. 
         // we have to divide the key into k' vectors .
-        private List<int[]> ParseKey(int[] key, int blocksCount)
+        public List<int[]> ParseKey(int[] key, int blocksCount)
         {
             List<int[]> seedVectors = new List<int[]>();
 
@@ -122,8 +137,8 @@ namespace BL.decryption
             {
                 //int[] seedVector = new int[k];
 
-                int[] seedVector = new int[SUB_BLOCK_SIZE];
-                Array.Copy(key, i * SUB_BLOCK_SIZE, seedVector, 0, SUB_BLOCK_SIZE);
+                int[] seedVector = new int[_setting.subBlockSize];
+                Array.Copy(key, i * _setting.subBlockSize, seedVector, 0, _setting.subBlockSize);
                 //Array.Copy(key, i * k, seedVector, 0, k);
                 seedVectors.Add(seedVector);
             }
@@ -133,15 +148,15 @@ namespace BL.decryption
         /// <summary>
         /// מייצר תת-מפתח מווקטור זרע
         /// </summary>
-        private int[,] GenerateSubKey(int[] seedVector)
+        public int[,] GenerateSubKey(int[] seedVector)
         {
-            int[,] subKey = new int[GRAPH_ORDER, GRAPH_ORDER];
+            int[,] subKey = new int[_setting.graphOrder, _setting.graphOrder];
 
-            for (int i = 0; i < GRAPH_ORDER; i++)
+            for (int i = 0; i < _setting.graphOrder; i++)
             {
-                int[] rowValues = GenerateBBSSequence(seedVector[i], GRAPH_ORDER);
+                int[] rowValues = GenerateBBSSequence(seedVector[i], _setting.graphOrder);
 
-                for (int j = 0; j < GRAPH_ORDER; j++)
+                for (int j = 0; j < _setting.graphOrder; j++)
                 {
                     subKey[i, j] = rowValues[j];
                 }
@@ -149,7 +164,7 @@ namespace BL.decryption
            
             return subKey;
         }
-        private int[] GenerateBBSSequence(int seed, int length)
+        public int[] GenerateBBSSequence(int seed, int length)
         {
             // מספרים ראשוניים גדולים עבור BBS
             BigInteger p = BigInteger.Parse("98799821657648109045695379286138768173");

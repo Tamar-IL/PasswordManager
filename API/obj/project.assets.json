@@ -560,7 +560,8 @@
         "dependencies": {
           "DAL": "1.0.0",
           "Entities": "1.0.0",
-          "IBL": "1.0.0"
+          "IBL": "1.0.0",
+          "MyProject.Common": "1.0.0"
         },
         "compile": {
           "bin/placeholder/BL.dll": {}
@@ -638,6 +639,16 @@
         },
         "runtime": {
           "bin/placeholder/IDAL.dll": {}
+        }
+      },
+      "MyProject.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/MyProject.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MyProject.Common.dll": {}
         }
       }
     }
@@ -1824,6 +1835,11 @@
       "type": "project",
       "path": "../IDAL/IDAL.csproj",
       "msbuildProject": "../IDAL/IDAL.csproj"
+    },
+    "MyProject.Common/1.0.0": {
+      "type": "project",
+      "path": "../MyProject.Common/MyProject.Common.csproj",
+      "msbuildProject": "../MyProject.Common/MyProject.Common.csproj"
     }
   },
   "projectFileDependencyGroups": {

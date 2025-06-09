@@ -67,3 +67,5 @@ C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\obj\Debug\net8.0\API.MvcApplicationPartsAssemblyInfo.cs
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\MyProject.Common.dll
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\API\bin\Debug\net8.0\MyProject.Common.pdb

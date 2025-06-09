@@ -8,5 +8,7 @@ namespace IBL
 {
     public interface IEncryptionProcess
     {
+        string AddLengthAsPrefix(string input);
+
     }
 }

@@ -1,5 +1,7 @@
 ﻿using IBL;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Options;
+using MyProject.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,18 +20,11 @@ namespace BL
         //private static int r = n % 78;
         //private static int k = r > 0 ? r : r + 1;     
 
-        private const int BLOCK_SIZE = 78;
-        private const int SUB_BLOCK_SIZE = 13;
-        private const int GRAPH_ORDER = 13;
-        private const int KEY_SIZE = 256;
-        //private const int BLOCK_SIZE = 15;
-        //private const int SUB_BLOCK_SIZE = 5;
-        //private const int GRAPH_ORDER = 5;
-        //private const int KEY_SIZE = 256;
 
         public readonly int[] _keyEncryptionKey;
         public readonly int[,] _initializationMatrix;
         public readonly IBBSRandomGenerator _bBSRandomGenerator;
+        private readonly MySetting _setting;
 
         /// <summary>
         /// קונסטרקטור למערכת ההצפנה
@@ -37,16 +32,17 @@ namespace BL
         /// <param name="keyEncryptionKey">מפתח ראשי</param>
         /// <param name="initializationMatrix">מטריצת אתחול</param>
 
-        public GenerateKeyEncryption(int[] keyEncryptionKey, int[,] initializationMatrix)
+        public GenerateKeyEncryption(int[] keyEncryptionKey, int[,] initializationMatrix, IOptions<MySetting> options)
         {
-            //if (keyEncryptionKey.Length != KEY_SIZE)
-            //    throw new ArgumentException($"Master key must be {KEY_SIZE} bytes long");
+            _setting = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-            if (initializationMatrix.GetLength(0) != GRAPH_ORDER || initializationMatrix.GetLength(1) != GRAPH_ORDER)
-                throw new ArgumentException($"Initialization matrix must be {GRAPH_ORDER}x{GRAPH_ORDER}");
+            if (initializationMatrix.GetLength(0) != _setting.graphOrder || initializationMatrix.GetLength(1) != _setting.graphOrder)
+                throw new ArgumentException($"Initialization matrix must be {_setting.graphOrder}x{_setting.graphOrder}");
 
             _keyEncryptionKey = keyEncryptionKey;
             _initializationMatrix = initializationMatrix;
+
+
             //_bBSRandomGenerator = bBSRandomGenerator;
         }
 
@@ -62,17 +58,17 @@ namespace BL
             // המרת ההודעה למערך של ערכי ASCII
             int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
             Console.WriteLine("message as ascii ", string.Join(", ", messageAsAscii));
-            for (int i=0;i<messageAsAscii.Count();i++)
+            for (int i = 0; i < messageAsAscii.Count(); i++)
             {
-                Console.WriteLine("message as ascii ["+i+"]" +" "+ messageAsAscii[i].ToString());
+                Console.WriteLine("message as ascii [" + i + "]" + " " + messageAsAscii[i].ToString());
 
             }
             // חישוב מספר הבלוקים
             int messageLength = messageAsAscii.Length;
 
-            int remainder = messageLength % BLOCK_SIZE;
+            int remainder = messageLength % _setting.BlockSize;
 
-            int blocksCount = messageLength / BLOCK_SIZE + (remainder > 0 ? 1 : 0);
+            int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
 
             // חלוקת ההודעה לבלוקים
             List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
@@ -102,7 +98,7 @@ namespace BL
                 //לעומת זאת עם נבצע שארית 256 המספר הגדול ביותר שנוכל לקבל זה 255
                 //KEKואז ודאי לא תהיה חריגה מגודל המערך 
 
-                int index = selectedChar % KEY_SIZE;  // מודול 256
+                int index = selectedChar % _setting.keySize;  // מודול 256
 
                 // אם האינדקס לא בטווח, תפסול את החישוב
                 if (index < 0 || index >= _keyEncryptionKey.Length)
@@ -122,9 +118,9 @@ namespace BL
             }
             for (int i = 0; i < subKeys.Length; i++)
             {
-                for (int j = 0; j < GRAPH_ORDER; j++)        // ✅ 
+                for (int j = 0; j < _setting.graphOrder; j++)        // ✅ 
                 {
-                    for (int k = 0; k < GRAPH_ORDER; k++)    // ✅
+                    for (int k = 0; k < _setting.graphOrder; k++)    // ✅
                     {
                         Console.Write(subKeys[i][j, k]);
                     }
@@ -145,7 +141,7 @@ namespace BL
         {
             //BigInteger p, q, s = new BigInteger;
             //return _bBSRandomGenerator.GenerateSeed(p,q,s);
-            return GenerateBBSSequence(initialValue, SUB_BLOCK_SIZE);
+            return GenerateBBSSequence(initialValue, _setting.subBlockSize);
 
         }
         private int[] ConvertMessageToAscii(string message)
@@ -183,13 +179,13 @@ namespace BL
         }
         private int[,] GenerateSubKey(int[] seedVector)
         {
-            int[,] subKey = new int[GRAPH_ORDER, GRAPH_ORDER];
+            int[,] subKey = new int[_setting.graphOrder, _setting.graphOrder];
 
-            for (int i = 0; i < GRAPH_ORDER; i++)
+            for (int i = 0; i < _setting.graphOrder; i++)
             {
-                int[] rowValues = GenerateBBSSequence(seedVector[i], GRAPH_ORDER);
+                int[] rowValues = GenerateBBSSequence(seedVector[i], _setting.graphOrder);
 
-                for (int j = 0; j < GRAPH_ORDER; j++)
+                for (int j = 0; j < _setting.graphOrder; j++)
                 {
                     subKey[i, j] = rowValues[j];
                 }
@@ -201,14 +197,14 @@ namespace BL
         private List<int[]> ParseMessage(int[] message, int blocksCount)
         {
             List<int[]> blocks = new List<int[]>();
-          
+
             for (int i = 0; i < blocksCount; i++)
             {
-                int startIndex = i * BLOCK_SIZE;
-                int[] block = new int[BLOCK_SIZE];
+                int startIndex = i * _setting.BlockSize;
+                int[] block = new int[_setting.BlockSize];
 
                 // העתקת הנתונים לבלוק (או מילוי באפסים אם בסוף)
-                int copyLength = Math.Min(BLOCK_SIZE, message.Length - startIndex);
+                int copyLength = Math.Min(_setting.BlockSize, message.Length - startIndex);
                 if (copyLength > 0)
                 {
                     Array.Copy(message, startIndex, block, 0, copyLength);

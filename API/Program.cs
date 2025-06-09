@@ -13,6 +13,9 @@ using BL.decryption;
 using System;
 using BL.RSAForMasterKay;
 using IBL.RSAForMasterKey;
+using System.Runtime;
+using Microsoft.Extensions.Options;
+using MyProject.Common;
 
 
 namespace API
@@ -55,6 +58,9 @@ namespace API
             builder.Services.AddSingleton(provider => provider.GetRequiredService<IMongoClient>().GetDatabase(dbName));
             builder.Services.AddSingleton<MongoDbService>(sp => new MongoDbService(connectionString, dbName));
 
+            builder.Services.Configure<MySetting>(builder.Configuration.GetSection("MySetting"));
+            builder.Services.AddScoped<MySetting>();
+
             //builder.Services.AddSingleton<MongoDbService>(provider => new MongoDbService(connectionString, dbName));
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
@@ -69,6 +75,7 @@ namespace API
                         .AllowAnyHeader());
             });
             var app = builder.Build();
+            var setting = app.Services.GetRequiredService<IOptions<MySetting>>().Value;
 
             if (app.Environment.IsDevelopment())
             {
@@ -78,20 +85,6 @@ namespace API
            
 
             app.UseCors("AllowAll");
-
-            // יצירת מפתח ראשי
-            //int[] masterKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>();
-
-            //int[] masterKey = GenerateRandomKey(256);
-
-            // יצירת מטריצת אתחול
-
-            // יצירת מופע של מערכת ההצפנה'Random random = new Random();
-            //string str1 = "this is message for testhhhhhhhhhhhhhhhhhhhhhhhhhfyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyygggggggggggggggggggggggggggggdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhheererjdlakjfljhdhfjhdhhhkk";
-            //string str2 = "hhis is mesyyge forytesthhhhhhhhhfyhyhyhhhyhyhhyhfyyyyyyyyyyyyyyyyyyyyyyyyyyyygyyyygggggghhgggggghgggggggggghhghhhhhhhhhhhhhhhhhhhhhhhhhehhhhhhhhhhhhhhhhheeerjdlakjfldhfjhdhhkk";
-            //Console.WriteLine( str1.OrderBy(c => c).SequenceEqual(str2.OrderBy(c => c)));
-            //Console.WriteLine("הכנס מחרוזת:");
-            //string input = Console.ReadLine();
 
             //int[] frequencyArray = CreateFrequencyArray(input);
 
@@ -116,76 +109,34 @@ namespace API
 
             int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
 
-            // יצירת ערכים אקראיים בין 0 ל-99
-            //for (int i = 0; i < keyEncryptionKey.Length; i++)
-            //{
-            //    keyEncryptionKey[i] = random.Next(0, 100); // ערך אקראי בין 0 ל-99
-            //}
             int[,] initMatrix = GenerateRandomMatrix(13, 13);
             //int[,] initMatrix = GenerateRandomMatrix(5, 5);
             //GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
             //generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
-            EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix);
-            DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix);
+            EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix,Options.Create(setting));
+            DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix, Options.Create(setting));
            
             Console.WriteLine("\n-----------------------------\n");
             for (int i =0;i< keyEncryptionKey.Length;i++){ Console.Write(" "+keyEncryptionKey[ i]+", "); }
             Console.WriteLine("\n-----------------------------\n");
-            
+
             // הודעה לדוגמה
             string message = "" +
-                "trfg6h8j9k5E755sOQsA0X0lW0cvxS6IYgQqCAx" +
-                             //"ssage for " +
-                             //"testhhhhhh" +
-
-                             //"hhhhhhhhhf" +
-                             "";
-                             //"yyyyyyyyyy" +
-                             //"yyyyyyyyyy" +
-                             //"yyyggggggg" +
-                             //"gggggggggg" +
-                             //"gggggggggg" +
-                             //"ggdhhhhhhh" +
-                             //"hhhhhhhhhh" +
-                             //"hhhhhhhhhh" +
-                             //"hhhhhhhhhh" +
-                             //"hhhheererj" +
-                             //"dlakjfljhd" +
-                             //"----------";
+                "try15cahr0Vassw";
+                            
             Console.WriteLine("Original message: " + message);
 
-            //string message2 = "-----------" +
-            //                 "messe ag  2" +
-            //                 "Be for you today!" +
-            //                 "Be for you today!" +
-            //                 "Be for you today!" +
-            //                 "Be for you today!" +
-            //                 "Be for you today!" +
-
-            //                 "Be for you today!" +
-            //                 "Be for you today!"+
-
-            //                 "@@!";
-            //int num = message2.Length;
+            
            
             // הצפנת ההודעה
             var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
-            //var (encryptedData1, vectorOfPositions1) = cryptosystem.Encrypt(message2);
-
-            //Console.WriteLine("\nEncrypted data (first 20 values): " +
-            //    string.Join(", ", encryptedData.Take(20)) + "...");
-
-            //Console.WriteLine("\nVector of positions: " +
-            //    string.Join(", ", vectorOfPositions));
+          
 
             // פענוח ההודעה
             string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
-            //string decryptedMessage1 = decryptosystem.Decrypt(encryptedData1, vectorOfPositions1);
 
             Console.WriteLine("\nmessage encreypt: " + message + "--end");
             Console.WriteLine("\nmessage: " + decryptedMessage+"--end");
-            //Console.WriteLine("\nmessageencrypt1: " + message2);
-            //Console.WriteLine("\nDecrypted message: " + decryptedMessage1);
 
             // בדיקה שההודעה המקורית זהה להודעה שפוענחה
             Console.WriteLine("\nOriginal equals decrypted: " +

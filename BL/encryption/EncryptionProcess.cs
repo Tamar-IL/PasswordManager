@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using BL.decryption;
 using IBL;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using MyProject.Common;
 
 
 namespace BL.encryption
@@ -12,27 +16,20 @@ namespace BL.encryption
     public class EncryptionProcess : IEncryptionProcess
     {
         private GenerateKeyEncryption generateKeyEncryption;
-
-        //private const int BLOCK_SIZE = 15;
-        //private const int SUB_BLOCK_SIZE = 5;
-        //private const int GRAPH_ORDER = 5;
-        //private const int KEY_SIZE = 256;
-        private const int BLOCK_SIZE = 78;
-        private const int SUB_BLOCK_SIZE = 13;
-        private const int GRAPH_ORDER = 13;
-        private const int KEY_SIZE = 256;
         private readonly int[,] _initializationMatrix;
         private readonly int[] _keyEncryptionKey;
+        private readonly MySetting _setting;
         /// <summary>
         /// מצפין הודעת טקסט
         /// </summary>
         /// <param name="clearMessage">הודעה לא-מוצפנת</param>
         /// <returns>הודעה מוצפנת ווקטור מיקומים</returns>
-        public EncryptionProcess(int[] keyEncryptionKey, int[,] initializationMatrix)
+        public EncryptionProcess(int[] keyEncryptionKey, int[,] initializationMatrix, IOptions<MySetting> options)
         {
             _keyEncryptionKey = keyEncryptionKey;
             _initializationMatrix = initializationMatrix;
-            generateKeyEncryption = new GenerateKeyEncryption(keyEncryptionKey, initializationMatrix);
+            generateKeyEncryption = new GenerateKeyEncryption(keyEncryptionKey, initializationMatrix, options);
+            _setting = options.Value;
         }
 
         public EncryptionProcess()
@@ -51,8 +48,8 @@ namespace BL.encryption
 
             // חישוב מספר הבלוקים
             int messageLength = messageAsAscii.Length;
-            int remainder = messageLength % BLOCK_SIZE;
-            int blocksCount = messageLength / BLOCK_SIZE + (remainder > 0 ? 1 : 0);
+            int remainder = messageLength % _setting.BlockSize;
+            int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
             // split the message into k' block forming thr set
             // חלוקת ההודעה לבלוקים
             List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
@@ -125,24 +122,24 @@ namespace BL.encryption
         private List<int[]> ParseBlock(int[] block)
         {
             List<int[]> subBlocks = new List<int[]>();
-            int validLength = Math.Min(block.Length, BLOCK_SIZE);
+            int validLength = Math.Min(block.Length, _setting.BlockSize);
 
             // חלוקה ל-6 תת-בלוקים באורך 13
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < _setting.BlockSize/_setting.subBlockSize; i++)
             {
-                int[] subBlock = new int[SUB_BLOCK_SIZE];
-                int startIndex = i * SUB_BLOCK_SIZE;
+                int[] subBlock = new int[_setting.subBlockSize];
+                int startIndex = i * _setting.subBlockSize;
 
                 // למקרה של בלוק אחרון שאינו מלא
                 if (startIndex < validLength)
                 {
-                    int copyLength = Math.Min(SUB_BLOCK_SIZE, validLength - startIndex);
+                    int copyLength = Math.Min(_setting.subBlockSize, validLength - startIndex);
                     Array.Copy(block, startIndex, subBlock, 0, copyLength);
 
                     // מילוי עם אפסים אם צריך
-                    if (copyLength < SUB_BLOCK_SIZE)
+                    if (copyLength < _setting.subBlockSize)
                     {
-                        for (int j = copyLength; j < SUB_BLOCK_SIZE; j++)
+                        for (int j = copyLength; j < _setting.subBlockSize; j++)
                         {
                             subBlock[j] = 0;
                         }
@@ -151,7 +148,7 @@ namespace BL.encryption
                 else
                 {
                     // מילוי תת-בלוק ריק באפסים
-                    for (int j = 0; j < SUB_BLOCK_SIZE; j++)
+                    for (int j = 0; j < _setting.subBlockSize; j++)
                     {
                         subBlock[j] = 0;
                     }
@@ -169,7 +166,7 @@ namespace BL.encryption
         private int[,] BlockToAdjacencyMatrix(List<int[]> subBlocks)
         {
             // יצירת מטריצת סמיכות התחלתית מלאה באפסים
-            int[,] adjacencyMatrix = new int[GRAPH_ORDER, GRAPH_ORDER];
+            int[,] adjacencyMatrix = new int[_setting.graphOrder, _setting.graphOrder];
 
             // מעבר על כל תת-בלוק ויצירת מעגל המילטוני
             for (int subBlockIndex = 0; subBlockIndex < subBlocks.Count; subBlockIndex++)
@@ -205,6 +202,7 @@ namespace BL.encryption
         /// <summary>
         /// יוצר מעגל המילטוני עבור אינדקס תת-בלוק
         /// </summary>
+        
         private List<int> CreateHamiltonianCircuit(int subBlockIndex)
         {
             // כאן נייצר 6 מעגלים המילטוניים זרים בגרף מסדר 13
@@ -226,19 +224,7 @@ namespace BL.encryption
                 case 5:
                     return new List<int> { 0, 6, 1, 7, 12, 5, 11, 4, 10, 3, 9, 2, 8 };
                 default:
-                //case 0:
-                //    return new List<int> { 0, 1, 2, 3, 4  };
-                //case 1:
-                //    return new List<int> { 0, 2, 4, 3, 1 };
-                //case 2:
-                //    return new List<int> { 0, 3, 1, 2, 4 };
-                //case 3:
-                //    return new List<int> { 0, 4, 3, 1, 2 };
-                //case 4:
-                //    return new List<int> { 0, 3, 4, 2, 1 };
-                //case 5:
-                //    return new List<int> { 0, 2, 1, 3, 4 };
-                //default:
+            
                     throw new ArgumentException("Invalid sub-block index");
             }
         }
@@ -314,11 +300,11 @@ namespace BL.encryption
 
             for (int i = 0; i < blocksCount; i++)
             {
-                int startIndex = i * BLOCK_SIZE;
-                int[] block = new int[BLOCK_SIZE];
+                int startIndex = i * _setting.BlockSize;
+                int[] block = new int[_setting.BlockSize];
 
                 // העתקת הנתונים לבלוק (או מילוי באפסים אם בסוף)
-                int copyLength = Math.Min(BLOCK_SIZE, message.Length - startIndex);
+                int copyLength = Math.Min(_setting.BlockSize, message.Length - startIndex);
                 if (copyLength > 0)
                 {
                     Array.Copy(message, startIndex, block, 0, copyLength);
@@ -341,15 +327,31 @@ namespace BL.encryption
             return asciiValues;
 
         }
-        public static string AddSaltToMessageEnd(string message)
+        //שמירת אורך הסיסמה לפני הוספת המלח
+        public string AddLengthAsPrefix(string input)
         {
+            int length = input.Length;
+
+            if (length > 255)
+                throw new ArgumentException("Length too long to encode in a single byte.");
+
+           
+
+            return length + input;
+        }
+
+
+        public  string AddSaltToMessageEnd(string message)
+        {
+            message = AddLengthAsPrefix(message);
             Random _random = new Random();
+            //להוריד את הקבוע!!
             const int targetLength = 78;
             const string saltChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
             if (message.Length > targetLength)
                 throw new ArgumentException("ההודעה ארוכה מ-78 תווים.");
-
+            
             int saltLength = targetLength - message.Length;
             StringBuilder saltBuilder = new StringBuilder(saltLength);
 
@@ -358,9 +360,11 @@ namespace BL.encryption
                 char randomChar = saltChars[_random.Next(saltChars.Length)];
                 saltBuilder.Append(randomChar);
             }
-
+            
             return message + saltBuilder.ToString();
         }
+       
+
     }
 
 }

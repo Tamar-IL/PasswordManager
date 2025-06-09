@@ -305,7 +305,8 @@
         "dependencies": {
           "DAL": "1.0.0",
           "Entities": "1.0.0",
-          "IBL": "1.0.0"
+          "IBL": "1.0.0",
+          "MyProject.Common": "1.0.0"
         },
         "runtime": {
           "BL.dll": {
@@ -370,6 +371,14 @@
         },
         "runtime": {
           "IDAL.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MyProject.Common/1.0.0": {
+        "runtime": {
+          "MyProject.Common.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -647,6 +656,11 @@
       "sha512": ""
     },
     "IDAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MyProject.Common/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

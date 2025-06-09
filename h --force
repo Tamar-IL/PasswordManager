@@ -1,0 +1,864 @@
+[1mdiff --git a/API/API.csproj.user b/API/API.csproj.user[m
+[1mnew file mode 100644[m
+[1mindex 0000000..031db34[m
+[1m--- /dev/null[m
+[1m+++ b/API/API.csproj.user[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32mן»¿<?xml version="1.0" encoding="utf-8"?>[m
+[32m+[m[32m<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">[m
+[32m+[m[32m  <PropertyGroup>[m
+[32m+[m[32m    <ActiveDebugProfile>https</ActiveDebugProfile>[m
+[32m+[m[32m    <Controller_SelectedScaffolderID>MvcControllerEmptyScaffolder</Controller_SelectedScaffolderID>[m
+[32m+[m[32m    <Controller_SelectedScaffolderCategoryPath>root/Common/MVC/Controller</Controller_SelectedScaffolderCategoryPath>[m
+[32m+[m[32m  </PropertyGroup>[m
+[32m+[m[32m</Project>[m
+\ No newline at end of file[m
+[1mdiff --git a/API/Program.cs b/API/Program.cs[m
+[1mindex c6f938c..761241e 100644[m
+[1m--- a/API/Program.cs[m
+[1m+++ b/API/Program.cs[m
+[36m@@ -114,15 +114,15 @@[m [mnamespace API[m
+ [m
+             Random random = new Random();[m
+ [m
+[31m-            int[] keyEncryptionKey = new int[256]; // מערך בגודל 64[m
+[32m+[m[32m            int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256[m
+ [m
+             // יצירת ערכים אקראיים בין 0 ל-99[m
+[31m-            for (int i = 0; i < keyEncryptionKey.Length; i++)[m
+[31m-            {[m
+[31m-                keyEncryptionKey[i] = random.Next(0, 100); // ערך אקראי בין 0 ל-99[m
+[31m-            }[m
+[31m-            //int[,] initMatrix = GenerateRandomMatrix(13, 13);[m
+[31m-            int[,] initMatrix = GenerateRandomMatrix(5, 5);[m
+[32m+[m[32m            //for (int i = 0; i < keyEncryptionKey.Length; i++)[m
+[32m+[m[32m            //{[m
+[32m+[m[32m            //    keyEncryptionKey[i] = random.Next(0, 100); // ערך אקראי בין 0 ל-99[m
+[32m+[m[32m            //}[m
+[32m+[m[32m            int[,] initMatrix = GenerateRandomMatrix(13, 13);[m
+[32m+[m[32m            //int[,] initMatrix = GenerateRandomMatrix(5, 5);[m
+             //GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);[m
+             //generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);[m
+             EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix);[m
+[36m@@ -134,12 +134,12 @@[m [mnamespace API[m
+             [m
+             // הודעה לדוגמה[m
+             string message = "" +[m
+[31m-                "trfg6h8j9k" +[m
+[32m+[m[32m                "trfg6h8j9k5E755sOQsA0X0lW0cvxS6IYgQqCAx" +[m
+                              //"ssage for " +[m
+                              //"testhhhhhh" +[m
+ [m
+                              //"hhhhhhhhhf" +[m
+[31m-                             "55555";[m
+[32m+[m[32m                             "";[m
+                              //"yyyyyyyyyy" +[m
+                              //"yyyyyyyyyy" +[m
+                              //"yyyggggggg" +[m
+[1mdiff --git a/API/appsettings.json b/API/appsettings.json[m
+[1mindex b3da3dc..f9c65c4 100644[m
+[1m--- a/API/appsettings.json[m
+[1m+++ b/API/appsettings.json[m
+[36m@@ -15,7 +15,8 @@[m
+ [m
+   "Encryption": {[m
+     "MasterKey": [[m
+[31m-      543,789,[m
+[32m+[m[32m      543,[m
+[32m+[m[32m      789,[m
+       234,[m
+       876,[m
+       123,[m
+[36m@@ -274,6 +275,7 @@[m
+       645,[m
+       978[m
+     ][m
+[32m+[m[41m    [m
+   },[m
+   "cryptographySetting": {[m
+     "PrivateKaeyPath": "C:\\׳“׳™׳¡׳§ ׳׳§׳•׳׳™ (C)\\׳×׳›׳ ׳•׳×\\׳×׳›׳ ׳•׳× ׳©׳ ׳” ׳‘\\׳׳©׳¨׳“ ׳”׳—׳™׳ ׳•׳\\׳₪׳¨׳•׳™׳§׳˜ ׳’׳׳¨\\rsa.xml"[m
+[1mdiff --git a/API/bin/Debug/net8.0/API.deps.json b/API/bin/Debug/net8.0/API.deps.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5c096da[m
+[1m--- /dev/null[m
+[1m+++ b/API/bin/Debug/net8.0/API.deps.json[m
+[36m@@ -0,0 +1,655 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "runtimeTarget": {[m
+[32m+[m[32m    "name": ".NETCoreApp,Version=v8.0",[m
+[32m+[m[32m    "signature": ""[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "compilationOptions": {},[m
+[32m+[m[32m  "targets": {[m
+[32m+[m[32m    ".NETCoreApp,Version=v8.0": {[m
+[32m+[m[32m      "API/1.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "BL": "1.0.0",[m
+[32m+[m[32m          "DAL": "1.0.0",[m
+[32m+[m[32m          "DTO": "1.0.0",[m
+[32m+[m[32m          "MongoDB.Driver": "3.2.1",[m
+[32m+[m[32m          "Swashbuckle.AspNetCore": "6.6.2"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "API.dll": {}[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "AutoMapper/14.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.Options": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/AutoMapper.dll": {[m
+[32m+[m[32m            "assemblyVersion": "14.0.0.0",[m
+[32m+[m[32m            "fileVersion": "14.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "DnsClient/1.6.1": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Win32.Registry": "5.0.0"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net5.0/DnsClient.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.6.1.0",[m
+[32m+[m[32m            "fileVersion": "1.6.1.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.EntityFrameworkCore/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.EntityFrameworkCore.Abstractions": "9.0.3",[m
+[32m+[m[32m          "Microsoft.EntityFrameworkCore.Analyzers": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Caching.Memory": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Logging": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.EntityFrameworkCore.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.3.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11202"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.EntityFrameworkCore.Abstractions/9.0.3": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.3.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11202"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.EntityFrameworkCore.Analyzers/9.0.3": {},[m
+[32m+[m[32m      "Microsoft.Extensions.ApiDescription.Server/6.0.5": {},[m
+[32m+[m[32m      "Microsoft.Extensions.Caching.Abstractions/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.Primitives": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Caching.Abstractions.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.Caching.Memory/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.Caching.Abstractions": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Logging.Abstractions": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Options": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Primitives": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Caching.Memory.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.Configuration/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.Configuration.Abstractions": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Primitives": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Configuration.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.Configuration.Abstractions/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.Primitives": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.DependencyInjection/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.DependencyInjection.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.3": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.Logging/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.DependencyInjection": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Logging.Abstractions": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Options": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Logging.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.Logging.Abstractions/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.3",[m
+[32m+[m[32m          "System.Diagnostics.DiagnosticSource": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Logging.Abstractions.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.Options/9.0.3": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Primitives": "9.0.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Options.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Extensions.Primitives/9.0.3": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Microsoft.Extensions.Primitives.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.NETCore.Platforms/5.0.0": {},[m
+[32m+[m[32m      "Microsoft.OpenApi/1.6.14": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/netstandard2.0/Microsoft.OpenApi.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.6.14.0",[m
+[32m+[m[32m            "fileVersion": "1.6.14.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Microsoft.Win32.Registry/5.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "System.Security.AccessControl": "5.0.0",[m
+[32m+[m[32m          "System.Security.Principal.Windows": "5.0.0"[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "MongoDB.Bson/3.2.1": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "System.Memory": "4.5.5",[m
+[32m+[m[32m          "System.Runtime.CompilerServices.Unsafe": "5.0.0"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net6.0/MongoDB.Bson.dll": {[m
+[32m+[m[32m            "assemblyVersion": "3.2.1.0",[m
+[32m+[m[32m            "fileVersion": "3.2.1.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "MongoDB.Driver/3.2.1": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "DnsClient": "1.6.1",[m
+[32m+[m[32m          "Microsoft.Extensions.Logging.Abstractions": "9.0.3",[m
+[32m+[m[32m          "MongoDB.Bson": "3.2.1",[m
+[32m+[m[32m          "SharpCompress": "0.30.1",[m
+[32m+[m[32m          "Snappier": "1.0.0",[m
+[32m+[m[32m          "System.Buffers": "4.5.1",[m
+[32m+[m[32m          "ZstdSharp.Port": "0.7.3"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net6.0/MongoDB.Driver.dll": {[m
+[32m+[m[32m            "assemblyVersion": "3.2.1.0",[m
+[32m+[m[32m            "fileVersion": "3.2.1.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "SharpCompress/0.30.1": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net5.0/SharpCompress.dll": {[m
+[32m+[m[32m            "assemblyVersion": "0.30.1.0",[m
+[32m+[m[32m            "fileVersion": "0.30.1.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Snappier/1.0.0": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net5.0/Snappier.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.0.0.0",[m
+[32m+[m[32m            "fileVersion": "1.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Swashbuckle.AspNetCore/6.6.2": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.Extensions.ApiDescription.Server": "6.0.5",[m
+[32m+[m[32m          "Swashbuckle.AspNetCore.Swagger": "6.6.2",[m
+[32m+[m[32m          "Swashbuckle.AspNetCore.SwaggerGen": "6.6.2",[m
+[32m+[m[32m          "Swashbuckle.AspNetCore.SwaggerUI": "6.6.2"[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Swashbuckle.AspNetCore.Swagger/6.6.2": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.OpenApi": "1.6.14"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Swashbuckle.AspNetCore.Swagger.dll": {[m
+[32m+[m[32m            "assemblyVersion": "6.6.2.0",[m
+[32m+[m[32m            "fileVersion": "6.6.2.401"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Swashbuckle.AspNetCore.SwaggerGen/6.6.2": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Swashbuckle.AspNetCore.Swagger": "6.6.2"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {[m
+[32m+[m[32m            "assemblyVersion": "6.6.2.0",[m
+[32m+[m[32m            "fileVersion": "6.6.2.401"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Swashbuckle.AspNetCore.SwaggerUI/6.6.2": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {[m
+[32m+[m[32m            "assemblyVersion": "6.6.2.0",[m
+[32m+[m[32m            "fileVersion": "6.6.2.401"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "System.Buffers/4.5.1": {},[m
+[32m+[m[32m      "System.Diagnostics.DiagnosticSource/9.0.3": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net8.0/System.Diagnostics.DiagnosticSource.dll": {[m
+[32m+[m[32m            "assemblyVersion": "9.0.0.0",[m
+[32m+[m[32m            "fileVersion": "9.0.325.11113"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "System.Memory/4.5.5": {},[m
+[32m+[m[32m      "System.Runtime.CompilerServices.Unsafe/5.0.0": {},[m
+[32m+[m[32m      "System.Security.AccessControl/5.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "Microsoft.NETCore.Platforms": "5.0.0",[m
+[32m+[m[32m          "System.Security.Principal.Windows": "5.0.0"[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "System.Security.Principal.Windows/5.0.0": {},[m
+[32m+[m[32m      "ZstdSharp.Port/0.7.3": {[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "lib/net7.0/ZstdSharp.dll": {[m
+[32m+[m[32m            "assemblyVersion": "0.7.3.0",[m
+[32m+[m[32m            "fileVersion": "0.7.3.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "BL/1.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "DAL": "1.0.0",[m
+[32m+[m[32m          "Entities": "1.0.0",[m
+[32m+[m[32m          "IBL": "1.0.0"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "BL.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.0.0.0",[m
+[32m+[m[32m            "fileVersion": "1.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "DAL/1.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "AutoMapper": "14.0.0",[m
+[32m+[m[32m          "Entities": "1.0.0",[m
+[32m+[m[32m          "IDAL": "1.0.0",[m
+[32m+[m[32m          "Microsoft.EntityFrameworkCore": "9.0.3",[m
+[32m+[m[32m          "Microsoft.Extensions.Configuration": "9.0.3",[m
+[32m+[m[32m          "MongoDB.Driver": "3.2.1"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "DAL.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.0.0.0",[m
+[32m+[m[32m            "fileVersion": "1.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "DTO/1.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "MongoDB.Bson": "3.2.1"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "DTO.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.0.0.0",[m
+[32m+[m[32m            "fileVersion": "1.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "Entities/1.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "MongoDB.Bson": "3.2.1"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "Entities.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.0.0.0",[m
+[32m+[m[32m            "fileVersion": "1.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "IBL/1.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "DTO": "1.0.0"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "IBL.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.0.0.0",[m
+[32m+[m[32m            "fileVersion": "1.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "IDAL/1.0.0": {[m
+[32m+[m[32m        "dependencies": {[m
+[32m+[m[32m          "DTO": "1.0.0",[m
+[32m+[m[32m          "Entities": "1.0.0"[m
+[32m+[m[32m        },[m
+[32m+[m[32m        "runtime": {[m
+[32m+[m[32m          "IDAL.dll": {[m
+[32m+[m[32m            "assemblyVersion": "1.0.0.0",[m
+[32m+[m[32m            "fileVersion": "1.0.0.0"[m
+[32m+[m[32m          }[m
+[32m+[m[32m        }[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "libraries": {[m
+[32m+[m[32m    "API/1.0.0": {[m
+[32m+[m[32m      "type": "project",[m
+[32m+[m[32m      "serviceable": false,[m
+[32m+[m[32m      "sha512": ""[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "AutoMapper/14.0.0": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-OC+1neAPM4oCCqQj3g2GJ2shziNNhOkxmNB9cVS8jtx4JbgmRzLcUOxB9Tsz6cVPHugdkHgCaCrTjjSI0Z5sCQ==",[m
+[32m+[m[32m      "path": "automapper/14.0.0",[m
+[32m+[m[32m      "hashPath": "automapper.14.0.0.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "DnsClient/1.6.1": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-4H/f2uYJOZ+YObZjpY9ABrKZI+JNw3uizp6oMzTXwDw6F+2qIPhpRl/1t68O/6e98+vqNiYGu+lswmwdYUy3gg==",[m
+[32m+[m[32m      "path": "dnsclient/1.6.1",[m
+[32m+[m[32m      "hashPath": "dnsclient.1.6.1.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.EntityFrameworkCore/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-ji6fWE8bFWTvqaMue49RSCcAeqlec13hAbitTBZyz/RmYsQDhqM9VkWUoXS1x1mjcsyWjc5EQr2XyuAkwp0eNQ==",[m
+[32m+[m[32m      "path": "microsoft.entityframeworkcore/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.entityframeworkcore.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.EntityFrameworkCore.Abstractions/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-HQH7HgwTl6IyasW7t6F2+ihuHLDmf9+8XaS41v8VHN5Z7x5ZMQIiHCbwxme4P5ICAjBG6VsWcjMCoh4fHbEwJg==",[m
+[32m+[m[32m      "path": "microsoft.entityframeworkcore.abstractions/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.entityframeworkcore.abstractions.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.EntityFrameworkCore.Analyzers/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-M+iOxejD3HqPV8/KE148wIehHA3cmMF+FgnpiN8CFB7DLokVSKQPPrwtHjcrNYJ/BDEssviEPNok/jtQWxj7xA==",[m
+[32m+[m[32m      "path": "microsoft.entityframeworkcore.analyzers/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.entityframeworkcore.analyzers.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.ApiDescription.Server/6.0.5": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-Ckb5EDBUNJdFWyajfXzUIMRkhf52fHZOQuuZg/oiu8y7zDCVwD0iHhew6MnThjHmevanpxL3f5ci2TtHQEN6bw==",[m
+[32m+[m[32m      "path": "microsoft.extensions.apidescription.server/6.0.5",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Caching.Abstractions/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-t8b0R6wtqC4o0hJ+oQkLPydw2MMLEoLEpQXCWbzXAm9NBMOngkDZNcvwF6DxbYdL5SlfZJXbYmiOxKZmwHNgNg==",[m
+[32m+[m[32m      "path": "microsoft.extensions.caching.abstractions/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.caching.abstractions.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Caching.Memory/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-TXggBGDDd6r+J7FV09plXpzGmWcknVyoDsHlY2qcCbcAhmb0eH7Q9IkfIZl54/zEedVTa9jPgiPFTxH9WuCGMQ==",[m
+[32m+[m[32m      "path": "microsoft.extensions.caching.memory/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.caching.memory.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Configuration/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-RIEeZxWYm77+OWLwgik7DzSVSONjqkmcbuCb1koZdGAV7BgOUWnLz80VMyHZMw3onrVwFCCMHBBdruBPuQTvkg==",[m
+[32m+[m[32m      "path": "microsoft.extensions.configuration/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.configuration.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Configuration.Abstractions/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-q5qlbm6GRUrle2ZZxy9aqS/wWoc+mRD3JeP6rcpiJTh5XcemYkplAcJKq8lU11ZfPom5lfbZZfnQvDqcUhqD5Q==",[m
+[32m+[m[32m      "path": "microsoft.extensions.configuration.abstractions/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.configuration.abstractions.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.DependencyInjection/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-lDbxJpkl6X8KZGpkAxgrrthQ42YeiR0xjPp7KPx+sCPc3ZbpaIbjzd0QQ+9kDdK2RU2DOl3pc6tQyAgEZY3V0A==",[m
+[32m+[m[32m      "path": "microsoft.extensions.dependencyinjection/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.dependencyinjection.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-TfaHPSe39NyL2wxkisRxXK7xvHGZYBZ+dy3r+mqGvnxKgAPdHkMu3QMQZI4pquP6W5FIQBqs8FJpWV8ffCgDqQ==",[m
+[32m+[m[32m      "path": "microsoft.extensions.dependencyinjection.abstractions/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Logging/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-utIi2R1nm+PCWkvWBf1Ou6LWqg9iLfHU23r8yyU9VCvda4dEs7xbTZSwGa5KuwbpzpgCbHCIuKaFHB3zyFmnGw==",[m
+[32m+[m[32m      "path": "microsoft.extensions.logging/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.logging.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Logging.Abstractions/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-H/MBMLt9A/69Ux4OrV7oCKt3DcMT04o5SCqDolulzQA66TLFEpYYb4qedMs/uwrLtyHXGuDGWKZse/oa8W9AZw==",[m
+[32m+[m[32m      "path": "microsoft.extensions.logging.abstractions/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.logging.abstractions.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Options/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-xE7MpY70lkw1oiid5y6FbL9dVw8oLfkx8RhSNGN8sSzBlCqGn0SyT3Fqc8tZnDaPIq7Z8R9RTKlS564DS+MV3g==",[m
+[32m+[m[32m      "path": "microsoft.extensions.options/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.options.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Extensions.Primitives/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-yCCJHvBcRyqapMSNzP+kTc57Eaavq2cr5Tmuil6/XVnipQf5xmskxakSQ1enU6S4+fNg3sJ27WcInV64q24JsA==",[m
+[32m+[m[32m      "path": "microsoft.extensions.primitives/9.0.3",[m
+[32m+[m[32m      "hashPath": "microsoft.extensions.primitives.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.NETCore.Platforms/5.0.0": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",[m
+[32m+[m[32m      "path": "microsoft.netcore.platforms/5.0.0",[m
+[32m+[m[32m      "hashPath": "microsoft.netcore.platforms.5.0.0.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.OpenApi/1.6.14": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-tTaBT8qjk3xINfESyOPE2rIellPvB7qpVqiWiyA/lACVvz+xOGiXhFUfohcx82NLbi5avzLW0lx+s6oAqQijfw==",[m
+[32m+[m[32m      "path": "microsoft.openapi/1.6.14",[m
+[32m+[m[32m      "hashPath": "microsoft.openapi.1.6.14.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Microsoft.Win32.Registry/5.0.0": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-dDoKi0PnDz31yAyETfRntsLArTlVAVzUzCIvvEDsDsucrl33Dl8pIJG06ePTJTI3tGpeyHS9Cq7Foc/s4EeKcg==",[m
+[32m+[m[32m      "path": "microsoft.win32.registry/5.0.0",[m
+[32m+[m[32m      "hashPath": "microsoft.win32.registry.5.0.0.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "MongoDB.Bson/3.2.1": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-45w3BJU3sVejUaOVLAxQiEdWkNH+iyxMs3lDh4l2lUFbOb/s4uB++UoQY/3TCQrupQyx1/y7yzC5I76o4h7fFw==",[m
+[32m+[m[32m      "path": "mongodb.bson/3.2.1",[m
+[32m+[m[32m      "hashPath": "mongodb.bson.3.2.1.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "MongoDB.Driver/3.2.1": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-ynT4Mc0ilT+DSQBbobfORqCWqm5UdHIX3Nc59oQH3XbPi43jKiqf7SK8NLBmQsB6RJBJPR+WdIeNLtzyLj3U3g==",[m
+[32m+[m[32m      "path": "mongodb.driver/3.2.1",[m
+[32m+[m[32m      "hashPath": "mongodb.driver.3.2.1.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "SharpCompress/0.30.1": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-XqD4TpfyYGa7QTPzaGlMVbcecKnXy4YmYLDWrU+JIj7IuRNl7DH2END+Ll7ekWIY8o3dAMWLFDE1xdhfIWD1nw==",[m
+[32m+[m[32m      "path": "sharpcompress/0.30.1",[m
+[32m+[m[32m      "hashPath": "sharpcompress.0.30.1.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Snappier/1.0.0": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-rFtK2KEI9hIe8gtx3a0YDXdHOpedIf9wYCEYtBEmtlyiWVX3XlCNV03JrmmAi/Cdfn7dxK+k0sjjcLv4fpHnqA==",[m
+[32m+[m[32m      "path": "snappier/1.0.0",[m
+[32m+[m[32m      "hashPath": "snappier.1.0.0.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Swashbuckle.AspNetCore/6.6.2": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-+NB4UYVYN6AhDSjW0IJAd1AGD8V33gemFNLPaxKTtPkHB+HaKAKf9MGAEUPivEWvqeQfcKIw8lJaHq6LHljRuw==",[m
+[32m+[m[32m      "path": "swashbuckle.aspnetcore/6.6.2",[m
+[32m+[m[32m      "hashPath": "swashbuckle.aspnetcore.6.6.2.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Swashbuckle.AspNetCore.Swagger/6.6.2": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-ovgPTSYX83UrQUWiS5vzDcJ8TEX1MAxBgDFMK45rC24MorHEPQlZAHlaXj/yth4Zf6xcktpUgTEBvffRQVwDKA==",[m
+[32m+[m[32m      "path": "swashbuckle.aspnetcore.swagger/6.6.2",[m
+[32m+[m[32m      "hashPath": "swashbuckle.aspnetcore.swagger.6.6.2.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Swashbuckle.AspNetCore.SwaggerGen/6.6.2": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-zv4ikn4AT1VYuOsDCpktLq4QDq08e7Utzbir86M5/ZkRaLXbCPF11E1/vTmOiDzRTl0zTZINQU2qLKwTcHgfrA==",[m
+[32m+[m[32m      "path": "swashbuckle.aspnetcore.swaggergen/6.6.2",[m
+[32m+[m[32m      "hashPath": "swashbuckle.aspnetcore.swaggergen.6.6.2.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Swashbuckle.AspNetCore.SwaggerUI/6.6.2": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-mBBb+/8Hm2Q3Wygag+hu2jj69tZW5psuv0vMRXY07Wy+Rrj40vRP8ZTbKBhs91r45/HXT4aY4z0iSBYx1h6JvA==",[m
+[32m+[m[32m      "path": "swashbuckle.aspnetcore.swaggerui/6.6.2",[m
+[32m+[m[32m      "hashPath": "swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "System.Buffers/4.5.1": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg==",[m
+[32m+[m[32m      "path": "system.buffers/4.5.1",[m
+[32m+[m[32m      "hashPath": "system.buffers.4.5.1.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "System.Diagnostics.DiagnosticSource/9.0.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-cBA+28xDW33tSiGht/H8xvr8lnaCrgJ7EdO348AfSGsX4PPJUOULKxny/cc9DVNGExaCrtqagsnm5M2mkWIZ+g==",[m
+[32m+[m[32m      "path": "system.diagnostics.diagnosticsource/9.0.3",[m
+[32m+[m[32m      "hashPath": "system.diagnostics.diagnosticsource.9.0.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "System.Memory/4.5.5": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",[m
+[32m+[m[32m      "path": "system.memory/4.5.5",[m
+[32m+[m[32m      "hashPath": "system.memory.4.5.5.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "System.Runtime.CompilerServices.Unsafe/5.0.0": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-ZD9TMpsmYJLrxbbmdvhwt9YEgG5WntEnZ/d1eH8JBX9LBp+Ju8BSBhUGbZMNVHHomWo2KVImJhTDl2hIgw/6MA==",[m
+[32m+[m[32m      "path": "system.runtime.compilerservices.unsafe/5.0.0",[m
+[32m+[m[32m      "hashPath": "system.runtime.compilerservices.unsafe.5.0.0.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "System.Security.AccessControl/5.0.0": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-dagJ1mHZO3Ani8GH0PHpPEe/oYO+rVdbQjvjJkBRNQkX4t0r1iaeGn8+/ybkSLEan3/slM0t59SVdHzuHf2jmw==",[m
+[32m+[m[32m      "path": "system.security.accesscontrol/5.0.0",[m
+[32m+[m[32m      "hashPath": "system.security.accesscontrol.5.0.0.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "System.Security.Principal.Windows/5.0.0": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-t0MGLukB5WAVU9bO3MGzvlGnyJPgUlcwerXn1kzBRjwLKixT96XV0Uza41W49gVd8zEMFu9vQEFlv0IOrytICA==",[m
+[32m+[m[32m      "path": "system.security.principal.windows/5.0.0",[m
+[32m+[m[32m      "hashPath": "system.security.principal.windows.5.0.0.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "ZstdSharp.Port/0.7.3": {[m
+[32m+[m[32m      "type": "package",[m
+[32m+[m[32m      "serviceable": true,[m
+[32m+[m[32m      "sha512": "sha512-U9Ix4l4cl58Kzz1rJzj5hoVTjmbx1qGMwzAcbv1j/d3NzrFaESIurQyg+ow4mivCgkE3S413y+U9k4WdnEIkRA==",[m
+[32m+[m[32m      "path": "zstdsharp.port/0.7.3",[m
+[32m+[m[32m      "hashPath": "zstdsharp.port.0.7.3.nupkg.sha512"[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "BL/1.0.0": {[m
+[32m+[m[32m      "type": "project",[m
+[32m+[m[32m      "serviceable": false,[m
+[32m+[m[32m      "sha512": ""[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "DAL/1.0.0": {[m
+[32m+[m[32m      "type": "project",[m
+[32m+[m[32m      "serviceable": false,[m
+[32m+[m[32m      "sha512": ""[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "DTO/1.0.0": {[m
+[32m+[m[32m      "type": "project",[m
+[32m+[m[32m      "serviceable": false,[m
+[32m+[m[32m      "sha512": ""[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "Entities/1.0.0": {[m
+[32m+[m[32m      "type": "project",[m
+[32m+[m[32m      "serviceable": false,[m
+[32m+[m[32m      "sha512": ""[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "IBL/1.0.0": {[m
+[32m+[m[32m      "type": "project",[m
+[32m+[m[32m      "serviceable": false,[m
+[32m+[m[32m      "sha512": ""[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "IDAL/1.0.0": {[m
+[32m+[m[32m      "type": "project",[m
+[32m+[m[32m      "serviceable": false,[m
+[32m+[m[32m      "sha512": ""[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/API/bin/Debug/net8.0/API.dll b/API/bin/Debug/net8.0/API.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5e402a3[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/API.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/API.exe b/API/bin/Debug/net8.0/API.exe[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b3459b7[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/API.exe differ
+[1mdiff --git a/API/bin/Debug/net8.0/API.pdb b/API/bin/Debug/net8.0/API.pdb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..08afdc1[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/API.pdb differ
+[1mdiff --git a/API/bin/Debug/net8.0/API.runtimeconfig.json b/API/bin/Debug/net8.0/API.runtimeconfig.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b8a4a9c[m
+[1m--- /dev/null[m
+[1m+++ b/API/bin/Debug/net8.0/API.runtimeconfig.json[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "runtimeOptions": {[m
+[32m+[m[32m    "tfm": "net8.0",[m
+[32m+[m[32m    "frameworks": [[m
+[32m+[m[32m      {[m
+[32m+[m[32m        "name": "Microsoft.NETCore.App",[m
+[32m+[m[32m        "version": "8.0.0"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      {[m
+[32m+[m[32m        "name": "Microsoft.AspNetCore.App",[m
+[32m+[m[32m        "version": "8.0.0"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    ],[m
+[32m+[m[32m    "configProperties": {[m
+[32m+[m[32m      "System.GC.Server": true,[m
+[32m+[m[32m      "System.Reflection.NullabilityInfoContext.IsSupported": true,[m
+[32m+[m[32m      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/API/bin/Debug/net8.0/API.staticwebassets.endpoints.json b/API/bin/Debug/net8.0/API.staticwebassets.endpoints.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..2b6c535[m
+[1m--- /dev/null[m
+[1m+++ b/API/bin/Debug/net8.0/API.staticwebassets.endpoints.json[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "Version": 1,[m
+[32m+[m[32m  "ManifestType": "Build",[m
+[32m+[m[32m  "Endpoints": [][m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/API/bin/Debug/net8.0/AutoMapper.dll b/API/bin/Debug/net8.0/AutoMapper.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..1080fb1[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/AutoMapper.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/BL.dll b/API/bin/Debug/net8.0/BL.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0d4cda9[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/BL.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/BL.pdb b/API/bin/Debug/net8.0/BL.pdb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..886c8c6[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/BL.pdb differ
+[1mdiff --git a/API/bin/Debug/net8.0/DAL.dll b/API/bin/Debug/net8.0/DAL.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8f598e4[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/DAL.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/DAL.pdb b/API/bin/Debug/net8.0/DAL.pdb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..df7a331[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/DAL.pdb differ
+[1mdiff --git a/API/bin/Debug/net8.0/DTO.dll b/API/bin/Debug/net8.0/DTO.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..fea634a[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/DTO.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/DTO.pdb b/API/bin/Debug/net8.0/DTO.pdb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4a0d85a[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/DTO.pdb differ
+[1mdiff --git a/API/bin/Debug/net8.0/DnsClient.dll b/API/bin/Debug/net8.0/DnsClient.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..39aa546[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/DnsClient.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/Entities.dll b/API/bin/Debug/net8.0/Entities.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3868008[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/Entities.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/Entities.pdb b/API/bin/Debug/net8.0/Entities.pdb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3bc4c8a[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/Entities.pdb differ
+[1mdiff --git a/API/bin/Debug/net8.0/IBL.dll b/API/bin/Debug/net8.0/IBL.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..86589c3[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/IBL.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/IBL.pdb b/API/bin/Debug/net8.0/IBL.pdb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..32a3456[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/IBL.pdb differ
+[1mdiff --git a/API/bin/Debug/net8.0/IDAL.dll b/API/bin/Debug/net8.0/IDAL.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..57e4b7e[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/IDAL.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/IDAL.pdb b/API/bin/Debug/net8.0/IDAL.pdb[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f0da567[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/IDAL.pdb differ
+[1mdiff --git a/API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll b/API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f0bbc91[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.Abstractions.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll b/API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3240678[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/Microsoft.Extensions.Configuration.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll b/API/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..83a9f35[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/Microsoft.Extensions.Primitives.dll differ
+[1mdiff --git a/API/bin/Debug/net8.0/Microsoft.OpenApi.dll b/API/bin/Debug/net8.0/Microsoft.OpenApi.dll[m
+[1mnew file mode 100644[m
+[1mindex 0000000..aac9a6d[m
+Binary files /dev/null and b/API/bin/Debug/net8.0/Microsof
