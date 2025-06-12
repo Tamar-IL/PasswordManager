@@ -16,6 +16,7 @@ using IBL.RSAForMasterKey;
 using System.Runtime;
 using Microsoft.Extensions.Options;
 using MyProject.Common;
+using System.Security.Cryptography;
 
 
 namespace API
@@ -105,7 +106,7 @@ namespace API
             // מבחן מהיר - הוסף בתחילת הפונקציה Login
            ////--rsa----
 
-            Random random = new Random();
+            //Random random = new Random();
 
             int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
 
@@ -122,7 +123,7 @@ namespace API
 
             // הודעה לדוגמה
             string message = "" +
-                "try15cahr0Vassw";
+                "its_my_p--:qwer4321";
                             
             Console.WriteLine("Original message: " + message);
 
@@ -141,6 +142,7 @@ namespace API
             // בדיקה שההודעה המקורית זהה להודעה שפוענחה
             Console.WriteLine("\nOriginal equals decrypted: " +
                 (message == decryptedMessage ? "Yes" : "No"));
+            //QuickTest();
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
@@ -153,11 +155,11 @@ namespace API
         private static int[] GenerateRandomKey(int length)
         {
             int[] key = new int[length];
-            Random random = new Random();
 
             for (int i = 0; i < length; i++)
             {
-                key[i] = random.Next(0, 256);
+
+                key[i] =  RandomNumberGenerator.GetInt32(0, 256);
             }
 
             return key;
@@ -169,13 +171,13 @@ namespace API
         private static int[,] GenerateRandomMatrix(int rows, int cols)
         {
             int[,] matrix = new int[rows, cols];
-            Random random = new Random();
+            //Random random = new Random();
 
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    matrix[i, j] = random.Next(0, 256);
+                    matrix[i, j] = RandomNumberGenerator.GetInt32(0, 256);
                 }
             }
 
@@ -205,6 +207,75 @@ namespace API
 
             return masterKey;
         }
+        // פונקציית בדיקה
+        //public static void QuickTest()
+        //{
+        //    Console.WriteLine("=== בדיקה מהירה של ההצפנה ===");
+
+        //    // הגדרות
+        //    var settings = new MySetting
+        //    {
+        //        BlockSize = 78,
+        //        subBlockSize = 13,
+        //        graphOrder = 13,
+        //        keySize = 256,
+        //        minPass = 8
+        //    };
+
+        //    var masterKey = new int[256];
+        //    for (int i = 0; i < 256; i++)
+        //    {
+        //        masterKey[i] = (i * 5 + 17) % 256;
+        //    }
+
+        //    var initMatrix = new int[13, 13];
+        //    for (int i = 0; i < 13; i++)
+        //    {
+        //        for (int j = 0; j < 13; j++)
+        //        {
+        //            initMatrix[i, j] = (i * j + 3) % 256;
+        //        }
+        //    }
+
+        //    var options = Microsoft.Extensions.Options.Options.Create(settings);
+
+        //    // בדיקה
+        //    string[] testPasswords = { "test", "password123", "mySecret!" };
+
+        //    foreach (string password in testPasswords)
+        //    {
+        //        Console.WriteLine($"\nבודק סיסמה: '{password}'");
+
+        //        var encryption = new EncryptionProcess(masterKey, initMatrix, options);
+        //        var decryption = new DecryptionProcess(masterKey, initMatrix, options);
+
+        //        var (encrypted, vector) = encryption.Encrypt(password);
+        //        string decrypted = decryption.Decrypt(encrypted, vector);
+
+        //        Console.WriteLine($"מקורי:    '{password}'");
+        //        Console.WriteLine($"מפוענח:   '{decrypted}'");
+        //        Console.WriteLine($"תואם:     {password == decrypted}");
+
+        //        if (password != decrypted)
+        //        {
+        //            Console.WriteLine("? שגיאה בהצפנה/פענוח!");
+        //            // הדפס השוואה תו-תו
+        //            for (int i = 0; i < Math.Max(password.Length, decrypted.Length); i++)
+        //            {
+        //                char original = i < password.Length ? password[i] : ' ';
+        //                char recovered = i < decrypted.Length ? decrypted[i] : ' ';
+        //                if (original != recovered)
+        //                {
+        //                    Console.WriteLine($"  מיקום {i}: '{original}' ? ? '{recovered}'");
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("? הצלחה!");
+        //        }
+        //    }
+        //}
 
     }
 }

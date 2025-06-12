@@ -9,6 +9,7 @@ using IBL;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MyProject.Common;
+using System.Security.Cryptography;
 
 
 namespace BL.encryption
@@ -34,18 +35,22 @@ namespace BL.encryption
 
         public EncryptionProcess()
         {
+
         }
 
         public (int[] EncryptedMessage, List<int> VectorOfPositions) Encrypt(string clearMessage)
         {
+            Console.WriteLine($"Input message: '{clearMessage}'");
+            Console.WriteLine($"After salt: '{clearMessage}' -> length {clearMessage.Length}");
+
+
             clearMessage = AddSaltToMessageEnd(clearMessage);
             Console.WriteLine("clearMessage:" + clearMessage);
-            //by algorithm 2 יצירת תת-מפתחות
-            var (subKeys, vectorOfPositions) = generateKeyEncryption.GenerateSubKeysForEncryption(clearMessage);
-            Console.WriteLine("subKeys:"+ subKeys);
+
+
+
             // המרת ההודעה למערך של ערכי ASCII
             int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
-
             // חישוב מספר הבלוקים
             int messageLength = messageAsAscii.Length;
             int remainder = messageLength % _setting.BlockSize;
@@ -53,6 +58,10 @@ namespace BL.encryption
             // split the message into k' block forming thr set
             // חלוקת ההודעה לבלוקים
             List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
+            //by algorithm 2 יצירת תת-מפתחות
+
+            var (subKeys, vectorOfPositions) = generateKeyEncryption.GenerateSubKeysForEncryption(blocks);
+
 
             // מערך לאחסון הבלוקים המוצפנים
             List<int[]> encryptedBlocks = new List<int[]>();
@@ -61,58 +70,24 @@ namespace BL.encryption
             int[,] previousMatrix = _initializationMatrix;
 
             // הצפנת כל בלוק
-            
             for (int i = 0; i < blocksCount; i++)
             {
                 // חלוקת הבלוק לתת-בלוקים
                 List<int[]> subBlocks = ParseBlock(blocks[i]);
-                Console.WriteLine("subBlocks1:");
-                foreach (var number in subBlocks)
-                {
-                    Console.Write(number + " , ");
-                }
-
                 // המרת תת-הבלוקים לגרף עם מעגלים המילטוניים
                 int[,] adjacencyMatrix = BlockToAdjacencyMatrix(subBlocks);
-                Console.WriteLine("adjacencyMatrix1:" );
-                foreach (var number in adjacencyMatrix)
-                {
-                    Console.Write(number + " , ");
-                }
                 // ביצוע XOR עם המטריצה הקודמת (CBC)
                 int[,] modifiedMatrix = MatrixXor(adjacencyMatrix, previousMatrix);
-                Console.WriteLine("modifiedMatrix1:");
-                foreach (var number in modifiedMatrix)
-                {
-                    Console.Write(number + " , ");
-                }
                 // ביצוע XOR עם תת-המפתח
                 int[,] encryptedMatrix = MatrixXor(modifiedMatrix, subKeys[i]);
-                Console.WriteLine("encryptedMatrix:" );
-                foreach (var number in encryptedMatrix)
-                {
-                    Console.Write(number + " , ");
-                }
                 // שמירת המטריצה הנוכחית עבור הבלוק הבא
                 previousMatrix = encryptedMatrix;
-
                 // המרת המטריצה המוצפנת לוקטור
                 int[] encryptedBlock = MatrixToVector(encryptedMatrix);
-
                 encryptedBlocks.Add(encryptedBlock);
-            }
-            Console.WriteLine("encryptedBlock:" );
-            foreach (var number in encryptedBlocks)
-            {
-                Console.Write(number+",");
             }
             // איחוד כל הבלוקים המוצפנים לוקטור אחד
             int[] encryptedMessage = ConcatenateBlocks(encryptedBlocks);
-            Console.Write("encryptedMessage:" + encryptedMessage);
-            foreach (var number in encryptedMessage)
-            {
-                Console.WriteLine(number + ",");
-            }
             return (encryptedMessage, vectorOfPositions);
         }
 
@@ -184,7 +159,6 @@ namespace BL.encryption
                     int toVertex = path[i + 1];
 
                     adjacencyMatrix[fromVertex, toVertex] = value;
-                    //adjacencyMatrix[toVertex, fromVertex] = value; // גרף לא מכוון
                 }
 
                 // סגירת המעגל - חיבור בין הקדקוד האחרון לראשון
@@ -193,7 +167,6 @@ namespace BL.encryption
                 int firstVertex = path[0];
 
                 adjacencyMatrix[lastVertex, firstVertex] = lastValue;
-                //adjacencyMatrix[firstVertex, lastVertex] = lastValue; // גרף לא מכוון
             }
 
             return adjacencyMatrix;
@@ -335,32 +308,28 @@ namespace BL.encryption
             if (length > 255)
                 throw new ArgumentException("Length too long to encode in a single byte.");
 
-           
-
             return length + input;
         }
 
 
         public  string AddSaltToMessageEnd(string message)
         {
-            message = AddLengthAsPrefix(message);
-            Random _random = new Random();
-            //להוריד את הקבוע!!
-            const int targetLength = 78;
-            const string saltChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+            message = AddLengthAsPrefix(message);
+            int targetLength = _setting.BlockSize;
+            string saltChars = _setting.SaltChars;
             if (message.Length > targetLength)
-                throw new ArgumentException("ההודעה ארוכה מ-78 תווים.");
-            
+                throw new ArgumentException("ההודעה ארוכה מ- ." + _setting.BlockSize + "תווים");           
             int saltLength = targetLength - message.Length;
             StringBuilder saltBuilder = new StringBuilder(saltLength);
-
             for (int i = 0; i < saltLength; i++)
             {
-                char randomChar = saltChars[_random.Next(saltChars.Length)];
+                if (saltChars == null)
+                    throw new InvalidOperationException("saltChars לא מאותחל");
+                int index = RandomNumberGenerator.GetInt32(saltChars.Length);
+                char randomChar = saltChars[index];
                 saltBuilder.Append(randomChar);
-            }
-            
+            }          
             return message + saltBuilder.ToString();
         }
        

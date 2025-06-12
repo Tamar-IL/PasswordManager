@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using IBL;
 
@@ -78,8 +80,7 @@ using IBL;
         public async Task<int> getCharFromBlock(List<int> Blocki)
         {
             //הגרלת מיקום בתוך בלוק מסוים		
-            Random randIndex = new Random();
-            int index = randIndex.Next(1, Blocki.Count());
+             int index= RandomNumberGenerator.GetInt32(1, Blocki.Count());
             int i = Blocki[index];
             return i;
         }

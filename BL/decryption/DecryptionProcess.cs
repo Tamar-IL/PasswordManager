@@ -68,7 +68,7 @@ namespace BL.decryption
             {
                 // המרת וקטור לבלוק המוצפן למטריצה
                 int[,] encryptedMatrix = VectorToMatrix(encryptedBlocks[i]);
-
+                int[,] nextPreviousMatrix = encryptedMatrix;
                 // ביצוע XOR עם תת-המפתח
                 int[,] modifiedMatrix = MatrixXor(encryptedMatrix, subKeys[i]);
 
@@ -76,7 +76,7 @@ namespace BL.decryption
                 int[,] adjacencyMatrix = MatrixXor(modifiedMatrix, previousMatrix);
 
                 // עדכון המטריצה הקודמת לבלוק הבא
-                previousMatrix = encryptedMatrix;
+                previousMatrix = nextPreviousMatrix;
 
                 // המרת מטריצת הסמיכות לבלוק
                 int[] decryptedBlock = AdjacencyMatrixToBlock(adjacencyMatrix);
@@ -106,7 +106,6 @@ namespace BL.decryption
                  digit = (asciiArray[0] - '0') * 10 + (asciiArray[1] - '0');
                  num = 2;
             }
-
 
             // הגבלת האורך שלא יחרוג מהאורך של המערך המקורי
             count = Math.Min(digit, asciiArray.Length - num);

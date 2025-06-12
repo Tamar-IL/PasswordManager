@@ -93,16 +93,26 @@ namespace BL.decryption
 
                 //int[] values = GenerateBBSSequence(seed, SUB_BLOCK_SIZE);
                 //Array.Copy(values, 0, key, index, SUB_BLOCK_SIZE);
-                //index += SUB_BLOCK_SIZE;
-                int keyIndex = position % _setting.keySize;
-                if (keyIndex < 0 || keyIndex >= keyEncryptionKey.Length)
-                {
-                    throw new ArgumentOutOfRangeException($"האינדקס {keyIndex} חורג מהמגבלה של המערך.");
-                }
+                ////index += SUB_BLOCK_SIZE;
+                /////-------------------שינוי
+                //int keyIndex = position % _setting.keySize;
+                //if (keyIndex < 0 || keyIndex >= keyEncryptionKey.Length)
+                //{
+                //    throw new ArgumentOutOfRangeException($"האינדקס {keyIndex} חורג מהמגבלה של המערך.");
+                //}
+                //int seed = keyEncryptionKey[keyIndex];
+                //int[] values = GenerateBBSSequence(seed, _setting.subBlockSize);
+                //Array.Copy(values, 0, key, index, _setting.subBlockSize);
+                //index += _setting.subBlockSize;
+                //----------שינוי א---------
+                // וודא שהאינדקס תקין
+                int keyIndex = Math.Abs(position) % _setting.keySize;
                 int seed = keyEncryptionKey[keyIndex];
+
                 int[] values = GenerateBBSSequence(seed, _setting.subBlockSize);
                 Array.Copy(values, 0, key, index, _setting.subBlockSize);
                 index += _setting.subBlockSize;
+
             }
 
             return key;

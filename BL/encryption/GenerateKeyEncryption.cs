@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,34 +54,35 @@ namespace BL
         /// </summary>
         /// <param name="clearMessage">הודעה לא-מוצפנת</param>
         /// <returns>תת-מפתחות ווקטור מיקומים</returns>
-        public (int[][,] SubKeys, List<int> VectorOfPositions) GenerateSubKeysForEncryption(string clearMessage)
+        public (int[][,] SubKeys, List<int> VectorOfPositions) GenerateSubKeysForEncryption(List<int[]> blocks)
         {
             // המרת ההודעה למערך של ערכי ASCII
-            int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
-            Console.WriteLine("message as ascii ", string.Join(", ", messageAsAscii));
-            for (int i = 0; i < messageAsAscii.Count(); i++)
-            {
-                Console.WriteLine("message as ascii [" + i + "]" + " " + messageAsAscii[i].ToString());
-
-            }
+            //int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
+          
             // חישוב מספר הבלוקים
-            int messageLength = messageAsAscii.Length;
+            //int messageLength = messageAsAscii.Length;
 
-            int remainder = messageLength % _setting.BlockSize;
+            //int remainder = messageLength % _setting.BlockSize;
 
-            int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
+            //int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
+            int blocksCount = blocks.Count();
 
             // חלוקת ההודעה לבלוקים
-            List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
-            Console.WriteLine("blocks ", string.Join(", ", blocks));
-            int[][,] subKeys = new int[blocksCount][,];
+            //List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
+            //Console.WriteLine("blocks ", string.Join(", ", blocks));
+            int[][,] subKeys = new int[blocks.Count()][,];
             List<int> vectorOfPositions = new List<int>();
+            // יצירת זרע מבוסס על התוכן
+
+            //Random random = new Random(blocks.GetHashCode());
 
             // עבור כל בלוק יוצרים תת-מפתח
+
             for (int i = 0; i < blocksCount; i++)
             {
                 // בחירה אקראית של תו מהבלוק
-                int randomIndex = new Random().Next(blocks[i].Length);
+                //int randomIndex = random.Next();
+                int randomIndex = RandomNumberGenerator.GetInt32(blocks[i].Length);
                 int selectedChar = blocks[i][randomIndex];
 
                 // אם selectedChar שלילי, נעשה אותו חיובי (אם זה לא בא מתוך טווח ASCII)
@@ -92,12 +94,7 @@ namespace BL
                 // הוספה לוקטור המיקומים
                 vectorOfPositions.Add(selectedChar);
 
-                // קבלת מספר מהמפתח הראשי
-                //למה לחלק ל256? כי אם קיבלנו בסלקטצאר מספר יותר גדול מ256 
-                //אז אם נבצע חלוקה ב256 יכול להיות שנקבל מספר גדול מ256
-                //לעומת זאת עם נבצע שארית 256 המספר הגדול ביותר שנוכל לקבל זה 255
-                //KEKואז ודאי לא תהיה חריגה מגודל המערך 
-
+                
                 int index = selectedChar % _setting.keySize;  // מודול 256
 
                 // אם האינדקס לא בטווח, תפסול את החישוב
@@ -116,21 +113,7 @@ namespace BL
                 subKeys[i] = GenerateSubKey(seedVector);
                 Console.WriteLine("subkey [", i, "]", string.Join(", ", subKeys[i]));
             }
-            for (int i = 0; i < subKeys.Length; i++)
-            {
-                for (int j = 0; j < _setting.graphOrder; j++)        // ✅ 
-                {
-                    for (int k = 0; k < _setting.graphOrder; k++)    // ✅
-                    {
-                        Console.Write(subKeys[i][j, k]);
-                    }
-
-                    Console.WriteLine("---");
-
-                }
-                Console.WriteLine("---");
-
-            }
+          
             return (subKeys, vectorOfPositions);
         }
 
