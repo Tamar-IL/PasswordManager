@@ -116,28 +116,30 @@ namespace API
             //generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
             EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix,Options.Create(setting));
             DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix, Options.Create(setting));
-           
-            Console.WriteLine("\n-----------------------------\n");
-            for (int i =0;i< keyEncryptionKey.Length;i++){ Console.Write(" "+keyEncryptionKey[ i]+", "); }
-            Console.WriteLine("\n-----------------------------\n");
+
+
 
             // הודעה לדוגמה
             string message = "" +
-                "its_my_p--:qwer4321";
+                "135!#%qwer";
                             
             Console.WriteLine("Original message: " + message);
 
-            
-           
             // הצפנת ההודעה
             var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
-          
+            Console.WriteLine("encryptPass:\n" + encryptedData);
+
+            for (int i = 0; i < encryptedData.Length; i++)
+            {
+                Console.Write(+encryptedData[i]+" , ");
+
+            }
 
             // פענוח ההודעה
             string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
 
-            Console.WriteLine("\nmessage encreypt: " + message + "--end");
-            Console.WriteLine("\nmessage: " + decryptedMessage+"--end");
+            Console.WriteLine("\norginal message: " + message + "--end");
+            Console.WriteLine("\ndecrypt message: " + decryptedMessage+"--end");
 
             // בדיקה שההודעה המקורית זהה להודעה שפוענחה
             Console.WriteLine("\nOriginal equals decrypted: " +

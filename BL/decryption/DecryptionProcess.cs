@@ -236,15 +236,15 @@ namespace BL.decryption
                 case 0:
                     return new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
                 case 1:
-                    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 11, 9, 7, 5, 3, 1 };
+                    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 1, 3, 5, 7, 9, 11 };
                 case 2:
-                    return new List<int> { 0, 3, 6, 9, 12, 8, 4, 1, 5, 10, 7, 2, 11 };
+                    return new List<int> { 0, 3, 6, 9, 12, 2, 5, 8, 11, 1, 4, 7, 10 };
                 case 3:
-                    return new List<int> { 0, 4, 8, 12, 7, 3, 10, 6, 2, 9, 5, 1, 11 };
+                    return new List<int> { 0, 4, 8, 12, 3, 7, 11, 2, 6, 10, 1, 5, 9 };
                 case 4:
-                    return new List<int> { 0, 5, 10, 4, 9, 3, 8, 2, 7, 1, 6, 11, 12 };
+                    return new List<int> { 0, 5, 10, 2, 7, 12, 4, 9, 1, 6, 11, 3, 8 };
                 case 5:
-                    return new List<int> { 0, 6, 1, 7, 12, 5, 11, 4, 10, 3, 9, 2, 8 };
+                    return new List<int> { 0, 6, 12, 5, 11, 4, 10, 3, 9, 2, 8, 1, 7 };
                 default:
                     throw new ArgumentException("Invalid sub-block index");
             }
