@@ -66,7 +66,7 @@ namespace BL.decryption
             int index = 0;
             foreach (int position in vectorOfPositions) 
             {
-                int keyIndex = Math.Abs(position) % _setting.keySize;
+                int keyIndex = Math.Abs(position) % _keyEncryptionKey.Length;
                 int seed = keyEncryptionKey[keyIndex];
 
                 int[] values = BBSRandomGenerator.GenerateBBSSequence(seed, _setting.subBlockSize, _setting);

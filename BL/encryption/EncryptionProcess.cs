@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MyProject.Common;
 using System.Security.Cryptography;
+using MyProject.Common.Security;
+using Microsoft.Extensions.Logging;
 
 
 namespace BL.encryption
@@ -18,23 +20,43 @@ namespace BL.encryption
     {
         private static readonly StringBuilder _saltBuilder = new StringBuilder(256);
 
-        private GenerateKeyEncryption generateKeyEncryption;
-        private readonly int[,] _initializationMatrix;
-        private readonly int[] _keyEncryptionKey;
+        private GenerateKeyEncryption generateKeyEncryption;        
         private readonly MySetting _setting;
+
+        //private readonly int[,] _initializationMatrix;
+        //private readonly int[] _keyEncryptionKey;
+        private readonly ISecureKeyProvider _keyProvider;
+        private readonly ILogger<EncryptionProcess> _logger;
+
         /// <summary>
         /// מצפין הודעת טקסט
         /// </summary>
         /// <param name="clearMessage">הודעה לא-מוצפנת</param>
         /// <returns>הודעה מוצפנת ווקטור מיקומים</returns>
-        public EncryptionProcess(int[] keyEncryptionKey, int[,] initializationMatrix, IOptions<MySetting> options)
+        //public EncryptionProcess(int[] keyEncryptionKey, int[,] initializationMatrix, IOptions<MySetting> options)
+        //{
+        //    _keyEncryptionKey = keyEncryptionKey;
+        //    _initializationMatrix = initializationMatrix;
+        //    generateKeyEncryption = new GenerateKeyEncryption(keyEncryptionKey, initializationMatrix, options);
+        //    _setting = options.Value;
+        //}
+        public EncryptionProcess(ISecureKeyProvider keyProvider, IOptions<MySetting> options, ILogger<EncryptionProcess> logger)
         {
-            _keyEncryptionKey = keyEncryptionKey;
-            _initializationMatrix = initializationMatrix;
-            generateKeyEncryption = new GenerateKeyEncryption(keyEncryptionKey, initializationMatrix, options);
-            _setting = options.Value;
-        }
+            _keyProvider = keyProvider ?? throw new ArgumentNullException(nameof(keyProvider));
+            _setting = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
+            // קבל את המפתחות המאובטחים
+            byte[] masterKey = _keyProvider.GetMasterKey();
+            int[,] initMatrix = _keyProvider.GetInitializationMatrix();
+
+            // המר מ-byte[] ל-int[] לתאימות עם הקוד הקיים
+            int[] masterKeyInts = ConvertBytesToInts(masterKey);
+
+            generateKeyEncryption = new GenerateKeyEncryption(masterKeyInts, initMatrix, options);
+
+            _logger.LogInformation("תהליך ההצפנה הופעל עם מפתחות מאובטחים. אורך מפתח: {KeyLength} בתים", masterKey.Length);
+        }
         public EncryptionProcess()
         {
 
@@ -42,7 +64,9 @@ namespace BL.encryption
 
         public (int[] EncryptedMessage, List<int> VectorOfPositions) Encrypt(string clearMessage)
         {
-            Console.WriteLine($"Input message: '{clearMessage}'");
+            try
+            {
+                Console.WriteLine($"Input message: '{clearMessage}'");
 
             clearMessage = AddSaltToMessageEnd(clearMessage);
             Console.WriteLine("clearMessage:" + clearMessage);
@@ -63,7 +87,8 @@ namespace BL.encryption
             List<int[]> encryptedBlocks = new List<int[]>();
 
             // מטריצה קודמת עבור CBC
-            int[,] previousMatrix = _initializationMatrix;
+            //int[,] previousMatrix = _initializationMatrix;
+            int[,] previousMatrix = _keyProvider.GetInitializationMatrix();
 
             // הצפנת כל בלוק
             for (int i = 0; i < blocksCount; i++)
@@ -80,16 +105,23 @@ namespace BL.encryption
                 previousMatrix = encryptedMatrix;
                 // המרת המטריצה המוצפנת לוקטור
                 int[] encryptedBlock = MatrixToVector(encryptedMatrix);
+
                 encryptedBlocks.Add(encryptedBlock);
             }
             // איחוד כל הבלוקים המוצפנים לוקטור אחד
             int[] encryptedMessage = CryptographyUtils.ConcatenateBlocks(encryptedBlocks);
             return (encryptedMessage, vectorOfPositions);
         }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "שגיאה בתהליך ההצפנה");
+                throw;
+            }
+        }
         /// <summary>
         /// מחלק בלוק לתת-בלוקים
         /// </summary>
-        private List<int[]> ParseBlock(int[] block)
+        public List<int[]> ParseBlock(int[] block)
         {
             List<int[]> subBlocks = new List<int[]>();
             int validLength = Math.Min(block.Length, _setting.BlockSize);
@@ -132,7 +164,7 @@ namespace BL.encryption
         /// <summary>
         /// ממיר תת-בלוקים למטריצת סמיכות
         /// </summary>
-        private int[,] BlockToAdjacencyMatrix(List<int[]> subBlocks)
+        public int[,] BlockToAdjacencyMatrix(List<int[]> subBlocks)
         {
             // יצירת מטריצת סמיכות התחלתית מלאה באפסים
             int[,] adjacencyMatrix = new int[_setting.graphOrder, _setting.graphOrder];
@@ -165,15 +197,24 @@ namespace BL.encryption
 
             return adjacencyMatrix;
         }
-       
+
         /// <summary>
-        /// מבצע פעולת XOR בין שתי מטריצות
+        /// המרה מ-byte[] ל-int[] לתאימות עם הקוד הקיים
         /// </summary>
+        public int[] ConvertBytesToInts(byte[] bytes)
+        {
+            int[] ints = new int[bytes.Length];
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                ints[i] = bytes[i];
+            }
+            return ints;
+        }
 
         /// <summary>
         /// ממיר מטריצה לוקטור
         /// </summary>
-        private int[] MatrixToVector(int[,] matrix)
+        public int[] MatrixToVector(int[,] matrix)
         {
             int rows = matrix.GetLength(0);
             int cols = matrix.GetLength(1);
@@ -197,7 +238,7 @@ namespace BL.encryption
 
         //#endregion
 
-        private List<int[]> ParseMessage(int[] message, int blocksCount)
+        public List<int[]> ParseMessage(int[] message, int blocksCount)
         {
             List<int[]> blocks = new List<int[]>();
             //----------------
@@ -221,7 +262,7 @@ namespace BL.encryption
 
             return blocks;
         }
-        private int[] ConvertMessageToAscii(string message)
+        public int[] ConvertMessageToAscii(string message)
         {
             byte[] bytes = Encoding.ASCII.GetBytes(message);
             int[] asciiValues = new int[bytes.Length];

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IBL;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyProject.Common;
+using MyProject.Common.Security;
 
 namespace BL.decryption
 {
@@ -25,15 +27,39 @@ namespace BL.decryption
         private readonly int[] _keyEncryptionKey;
         private readonly int[,] _initializationMatrix;
 
+        private readonly ILogger<DecryptionProcess> _logger;
+
         //public DecryptionProcess(GenerateKeyEncryption generateKeyEncryption, generateKeyDecryption decryption, int[] keyEncryptionKey, int[,] initializationMatrix)
-        public DecryptionProcess(int[] keyEncryptionKey, int[,] initializationMatrix, IOptions<MySetting> options)
+        //public DecryptionProcess(int[] keyEncryptionKey, int[,] initializationMatrix, IOptions<MySetting> options)
+        //{
+        //    //this.generateKeyEncryption = generateKeyEncryption;
+        //    //this.decryption = decryption ?? throw new ArgumentNullException(nameof(decryption));  // אם decryption הוא null, נשלח חריגה
+        //    this._keyEncryptionKey = keyEncryptionKey;
+        //    this._initializationMatrix = initializationMatrix;
+        //    _decryption = new generateKeyDecryption(keyEncryptionKey, initializationMatrix, options);
+        //    _setting = options.Value;
+
+        //}
+        public DecryptionProcess(ISecureKeyProvider keyProvider, IOptions<MySetting> options, ILogger<DecryptionProcess> logger)
         {
-            //this.generateKeyEncryption = generateKeyEncryption;
-            //this.decryption = decryption ?? throw new ArgumentNullException(nameof(decryption));  // אם decryption הוא null, נשלח חריגה
-            this._keyEncryptionKey = keyEncryptionKey;
-            this._initializationMatrix = initializationMatrix;
-            _decryption = new generateKeyDecryption(keyEncryptionKey, initializationMatrix, options);
-            _setting = options.Value;
+            var keyProviderLocal = keyProvider ?? throw new ArgumentNullException(nameof(keyProvider));
+            _setting = options?.Value ?? throw new ArgumentNullException(nameof(options));
+
+            // קבל מפתחות מאובטחים
+            byte[] masterKey = keyProviderLocal.GetMasterKey();
+            int[,] initMatrix = keyProviderLocal.GetInitializationMatrix();
+
+            // המר ל-int[] לתאימות
+            int[] masterKeyInts = new int[masterKey.Length];
+            for (int i = 0; i < masterKey.Length; i++)
+            {
+                masterKeyInts[i] = masterKey[i];
+            }
+
+            this._keyEncryptionKey = masterKeyInts;
+            this._initializationMatrix = initMatrix;
+            _decryption = new generateKeyDecryption(masterKeyInts, initMatrix, options);
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         }
         /// <summary>
@@ -113,7 +139,7 @@ namespace BL.decryption
         /// <summary>
         /// מחלק הודעה מוצפנת לבלוקים
         /// </summary>
-        private List<int[]> ParseEncryptedMessage(int[] encryptedMessage, int blocksCount)
+        public List<int[]> ParseEncryptedMessage(int[] encryptedMessage, int blocksCount)
         {
             List<int[]> blocks = new List<int[]>();
             int blockLength = _setting.graphOrder * _setting.graphOrder; // 13^2 = 169
@@ -136,7 +162,7 @@ namespace BL.decryption
         /// <summary>
         /// ממיר וקטור למטריצה
         /// </summary>
-        private int[,] VectorToMatrix(int[] vector)
+        public int[,] VectorToMatrix(int[] vector)
         {
             int side = (int)Math.Sqrt(vector.Length); // צריך להיות 13
             int[,] matrix = new int[side, side];
@@ -155,7 +181,7 @@ namespace BL.decryption
         /// <summary>
         /// ממיר מטריצת סמיכות לבלוק
         /// </summary>
-        private int[] AdjacencyMatrixToBlock(int[,] adjacencyMatrix)
+        public int[] AdjacencyMatrixToBlock(int[,] adjacencyMatrix)
         {
             // שחזור כל 6 תת-הבלוקים מתוך המעגלים ההמילטוניים
             List<int[]> subBlocks = new List<int[]>();
@@ -192,7 +218,7 @@ namespace BL.decryption
         }
        
         /// </summary>
-        private string ConvertAsciiToString(int[] asciiValues)
+        public string ConvertAsciiToString(int[] asciiValues)
         {
             // הסרת אפסים מסופיים
             int validLength = asciiValues.Length;

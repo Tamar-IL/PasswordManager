@@ -57,9 +57,11 @@ namespace API
             builder.Services.AddSingleton(provider => provider.GetRequiredService<IMongoClient>().GetDatabase(dbName));
             builder.Services.AddSingleton<MongoDbService>(sp => new MongoDbService(connectionString, dbName));
 
+            //builder.Services.Configure<MySetting>(builder.Configuration.GetSection("MySetting"));
+            //builder.Services.AddScoped<MySetting>();
             builder.Services.Configure<MySetting>(builder.Configuration.GetSection("MySetting"));
-            builder.Services.AddScoped<MySetting>();
-            builder.Services.AddSecureKeyManagement();
+            builder.Services.AddScoped<IEncryptionProcess, EncryptionProcess>();
+            builder.Services.AddScoped<IDecryptionProcess, DecryptionProcess>();
 
             //builder.Services.AddSingleton<MongoDbService>(provider => new MongoDbService(connectionString, dbName));
             builder.Services.AddAuthorization();
@@ -74,16 +76,24 @@ namespace API
                         .AllowAnyMethod()
                         .AllowAnyHeader());
             });
+            
+            builder.Services.AddSecureKeyManagement();
+
+            builder.Services.AddLogging(builder =>
+            {
+                builder.AddConsole();
+                builder.SetMinimumLevel(LogLevel.Information);
+            });
             var app = builder.Build();
             var setting = app.Services.GetRequiredService<IOptions<MySetting>>().Value;
-
+            
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-           
 
+          
             app.UseCors("AllowAll");
 
             //int[] frequencyArray = CreateFrequencyArray(input);
@@ -103,46 +113,74 @@ namespace API
             //string decryptText = rsaEncryption.Decrypt(encrypteData,PrivateKay);
             //Console.WriteLine("orginalData:\n"+ "32!676gsgh$^&@hdg" + "\nencryptData:\n" + encrypteData + "\ndecryptData : \n" + decryptText);
             // מבחן מהיר - הוסף בתחילת הפונקציה Login
-           ////--rsa----
+            ////--rsa----
 
 
-            int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
+            //int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
 
-            int[,] initMatrix = GenerateRandomMatrix(13, 13);
-            //int[,] initMatrix = GenerateRandomMatrix(5, 5);
-            //GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
-            //generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
-            EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix,Options.Create(setting));
-            DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix, Options.Create(setting));
+            //int[,] initMatrix = GenerateRandomMatrix(13, 13);
+            ////int[,] initMatrix = GenerateRandomMatrix(5, 5);
 
+            //byte[] masterKey = _keyProvider.GetMasterKey();
+            //int[,] initMatrix = _keyProvider.GetInitializationMatrix();
+            ////GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
+            ////generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
+            ////EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix,Options.Create(setting));
+            //EncryptionProcess cryptosystem = new EncryptionProcess(Options.Create(setting));
+            //DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix, Options.Create(setting));
 
-
-            // הודעה לדוגמה
-            string message = "" +
-                "1234567890!@#$%^&*()qwertyuiop[]asdfghjkl;'zxcvbnm,./";
-                            
-            Console.WriteLine("Original message: " + message);
-
-            // הצפנת ההודעה
-            var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
-            Console.WriteLine("encryptPass:\n" + encryptedData);
-
-            for (int i = 0; i < encryptedData.Length; i++)
+            using (var scope = app.Services.CreateScope())
             {
-                Console.Write(+encryptedData[i]+" , ");
+                var keyProvider = scope.ServiceProvider.GetRequiredService<ISecureKeyProvider>();
+                var encryptionProcess = scope.ServiceProvider.GetRequiredService<IEncryptionProcess>();
+                var decryptionProcess = scope.ServiceProvider.GetRequiredService<IDecryptionProcess>();
 
+                bool keyExists = keyProvider.KeyExists();
+                Console.WriteLine($"מפתחות קיימים: {keyExists}");
+                string message = "TestPassword123";
+
+                Console.WriteLine("Original message: " + message);
+
+                // הצפנת ההודעה
+                var (encryptedData, vectorOfPositions) = encryptionProcess.Encrypt(message);
+                Console.WriteLine("הצפנה הושלמה");
+
+                // פענוח ההודעה
+                string decryptedMessage = decryptionProcess.Decrypt(encryptedData, vectorOfPositions);
+
+                Console.WriteLine("Original message: " + message);
+                Console.WriteLine("Decrypted message: " + decryptedMessage);
+
+                // בדיקה שההודעה המקורית זהה להודעה שפוענחה
+                Console.WriteLine("Original equals decrypted: " +
+                    (message == decryptedMessage ? "Yes" : "No"));
             }
+            //    // הודעה לדוגמה
+            //    string message = "" +
+            //    "1234567890!@#$%^&*()qwertyuiop[]asdfghjkl;'zxcvbnm,./";
 
-            // פענוח ההודעה
-            string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
+            //Console.WriteLine("Original message: " + message);
 
-            Console.WriteLine("\norginal message: " + message + "--end");
-            Console.WriteLine("\ndecrypt message: " + decryptedMessage+"--end");
+            //// הצפנת ההודעה
+            //var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
+            //Console.WriteLine("encryptPass:\n" + encryptedData);
 
-            // בדיקה שההודעה המקורית זהה להודעה שפוענחה
-            Console.WriteLine("\nOriginal equals decrypted: " +
-                (message == decryptedMessage ? "Yes" : "No"));
-            //QuickTest();
+            //for (int i = 0; i < encryptedData.Length; i++)
+            //{
+            //    Console.Write(+encryptedData[i]+" , ");
+
+            //}
+
+            //// פענוח ההודעה
+            //string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
+
+            //Console.WriteLine("\norginal message: " + message + "--end");
+            //Console.WriteLine("\ndecrypt message: " + decryptedMessage+"--end");
+
+            //// בדיקה שההודעה המקורית זהה להודעה שפוענחה
+            //Console.WriteLine("\nOriginal equals decrypted: " +
+            //    (message == decryptedMessage ? "Yes" : "No"));
+            ////QuickTest();
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
