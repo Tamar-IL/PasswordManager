@@ -349,6 +349,9 @@
             "projectReferences": {
               "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\DTO\\DTO.csproj": {
                 "projectPath": "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\DTO\\DTO.csproj"
+              },
+              "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\MyProject.Common\\MyProject.Common.csproj": {
+                "projectPath": "C:\\דיסק מקומי (C)\\תכנות\\תכנות שנה ב\\משרד החינוך\\פרויקט גמר\\PasswordManagement\\MyProject.Common\\MyProject.Common.csproj"
               }
             }
           }
@@ -507,6 +510,24 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "System.Security.Cryptography.ProtectedData": {
+              "target": "Package",
+              "version": "[9.0.6, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

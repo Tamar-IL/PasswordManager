@@ -16,6 +16,7 @@ using IBL.RSAForMasterKey;
 using System.Runtime;
 using Microsoft.Extensions.Options;
 using MyProject.Common;
+using MyProject.Common.Security;
 using System.Security.Cryptography;
 
 
@@ -33,17 +34,14 @@ namespace API
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
             builder.Logging.AddDebug();
-            BigInteger p = new BigInteger(123);
-            BigInteger q = new BigInteger(456);
-            BigInteger s = new BigInteger(789);
 
             builder.Services.AddLogging();
             string _privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
 
             builder.Services.AddScoped<IRSAencryption>(provider => new RSAencryption(_privateKeyPAth));
 
-            builder.Services.AddScoped<IkeyGeneration>(provider => new KeyGeneration(p, q, s));
-            builder.Services.AddScoped<IBBSRandomGenerator>(provider => new BBSRandomGenerator(p, q, s));
+            //builder.Services.AddScoped<IkeyGeneration>(provider => new KeyGeneration(p, q, s));
+            //builder.Services.AddScoped<IBBSRandomGenerator>(provider => new BBSRandomGenerator(p, q, s));
             builder.Services.AddScoped<IEncryptionProcess, EncryptionProcess>();
           
             builder.Services.AddScoped<IWebSitesBL, WebSitesBL>();
@@ -61,6 +59,7 @@ namespace API
 
             builder.Services.Configure<MySetting>(builder.Configuration.GetSection("MySetting"));
             builder.Services.AddScoped<MySetting>();
+            builder.Services.AddSecureKeyManagement();
 
             //builder.Services.AddSingleton<MongoDbService>(provider => new MongoDbService(connectionString, dbName));
             builder.Services.AddAuthorization();
@@ -106,7 +105,6 @@ namespace API
             // מבחן מהיר - הוסף בתחילת הפונקציה Login
            ////--rsa----
 
-            //Random random = new Random();
 
             int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
 
@@ -121,7 +119,7 @@ namespace API
 
             // הודעה לדוגמה
             string message = "" +
-                "135!#%qwer";
+                "1234567890!@#$%^&*()qwertyuiop[]asdfghjkl;'zxcvbnm,./";
                             
             Console.WriteLine("Original message: " + message);
 

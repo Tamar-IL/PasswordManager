@@ -1,6 +1,7 @@
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\bin\Debug\net8.0\Entities.deps.json
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\bin\Debug\net8.0\Entities.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\bin\Debug\net8.0\Entities.pdb
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\Entities.csproj.AssemblyReference.cache
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\Entities.AssemblyInfoInputs.cache
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\Entities.AssemblyInfo.cs
@@ -10,4 +11,3 @@ C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\refint\Entities.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\Entities.pdb
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\ref\Entities.dll
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\Entities\obj\Debug\net8.0\Entities.csproj.AssemblyReference.cache

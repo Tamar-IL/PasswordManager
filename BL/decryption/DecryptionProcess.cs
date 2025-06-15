@@ -57,9 +57,7 @@ namespace BL.decryption
 
             // מערך לאחסון הבלוקים המפוענחים
             List<int[]> decryptedBlocks = new List<int[]>();
-            //-----------------
-            // למה שזה לא יהיה המטריצה האחרונה עם הראשונה?????...
-            //-----------------
+          
             // מטריצה קודמת עבור CBC (מטריצת אתחול לבלוק הראשון)
             int[,] previousMatrix = _initializationMatrix;
 
@@ -68,12 +66,13 @@ namespace BL.decryption
             {
                 // המרת וקטור לבלוק המוצפן למטריצה
                 int[,] encryptedMatrix = VectorToMatrix(encryptedBlocks[i]);
+
                 int[,] nextPreviousMatrix = encryptedMatrix;
                 // ביצוע XOR עם תת-המפתח
-                int[,] modifiedMatrix = MatrixXor(encryptedMatrix, subKeys[i]);
+                int[,] modifiedMatrix = CryptographyUtils.MatrixXor(encryptedMatrix, subKeys[i]);
 
                 // ביצוע XOR עם המטריצה הקודמת (CBC)
-                int[,] adjacencyMatrix = MatrixXor(modifiedMatrix, previousMatrix);
+                int[,] adjacencyMatrix = CryptographyUtils.MatrixXor(modifiedMatrix, previousMatrix);
 
                 // עדכון המטריצה הקודמת לבלוק הבא
                 previousMatrix = nextPreviousMatrix;
@@ -85,7 +84,7 @@ namespace BL.decryption
             }
 
             // איחוד כל הבלוקים המפוענחים להודעה אחת
-            int[] decryptedMessage = ConcatenateBlocks(decryptedBlocks);
+            int[] decryptedMessage = CryptographyUtils.ConcatenateBlocks(decryptedBlocks);
             // שליפת הסיסמה בלי המלח והתחילית 
             int[] parse = GetTextByPrefix(decryptedMessage);
             // המרת מערך ASCII לטקסט והסרת אפסים
@@ -164,7 +163,7 @@ namespace BL.decryption
             for (int subBlockIndex = 0; subBlockIndex < _setting.BlockSize / _setting.subBlockSize; subBlockIndex++)
             {
                 int[] subBlock = new int[_setting.subBlockSize];
-                List<int> path = CreateHamiltonianCircuit(subBlockIndex);
+                List<int> path = CryptographyUtils.CreateHamiltonianCircuit(subBlockIndex);
 
                 // הוצאת הערכים מהמטריצה לפי המסלול
                 for (int i = 0; i < path.Count - 1; i++)
@@ -191,24 +190,7 @@ namespace BL.decryption
             }
             return block;
         }
-        private int[,] MatrixXor(int[,] matrix1, int[,] matrix2)
-        {
-            int rows = matrix1.GetLength(0);
-            int cols = matrix1.GetLength(1);
-            int[,] result = new int[rows, cols];
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    result[i, j] = matrix1[i, j] ^ matrix2[i, j];
-                }
-            }
-
-            return result;
-
-
-        }
+       
         /// </summary>
         private string ConvertAsciiToString(int[] asciiValues)
         {
@@ -225,45 +207,6 @@ namespace BL.decryption
                 bytes[i] = (byte)asciiValues[i];
             }
             return Encoding.ASCII.GetString(bytes);
-        }
-        private List<int> CreateHamiltonianCircuit(int subBlockIndex)
-        {
-            // כאן נייצר 6 מעגלים המילטוניים זרים בגרף מסדר 13
-            // כל מעגל מייצג דרך שונה לעבור על כל הקדקודים פעם אחת וחזרה לקדקוד ההתחלתי
-            // בפועל, לכל subBlockIndex יש מעגל קבוע מראש
-            switch (subBlockIndex)
-            {
-                case 0:
-                    return new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-                case 1:
-                    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 1, 3, 5, 7, 9, 11 };
-                case 2:
-                    return new List<int> { 0, 3, 6, 9, 12, 2, 5, 8, 11, 1, 4, 7, 10 };
-                case 3:
-                    return new List<int> { 0, 4, 8, 12, 3, 7, 11, 2, 6, 10, 1, 5, 9 };
-                case 4:
-                    return new List<int> { 0, 5, 10, 2, 7, 12, 4, 9, 1, 6, 11, 3, 8 };
-                case 5:
-                    return new List<int> { 0, 6, 12, 5, 11, 4, 10, 3, 9, 2, 8, 1, 7 };
-                default:
-                    throw new ArgumentException("Invalid sub-block index");
-            }
-        }
-        //פונקציה ס=זו נמצאת גם בהצפנה וגם בפענוח כמו פונקציות המרה לאסקי או מאסקי וכו
-        private int[] ConcatenateBlocks(List<int[]> blocks)
-        {
-            int totalLength = blocks.Sum(block => block.Length);
-            int[] result = new int[totalLength];
-
-            int index = 0;
-            foreach (int[] block in blocks)
-            {
-                Array.Copy(block, 0, result, index, block.Length);
-                index += block.Length;
-            }
-
-            return result;
-
         }
     }
 }

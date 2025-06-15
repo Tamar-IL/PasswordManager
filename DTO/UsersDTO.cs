@@ -20,6 +20,8 @@ namespace DTO
 
         [BsonElement("Phone")]
         public string Phone { get; set; }
+        [BsonElement("VP")]
+        public string VP { get; set; }
   
 
         

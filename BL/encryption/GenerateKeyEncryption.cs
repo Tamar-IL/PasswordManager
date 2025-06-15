@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class GenerateKeyEncryption
+    public class GenerateKeyEncryption: IgenerateKeyEncrryption
     {//every block is length of 78
         // the formula of block's numbers : n=78k +r ----->
         // n-r = 78k ----> (n-r)/78 = 78k/78 ----> k=(n-r)/78 
@@ -56,39 +56,22 @@ namespace BL
         /// <returns>תת-מפתחות ווקטור מיקומים</returns>
         public (int[][,] SubKeys, List<int> VectorOfPositions) GenerateSubKeysForEncryption(List<int[]> blocks)
         {
-            // המרת ההודעה למערך של ערכי ASCII
-            //int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
-          
-            // חישוב מספר הבלוקים
-            //int messageLength = messageAsAscii.Length;
-
-            //int remainder = messageLength % _setting.BlockSize;
-
-            //int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
             int blocksCount = blocks.Count();
-
-            // חלוקת ההודעה לבלוקים
-            //List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
-            //Console.WriteLine("blocks ", string.Join(", ", blocks));
             int[][,] subKeys = new int[blocks.Count()][,];
             List<int> vectorOfPositions = new List<int>();
-            // יצירת זרע מבוסס על התוכן
-
-            //Random random = new Random(blocks.GetHashCode());
-
+            
             // עבור כל בלוק יוצרים תת-מפתח
 
             for (int i = 0; i < blocksCount; i++)
             {
                 // בחירה אקראית של תו מהבלוק
-                //int randomIndex = random.Next();
                 int randomIndex = RandomNumberGenerator.GetInt32(blocks[i].Length);
                 int selectedChar = blocks[i][randomIndex];
 
-                // אם selectedChar שלילי, נעשה אותו חיובי (אם זה לא בא מתוך טווח ASCII)
+                //  selectedChar שלילי, נעשה אותו חיובי (אם זה לא בא מתוך טווח ASCII)
                 if (selectedChar < 0)
                 {
-                    selectedChar = Math.Abs(selectedChar); // או, אם זה לא מספיק, תוכל לאתחל אותו ל-0 במקרה כזה
+                    selectedChar = Math.Abs(selectedChar); // או, אם זה לא מספיק,  לאתחל אותו ל-0 במקרה כזה
                 }
 
                 // הוספה לוקטור המיקומים
@@ -105,13 +88,10 @@ namespace BL
 
                 // קבלת ערך מהמפתח הראשי
                 int n = _keyEncryptionKey[index];
-
                 // יצירת וקטור זרע באורך 13
                 int[] seedVector = GenerateSeed(n);
-                Console.WriteLine("seed vector: ", string.Join(", ", seedVector));
                 // יצירת תת-מפתח
-                subKeys[i] = GenerateSubKey(seedVector);
-                Console.WriteLine("subkey [", i, "]", string.Join(", ", subKeys[i]));
+                subKeys[i] = BBSRandomGenerator.GenerateSubKey(seedVector, _setting);
             }
           
             return (subKeys, vectorOfPositions);
@@ -120,83 +100,9 @@ namespace BL
         /// <summary>
         /// מייצר וקטור זרע באורך 13 מתוך ערך התחלתי
         /// </summary>
-        private int[] GenerateSeed(int initialValue)
+        public int[] GenerateSeed(int initialValue)
         {
-            //BigInteger p, q, s = new BigInteger;
-            //return _bBSRandomGenerator.GenerateSeed(p,q,s);
-            return GenerateBBSSequence(initialValue, _setting.subBlockSize);
-
-        }
-        private int[] ConvertMessageToAscii(string message)
-        {
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
-            int[] asciiValues = new int[bytes.Length];
-
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                asciiValues[i] = bytes[i];
-            }
-
-            return asciiValues;
-        }
-        private int[] GenerateBBSSequence(int seed, int length)
-        {
-            // מספרים ראשוניים גדולים עבור BBS
-            BigInteger p = BigInteger.Parse("98799821657648109045695379286138768173");
-            BigInteger q = BigInteger.Parse("65147279015126562838267191403654601389");
-            BigInteger m = p * q;
-
-            int[] sequence = new int[length];
-
-            // הבטחה שהזרע הוא חיובי
-            BigInteger x = new BigInteger(Math.Abs(seed));
-            x = (x * x) % m;  // x₀ = seed² mod m
-
-            for (int i = 0; i < length; i++)
-            {
-                x = (x * x) % m;  // xₙ₊₁ = xₙ² mod m
-                sequence[i] = (int)(x % 256);  // מיפוי לטווח 0-255
-            }
-
-            return sequence;
-        }
-        private int[,] GenerateSubKey(int[] seedVector)
-        {
-            int[,] subKey = new int[_setting.graphOrder, _setting.graphOrder];
-
-            for (int i = 0; i < _setting.graphOrder; i++)
-            {
-                int[] rowValues = GenerateBBSSequence(seedVector[i], _setting.graphOrder);
-
-                for (int j = 0; j < _setting.graphOrder; j++)
-                {
-                    subKey[i, j] = rowValues[j];
-                }
-            }
-            Console.WriteLine("subkey length: ", subKey.Length);
-            return subKey;
-        }
-
-        private List<int[]> ParseMessage(int[] message, int blocksCount)
-        {
-            List<int[]> blocks = new List<int[]>();
-
-            for (int i = 0; i < blocksCount; i++)
-            {
-                int startIndex = i * _setting.BlockSize;
-                int[] block = new int[_setting.BlockSize];
-
-                // העתקת הנתונים לבלוק (או מילוי באפסים אם בסוף)
-                int copyLength = Math.Min(_setting.BlockSize, message.Length - startIndex);
-                if (copyLength > 0)
-                {
-                    Array.Copy(message, startIndex, block, 0, copyLength);
-                }
-
-                blocks.Add(block);
-            }
-
-            return blocks;
+            return BBSRandomGenerator.GenerateBBSSequence(initialValue, _setting.subBlockSize, _setting);
         }
     }
 }

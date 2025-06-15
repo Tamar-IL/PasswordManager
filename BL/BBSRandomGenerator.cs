@@ -7,64 +7,53 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
 using IBL;
+using MyProject.Common;
+
 
 
 namespace BL
 {
-    public class BBSRandomGenerator : IBBSRandomGenerator
+    public static  class BBSRandomGenerator 
     {
-        private BigInteger seed;
-        private BigInteger modulus;
-        public BBSRandomGenerator(BigInteger p, BigInteger q, BigInteger s)
-        {
-            if(!IsPrime(p) || !IsPrime(q))
-                throw new ArgumentException("p and q must be prime numbers");
-            modulus = p * q;
-            //seed = GenerateSeed(s);
-        }
-        public BigInteger GenerateSeed( BigInteger s)
+        private static readonly BigInteger P = BigInteger.Parse("98799821657648109045695379286138768173");
+        private static readonly BigInteger Q = BigInteger.Parse("65147279015126562838267191403654601389");
+        private static readonly BigInteger M = P * Q;
+        public static int[] GenerateBBSSequence(int seed, int length,MySetting _setting)
         {
            
-            // Use RNGCryptoServiceProvider for better security
-            using (var rng = new RNGCryptoServiceProvider())
+
+            int[] sequence = new int[length];
+
+            // הבטחה שהזרע הוא חיובי
+            BigInteger x = new BigInteger(Math.Abs(seed));
+            x = (x * x) % M;  // x₀ = seed² mod m
+
+            for (int i = 0; i < length; i++)
             {
-                byte[] bytes = new byte[modulus.ToByteArray().Length];
-                
-                do
+                x = (x * x) % M;  // xₙ₊₁ = xₙ² mod m
+                sequence[i] = (int)(x % 256);  // מיפוי לטווח 0-255
+            }
+
+            return sequence;
+        }
+
+        public static int[,] GenerateSubKey(int[] seedVector, MySetting _setting)
+        {
+            int[,] subKey = new int[_setting.graphOrder, _setting.graphOrder];
+
+            for (int i = 0; i < _setting.graphOrder; i++)
+            {
+                int[] rowValues =GenerateBBSSequence(seedVector[i], _setting.graphOrder,_setting);
+
+                for (int j = 0; j < _setting.graphOrder; j++)
                 {
-                    rng.GetBytes(bytes);
-                    s = new BigInteger(bytes) % (modulus - 2) + 2; // Ensure 2 <= s < modulus - 1
-                } while (BigInteger.GreatestCommonDivisor(s, modulus) != 1);
-
-                return s;
+                    subKey[i, j] = rowValues[j];
+                }
             }
-        }
-        public async Task<int> Next(int max)
-        {
-            if (max <= 0)
-                throw new ArgumentOutOfRangeException(nameof(max), "max must be greater than 0.");
 
-            // Update the seed using the BBS algorithm
-            seed = (seed * seed) % modulus;
-
-            // Return the next random number in the range [0, max)
-            return (int)(seed % max);
-           
-        }
-        public  bool IsPrime(BigInteger number)
-        {
-            if (number < 2) return false;
-            //run loop until i*i <= number ,
-            //where i*i >= number the remainder will be the number
-            //if we check 7 for example  we can see when i = 3 7&9=7 7&10=7 etc. we don't need it.
-            for (BigInteger i = 2; i * i <= number; i++)
-            {
-                if (number % i == 0) return false;
-            }
-            return true;
+            return subKey;
         }
 
-      
     }
 
 }

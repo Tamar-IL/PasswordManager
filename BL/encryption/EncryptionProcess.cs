@@ -16,6 +16,8 @@ namespace BL.encryption
 {
     public class EncryptionProcess : IEncryptionProcess
     {
+        private static readonly StringBuilder _saltBuilder = new StringBuilder(256);
+
         private GenerateKeyEncryption generateKeyEncryption;
         private readonly int[,] _initializationMatrix;
         private readonly int[] _keyEncryptionKey;
@@ -41,13 +43,9 @@ namespace BL.encryption
         public (int[] EncryptedMessage, List<int> VectorOfPositions) Encrypt(string clearMessage)
         {
             Console.WriteLine($"Input message: '{clearMessage}'");
-            Console.WriteLine($"After salt: '{clearMessage}' -> length {clearMessage.Length}");
-
 
             clearMessage = AddSaltToMessageEnd(clearMessage);
             Console.WriteLine("clearMessage:" + clearMessage);
-
-
 
             // המרת ההודעה למערך של ערכי ASCII
             int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
@@ -61,8 +59,6 @@ namespace BL.encryption
             //by algorithm 2 יצירת תת-מפתחות
 
             var (subKeys, vectorOfPositions) = generateKeyEncryption.GenerateSubKeysForEncryption(blocks);
-
-
             // מערך לאחסון הבלוקים המוצפנים
             List<int[]> encryptedBlocks = new List<int[]>();
 
@@ -77,9 +73,9 @@ namespace BL.encryption
                 // המרת תת-הבלוקים לגרף עם מעגלים המילטוניים
                 int[,] adjacencyMatrix = BlockToAdjacencyMatrix(subBlocks);
                 // ביצוע XOR עם המטריצה הקודמת (CBC)
-                int[,] modifiedMatrix = MatrixXor(adjacencyMatrix, previousMatrix);
+                int[,] modifiedMatrix = CryptographyUtils.MatrixXor(adjacencyMatrix, previousMatrix);
                 // ביצוע XOR עם תת-המפתח
-                int[,] encryptedMatrix = MatrixXor(modifiedMatrix, subKeys[i]);
+                int[,] encryptedMatrix = CryptographyUtils.MatrixXor(modifiedMatrix, subKeys[i]);
                 // שמירת המטריצה הנוכחית עבור הבלוק הבא
                 previousMatrix = encryptedMatrix;
                 // המרת המטריצה המוצפנת לוקטור
@@ -87,10 +83,9 @@ namespace BL.encryption
                 encryptedBlocks.Add(encryptedBlock);
             }
             // איחוד כל הבלוקים המוצפנים לוקטור אחד
-            int[] encryptedMessage = ConcatenateBlocks(encryptedBlocks);
+            int[] encryptedMessage = CryptographyUtils.ConcatenateBlocks(encryptedBlocks);
             return (encryptedMessage, vectorOfPositions);
         }
-
         /// <summary>
         /// מחלק בלוק לתת-בלוקים
         /// </summary>
@@ -134,7 +129,6 @@ namespace BL.encryption
 
             return subBlocks;
         }
-
         /// <summary>
         /// ממיר תת-בלוקים למטריצת סמיכות
         /// </summary>
@@ -149,7 +143,7 @@ namespace BL.encryption
                 int[] subBlock = subBlocks[subBlockIndex];
 
                 // יצירת מסלול המילטוני עבור תת-הבלוק
-                List<int> path = CreateHamiltonianCircuit(subBlockIndex);
+                List<int> path = CryptographyUtils.CreateHamiltonianCircuit(subBlockIndex);
 
                 // הוספת המשקלים      למטריצת הסמיכות
                 for (int i = 0; i < path.Count - 1; i++)
@@ -171,56 +165,10 @@ namespace BL.encryption
 
             return adjacencyMatrix;
         }
-
-        /// <summary>
-        /// יוצר מעגל המילטוני עבור אינדקס תת-בלוק
-        /// </summary>
-        
-        private List<int> CreateHamiltonianCircuit(int subBlockIndex)
-        {
-            // כאן נייצר 6 מעגלים המילטוניים זרים בגרף מסדר 13
-            // כל מעגל מייצג דרך שונה לעבור על כל הקדקודים פעם אחת וחזרה לקדקוד ההתחלתי
-
-            // בפועל, לכל subBlockIndex יש מעגל קבוע מראש
-            switch (subBlockIndex)
-            {
-                case 0:
-                    return new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-                case 1:
-                    return new List<int> { 0, 2, 4, 6, 8, 10, 12, 1, 3, 5, 7, 9, 11 };
-                case 2:
-                    return new List<int> { 0, 3, 6, 9, 12, 2, 5, 8, 11, 1, 4, 7, 10 };
-                case 3:
-                    return new List<int> { 0, 4, 8, 12, 3, 7, 11, 2, 6, 10, 1, 5, 9 };
-                case 4:
-                    return new List<int> { 0, 5, 10, 2, 7, 12, 4, 9, 1, 6, 11, 3, 8 };
-                case 5:
-                    return new List<int> { 0, 6, 12, 5, 11, 4, 10, 3, 9, 2, 8, 1, 7 };
-                default:
-            
-                    throw new ArgumentException("Invalid sub-block index");
-            }
-        }
-
+       
         /// <summary>
         /// מבצע פעולת XOR בין שתי מטריצות
         /// </summary>
-        private int[,] MatrixXor(int[,] matrix1, int[,] matrix2)
-        {
-            int rows = matrix1.GetLength(0);
-            int cols = matrix1.GetLength(1);
-            int[,] result = new int[rows, cols];
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    result[i, j] = matrix1[i, j] ^ matrix2[i, j];
-                }
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// ממיר מטריצה לוקטור
@@ -246,20 +194,6 @@ namespace BL.encryption
         /// <summary>
         /// מאחד בלוקים לוקטור אחד
         /// </summary>
-        private int[] ConcatenateBlocks(List<int[]> blocks)
-        {
-            int totalLength = blocks.Sum(block => block.Length);
-            int[] result = new int[totalLength];
-
-            int index = 0;
-            foreach (int[] block in blocks)
-            {
-                Array.Copy(block, 0, result, index, block.Length);
-                index += block.Length;
-            }
-
-            return result;
-        }
 
         //#endregion
 
@@ -303,6 +237,7 @@ namespace BL.encryption
         //שמירת אורך הסיסמה לפני הוספת המלח
         public string AddLengthAsPrefix(string input)
         {
+
             int length = input.Length;
 
             if (length > 255)
@@ -311,26 +246,27 @@ namespace BL.encryption
             return length + input;
         }
 
-
         public  string AddSaltToMessageEnd(string message)
-        {
-
+        {         
             message = AddLengthAsPrefix(message);
             int targetLength = _setting.BlockSize;
             string saltChars = _setting.SaltChars;
+            _saltBuilder.Clear();
+            _saltBuilder.Capacity = Math.Max(_saltBuilder.Capacity, saltChars.Length);
+
             if (message.Length > targetLength)
                 throw new ArgumentException("הסימהה ארוכה מ- ." + _setting.BlockSize + "תווים");           
             int saltLength = targetLength - message.Length;
-            StringBuilder saltBuilder = new StringBuilder(saltLength);
+            //StringBuilder saltBuilder = new StringBuilder(saltLength);
             for (int i = 0; i < saltLength; i++)
             {
                 if (saltChars == null)
                     throw new InvalidOperationException("saltChars לא מאותחל");
                 int index = RandomNumberGenerator.GetInt32(saltChars.Length);
                 char randomChar = saltChars[index];
-                saltBuilder.Append(randomChar);
+                _saltBuilder.Append(randomChar);
             }          
-            return message + saltBuilder.ToString();
+            return message + _saltBuilder.ToString();
         }
        
 
