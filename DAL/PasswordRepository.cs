@@ -172,5 +172,20 @@ namespace DAL
         //    var updatedEntity = await _passwordsRepository.UpdatePasswordAsync(id, entity);
         //    return _mapper.Map<PasswordsDTO>(updatedEntity);
         //}
+        public async Task<bool> PasswordExistsForUserAndSiteAsync(string userId, string siteId)
+        {
+            try
+            {
+                var collection = _dbService.GetCollection<Passwords>("passwords");
+                var count = await collection.CountDocumentsAsync(p => p.UserId == userId && p.SiteId == siteId);
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception( "Error checking password existence for UserId:" + userId + "SiteId:" + siteId, ex);
+                throw;
+            }
+        }
     }
+
 }

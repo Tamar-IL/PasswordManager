@@ -36,7 +36,7 @@ namespace BL.NewFolder
                 var website = await _webSitesRepository.GetAllWebSitesAsync();
                 if (website == null)
                 {
-                    return null;
+                    throw new Exception("there is no webSite or error at get all websites");
                 }
                 foreach (var site in website)
                 {
@@ -44,8 +44,6 @@ namespace BL.NewFolder
                         return _mapper.Map<WebSitesDTO>(site);
                 }
                 return new WebSitesDTO();
-
-
             }
             catch (Exception ex)
             {
@@ -128,15 +126,16 @@ namespace BL.NewFolder
                 siteDto.Name = GetSiteName(siteDto.baseAddress);
                 var webSite = _mapper.Map<WebSites>(siteDto);
                 WebSitesDTO web = await GetPasswordByUrlSiteAsync(siteDto.baseAddress);
-                if (web.Id == null)                                  
-                     await _webSitesRepository.AddWebSiteAsync(webSite);                
+                if (web.Id == null)
+                {
+                   WebSites web1 = await _webSitesRepository.AddWebSiteAsync(webSite); 
+                   return _mapper.Map<WebSitesDTO>(web1);
+                }
                 else
                 {
-                    //siteDto.Id = web.Id;
-                    //return siteDto;
-                    return web;
+                    return null;
                 }
-                return null;
+                throw new Exception("error in add WebSiteBL");
             }
             catch (Exception ex)
             {
@@ -176,18 +175,16 @@ namespace BL.NewFolder
         }
         public String splitUrl(string url)
         {
-
             if (string.IsNullOrWhiteSpace(url))
                 return null;
-
             try
             {
                 Uri uri = new Uri(url);
                 return uri.GetLeftPart(UriPartial.Authority);
             }
-            catch (UriFormatException)
+            catch (UriFormatException ex)
             {
-                return null;
+                throw new Exception("url not valid", ex);
             }
         }
 
@@ -208,9 +205,9 @@ namespace BL.NewFolder
                 // החזר החלק הראשון לפני הנקודה
                 return host.Split('.')[0];
             }
-            catch (UriFormatException)
+            catch (UriFormatException ex)
             {
-                return null;
+                throw new Exception("url not valid", ex);
             }
         }
     }

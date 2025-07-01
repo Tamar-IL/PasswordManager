@@ -1,3 +1,9 @@
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.csproj.AssemblyReference.cache
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.GeneratedMSBuildEditorConfig.editorconfig
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.AssemblyInfoInputs.cache
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.AssemblyInfo.cs
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.csproj.CoreCompileInputs.cache
+C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.sourcelink.json
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\bin\Debug\net8.0\BL.deps.json
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\bin\Debug\net8.0\BL.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\bin\Debug\net8.0\BL.pdb
@@ -13,12 +19,6 @@ C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\bin\Debug\net8.0\MyProject.Common.pdb
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\bin\Debug\net8.0\DTO.pdb
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\bin\Debug\net8.0\IDAL.pdb
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.csproj.AssemblyReference.cache
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.GeneratedMSBuildEditorConfig.editorconfig
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.AssemblyInfoInputs.cache
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.AssemblyInfo.cs
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.csproj.CoreCompileInputs.cache
-C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.sourcelink.json
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.csproj.Up2Date
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\BL.dll
 C:\דיסק מקומי (C)\תכנות\תכנות שנה ב\משרד החינוך\פרויקט גמר\PasswordManagement\BL\obj\Debug\net8.0\refint\BL.dll

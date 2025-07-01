@@ -31,6 +31,8 @@ namespace Entities.models
         public string LastDateUse { get; set; }
 
         [BsonElement("Password")]
-        public string Password { get; set; }
+        public int [] Password { get; set; }
+        [BsonElement("VP")]
+        public string VP { get; set; }
     }
 }

@@ -78,7 +78,7 @@ namespace BL
                 vectorOfPositions.Add(selectedChar);
 
                 
-                int index = selectedChar % _keyEncryptionKey.Length;  // מודול 256
+                int index = selectedChar % _keyEncryptionKey.Length;  // מודול 128
 
                 // אם האינדקס לא בטווח, תפסול את החישוב
                 if (index < 0 || index >= _keyEncryptionKey.Length)

@@ -20,7 +20,6 @@ namespace Entities.models
 
         [BsonElement("Phone")]
         public string Phone { get; set; }
-        [BsonElement("VP")]
-        public string VP { get; set; }
+       
     }
 }

@@ -13,7 +13,8 @@
           "IDAL": "1.0.0",
           "Microsoft.EntityFrameworkCore": "9.0.3",
           "Microsoft.Extensions.Configuration": "9.0.3",
-          "MongoDB.Driver": "3.2.1"
+          "MongoDB.Driver": "3.2.1",
+          "Portable.BouncyCastle": "1.9.0"
         },
         "runtime": {
           "DAL.dll": {}
@@ -213,6 +214,14 @@
           }
         }
       },
+      "Portable.BouncyCastle/1.9.0": {
+        "runtime": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "assemblyVersion": "1.9.0.0",
+            "fileVersion": "1.9.0.1"
+          }
+        }
+      },
       "SharpCompress/0.30.1": {
         "runtime": {
           "lib/net5.0/SharpCompress.dll": {
@@ -257,7 +266,8 @@
       },
       "DTO/1.0.0": {
         "dependencies": {
-          "MongoDB.Bson": "3.2.1"
+          "MongoDB.Bson": "3.2.1",
+          "Portable.BouncyCastle": "1.9.0"
         },
         "runtime": {
           "DTO.dll": {
@@ -268,7 +278,8 @@
       },
       "Entities/1.0.0": {
         "dependencies": {
-          "MongoDB.Bson": "3.2.1"
+          "MongoDB.Bson": "3.2.1",
+          "Portable.BouncyCastle": "1.9.0"
         },
         "runtime": {
           "Entities.dll": {
@@ -280,7 +291,8 @@
       "IDAL/1.0.0": {
         "dependencies": {
           "DTO": "1.0.0",
-          "Entities": "1.0.0"
+          "Entities": "1.0.0",
+          "Portable.BouncyCastle": "1.9.0"
         },
         "runtime": {
           "IDAL.dll": {
@@ -429,6 +441,13 @@
       "sha512": "sha512-ynT4Mc0ilT+DSQBbobfORqCWqm5UdHIX3Nc59oQH3XbPi43jKiqf7SK8NLBmQsB6RJBJPR+WdIeNLtzyLj3U3g==",
       "path": "mongodb.driver/3.2.1",
       "hashPath": "mongodb.driver.3.2.1.nupkg.sha512"
+    },
+    "Portable.BouncyCastle/1.9.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-eZZBCABzVOek+id9Xy04HhmgykF0wZg9wpByzrWN7q8qEI0Qen9b7tfd7w8VA3dOeesumMG7C5ZPy0jk7PSRHw==",
+      "path": "portable.bouncycastle/1.9.0",
+      "hashPath": "portable.bouncycastle.1.9.0.nupkg.sha512"
     },
     "SharpCompress/0.30.1": {
       "type": "package",

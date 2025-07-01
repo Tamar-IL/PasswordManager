@@ -5,24 +5,20 @@ namespace DTO
 {
     public class UsersDTO
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement("UserName")]
+       
         public string UserName { get; set; }
-
-        [BsonElement("Password")]
+        //להוריד! שדה מאובטח שלא יעבור בין השכבות
+  
         public string Password { get; set; }
 
-        [BsonElement("Email")]
+   
         public string Email { get; set; }
 
-        [BsonElement("Phone")]
+       
         public string Phone { get; set; }
-        [BsonElement("VP")]
-        public string VP { get; set; }
-  
+       
 
         
     }

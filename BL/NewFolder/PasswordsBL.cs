@@ -4,14 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using BL.decryption;
+using BL.encryption;
+using BL.RSAForMasterKay;
 using DnsClient.Internal;
 using DTO;
 using Entities.models;
 using IBL;
+using IBL.RSAForMasterKey;
 using IDAL;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using MyProject.Common;
 
 namespace BL.NewFolder
 {
@@ -23,23 +29,23 @@ namespace BL.NewFolder
         private readonly IUsersBL _userBL;
         private readonly IMapper _mapper;
         private readonly IWebSitesBL _webSite;
+        private readonly MySetting _mySetting;
+        private readonly IEncryptionProcess _encryptionProcess;
+        private readonly IRSAencryption _RSAencryption;
+
+
+
         MapperConfiguration configPasswordConverter;
-        public PasswordsBL(IWebSitesBL webSite, IUsersBL userBL, IPasswordsRepository passwordsRepository, ILogger<PasswordsBL> logger, IMapper mapper)
+        public PasswordsBL(IRSAencryption RSAencryption, IWebSitesBL webSite, IUsersBL userBL, IPasswordsRepository passwordsRepository, ILogger<PasswordsBL> logger, IMapper mapper, IOptions<MySetting> mySettingOptions, IEncryptionProcess encryptionProcess)
         {
             _webSite = webSite;
             _logger = logger;
             _userBL = userBL;
             _passwordsRepository = passwordsRepository;
             _mapper = mapper;
-
-            //configPasswordConverter = new AutoMapper.MapperConfiguration(a =>
-            //         a.CreateMap<Passwords, PasswordsDTO>()
-            //         .ForMember(x => x.Id, s => s.MapFrom(p => p.Id))
-            //         // .ForMember(x => x.CustCity, s => s.MapFrom(p =>int.Parse( p.CustCity) ))
-            //         .ReverseMap()
-            //         .ForMember(x => x.Id, s => s.MapFrom(p => p.Id))
-            //         // .ForMember(x => x.CustCity, s => s.MapFrom(p =>  p.CustCity.ToString() ))
-            //         );
+            _mySetting = mySettingOptions.Value;
+            _encryptionProcess = encryptionProcess;
+            _RSAencryption = RSAencryption;
         }
 
         public async Task<IEnumerable<PasswordsDTO>> GetAllPasswordsForUserByUserIdAsync(string id)
@@ -134,33 +140,63 @@ namespace BL.NewFolder
         {
             try
             {
-                password.Id = ObjectId.GenerateNewId().ToString(); // Generate new ID
+                password.Id = ObjectId.GenerateNewId().ToString();
                 password.DateReg = DateTime.UtcNow.ToString("yyyy-MM-dd");
                 password.LastDateUse = DateTime.UtcNow.ToString("yyyy-MM-dd");
-                //-----
-                // Save the encrypted password, not plain password!
-                //-----
-                WebSitesDTO newSite = new WebSitesDTO();
-                //----4
-                //split the url to base address.
-                url = _webSite.splitUrl(url);
-                //----
-                newSite.baseAddress = url;
-                newSite.Id = ObjectId.GenerateNewId().ToString();
-                var web = _webSite.AddWebSiteAsync(newSite);
-                // if the site exist yet, take the id and if not put the new id
-                if (web.Id.ToString() == newSite.Id)
-                    password.SiteId = web.Id.ToString();
+
+                // הצפנה
+                var (encryptPass, VP) = _encryptionProcess.Encrypt(password.Password);
+              //encrypt vp by rsa
+                if (VP != null )
+                {
+                    // המרת List<int> ל-string לשמירה זמנית
+                    string vpString = string.Join(",", VP);
+
+                    // המרת string ל-byte[] להצפנה RSA
+                    byte[] vpBytes = Encoding.UTF8.GetBytes(vpString);
+
+                    // הצפנת VP עם RSA
+                    byte[] encryptedVP = _RSAencryption.Encrypt(vpString, _RSAencryption.GetPublicKey());
+
+                    // המרת byte[] ל-Base64 string לשמירה ב-DB
+                    password.VP = Convert.ToBase64String(encryptedVP);
+                }
                 else
-                    password.SiteId = newSite.Id;
+                {
+                    _logger.LogWarning("VP is null or empty after encryption");
+                    password.VP = "";
+                }
+
+                WebSitesDTO newSite = new WebSitesDTO();
+                newSite.baseAddress = _webSite.splitUrl(url);
+                newSite.Id = ObjectId.GenerateNewId().ToString();
+                var web = await _webSite.AddWebSiteAsync(newSite);
+
+                password.SiteId = web?.Id ?? newSite.Id;
+
+                //  בדיקת כפילויות
+                var passwordExists = await _passwordsRepository.PasswordExistsForUserAndSiteAsync(password.UserId, password.SiteId);
+                if (passwordExists)
+                {
+                    throw new InvalidOperationException($"A password already exists for this user and website. Please update the existing password instead of creating a new one.");
+                }
+
+                // יצירת Entity
                 var passwordEntity = _mapper.Map<Passwords>(password);
-                await _passwordsRepository.AddPasswordAsync(passwordEntity);
+                passwordEntity.Password = encryptPass;
+
+                _logger.LogInformation($"About to save: ID={passwordEntity.Id}, SiteId={passwordEntity.SiteId}, VP='{passwordEntity.VP}'");
+
+                // שמירה
+                var result = await _passwordsRepository.AddPasswordAsync(passwordEntity);
+                _logger.LogInformation($"Save result: {result?.Id}");
+
                 return password;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while adding the password.");
-                throw new Exception("An error occurred while adding the password.", ex);
+                _logger.LogError(ex, "Error in AddPasswordAsync: {Message}", ex.Message);
+                throw;
             }
         }
 

@@ -61,57 +61,136 @@ namespace BL.encryption
         {
 
         }
+        //public (int[] EncryptedMessage, List<int> VectorOfPositions) Encrypt(string clearMessage)
+        //{
+        //    try
+        //    {
+        //        Console.WriteLine($"Input message: '{clearMessage}'");
 
+        //        clearMessage = AddSaltToMessageEnd(clearMessage);
+        //        Console.WriteLine("clearMessage:" + clearMessage);
+
+        //        // המרת ההודעה למערך של ערכי ASCII
+        //        int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
+        //        // חישוב מספר הבלוקים
+        //        int messageLength = messageAsAscii.Length;
+        //        int remainder = messageLength % _setting.BlockSize;
+        //        int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
+        //        // split the message into k' block forming thr set
+        //        // חלוקת ההודעה לבלוקים
+        //        //1.במקום 
+        //        //List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
+        //        //נעשה
+        //        List<int[]> blocks = ParseBlock(messageAsAscii);
+        //        //by algorithm 2 יצירת תת-מפתחות
+
+        //        var (subKeys, vectorOfPositions) = generateKeyEncryption.GenerateSubKeysForEncryption(blocks);
+        //        // מערך לאחסון הבלוקים המוצפנים
+        //        List<int[]> encryptedBlocks = new List<int[]>();
+        //        List<int[]> currentblock = new List<int[]>();
+               
+        //        // מטריצה קודמת עבור CBC
+        //        //int[,] previousMatrix = _initializationMatrix;
+        //        int[,] previousMatrix = _keyProvider.GetInitializationMatrix();
+        //        //2.הוספתי בחוץ
+        //        //int[,] adjacencyMatrix = BlockToAdjacencyMatrix(blocks);
+
+        //        // הצפנת כל בלוק
+        //        //3 פוריצ במקום פור
+        //        foreach ( var block in blocks) {
+        //            currentblock[0] = block;
+        //            //for (int i = 0; i < blocks.Count(); i++)
+        //            //{
+        //            int i = 0;
+        //            // חלוקת הבלוק לתת-בלוקים
+        //            //List<int[]> subBlocks = ParseBlock(blocks[i]);
+        //            // המרת תת-הבלוקים לגרף עם מעגלים המילטוניים
+        //            int[,] adjacencyMatrix = BlockToAdjacencyMatrix(currentblock);
+        //            // ביצוע XOR עם המטריצה הקודמת (CBC)
+        //            //אולי נביא לפונקציתXOR את המעגל ההמילטוני עליו עובדים עכשיו  ושתעשה אקסור רק על הערכים התתאימים ונשאר באותה פונקציה כל הזמן כלומר נעבוד על אותה פונקציה
+        //            int[,] modifiedMatrix = CryptographyUtils.MatrixXor(adjacencyMatrix, previousMatrix);
+        //            // ביצוע XOR עם תת-המפתח
+        //            //4
+        //            //int[,] encryptedMatrix = CryptographyUtils.MatrixXor(modifiedMatrix, subKeys[i]);
+        //            int[,] encryptedMatrix = CryptographyUtils.MatrixXor(modifiedMatrix, subKeys[i++]);
+        //            // שמירת המטריצה הנוכחית עבור הבלוק הבא
+        //            previousMatrix = encryptedMatrix;
+        //            // המרת המטריצה המוצפנת לוקטור
+        //            int[] encryptedBlock = MatrixToVector(encryptedMatrix);
+
+        //            encryptedBlocks.Add(encryptedBlock);
+        //        }
+        //        // איחוד כל הבלוקים המוצפנים לוקטור אחד
+        //        int[] encryptedMessage = CryptographyUtils.ConcatenateBlocks(encryptedBlocks);
+        //        return (encryptedMessage, vectorOfPositions);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "שגיאה בתהליך ההצפנה");
+        //        throw;
+        //    }
+        //}
         public (int[] EncryptedMessage, List<int> VectorOfPositions) Encrypt(string clearMessage)
         {
             try
             {
                 Console.WriteLine($"Input message: '{clearMessage}'");
 
-            clearMessage = AddSaltToMessageEnd(clearMessage);
-            Console.WriteLine("clearMessage:" + clearMessage);
+                clearMessage = AddSaltToMessageEnd(clearMessage);
+                Console.WriteLine("clearMessage:" + clearMessage);
 
-            // המרת ההודעה למערך של ערכי ASCII
-            int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
-            // חישוב מספר הבלוקים
-            int messageLength = messageAsAscii.Length;
-            int remainder = messageLength % _setting.BlockSize;
-            int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
-            // split the message into k' block forming thr set
-            // חלוקת ההודעה לבלוקים
-            List<int[]> blocks = ParseMessage(messageAsAscii, blocksCount);
-            //by algorithm 2 יצירת תת-מפתחות
+                // המרת ההודעה למערך של ערכי ASCII
+                int[] messageAsAscii = ConvertMessageToAscii(clearMessage);
+                int[] test = new int[messageAsAscii.Length*2];
+                int repeatCount = 3; // מס פעמים לחזור
 
-            var (subKeys, vectorOfPositions) = generateKeyEncryption.GenerateSubKeysForEncryption(blocks);
-            // מערך לאחסון הבלוקים המוצפנים
-            List<int[]> encryptedBlocks = new List<int[]>();
+                // יצירת מערך חדש שמכיל את המערך המקורי 3 פעמים
+                int[] repeatedArray = new int[messageAsAscii.Length * repeatCount];
 
-            // מטריצה קודמת עבור CBC
-            //int[,] previousMatrix = _initializationMatrix;
-            int[,] previousMatrix = _keyProvider.GetInitializationMatrix();
+                for (int i = 0; i < repeatCount; i++)
+                {
+                    Array.Copy(messageAsAscii, 0, repeatedArray, i * messageAsAscii.Length, messageAsAscii.Length);
+                }
+                // חישוב מספר הבלוקים
+                int messageLength = repeatedArray.Length;
+                int remainder = messageLength % _setting.BlockSize;
+                int blocksCount = messageLength / _setting.BlockSize + (remainder > 0 ? 1 : 0);
+                // split the message into k' block forming thr set
+                // חלוקת ההודעה לבלוקים
+                List<int[]> blocks = ParseMessage(repeatedArray, blocksCount);
+                //by algorithm 2 יצירת תת-מפתחות
 
-            // הצפנת כל בלוק
-            for (int i = 0; i < blocksCount; i++)
-            {
-                // חלוקת הבלוק לתת-בלוקים
-                List<int[]> subBlocks = ParseBlock(blocks[i]);
-                // המרת תת-הבלוקים לגרף עם מעגלים המילטוניים
-                int[,] adjacencyMatrix = BlockToAdjacencyMatrix(subBlocks);
-                // ביצוע XOR עם המטריצה הקודמת (CBC)
-                int[,] modifiedMatrix = CryptographyUtils.MatrixXor(adjacencyMatrix, previousMatrix);
-                // ביצוע XOR עם תת-המפתח
-                int[,] encryptedMatrix = CryptographyUtils.MatrixXor(modifiedMatrix, subKeys[i]);
-                // שמירת המטריצה הנוכחית עבור הבלוק הבא
-                previousMatrix = encryptedMatrix;
-                // המרת המטריצה המוצפנת לוקטור
-                int[] encryptedBlock = MatrixToVector(encryptedMatrix);
+                var (subKeys, vectorOfPositions) = generateKeyEncryption.GenerateSubKeysForEncryption(blocks);
+                Console.Write(subKeys);
+                // מערך לאחסון הבלוקים המוצפנים
+                List<int[]> encryptedBlocks = new List<int[]>();
 
-                encryptedBlocks.Add(encryptedBlock);
+                // מטריצה קודמת עבור CBC
+                //int[,] previousMatrix = _initializationMatrix;
+                int[,] previousMatrix = _keyProvider.GetInitializationMatrix();
+
+                // הצפנת כל בלוק
+                for (int i = 0; i < blocksCount; i++)
+                {
+                    // חלוקת הבלוק לתת-בלוקים
+                    List<int[]> subBlocks = ParseBlock(blocks[i]);
+                    // המרת תת-הבלוקים לגרף עם מעגלים המילטוניים
+                    int[,] adjacencyMatrix = BlockToAdjacencyMatrix(subBlocks);
+                    // ביצוע XOR עם המטריצה הקודמת (CBC)
+                    int[,] modifiedMatrix = CryptographyUtils.MatrixXor(adjacencyMatrix, previousMatrix);
+                    // ביצוע XOR עם תת-המפתח
+                    int[,] encryptedMatrix = CryptographyUtils.MatrixXor(modifiedMatrix, subKeys[i]);
+                    // שמירת המטריצה הנוכחית עבור הבלוק הבא
+                    previousMatrix = encryptedMatrix;
+                    // המרת המטריצה המוצפנת לוקטור
+                    int[] encryptedBlock = MatrixToVector(encryptedMatrix);
+                    //הוספה לבלוקיםם המוצפנים
+                    encryptedBlocks.Add(encryptedBlock);
+                }
+                // איחוד כל הבלוקים המוצפנים לוקטור אחד
+                int[] encryptedMessage = CryptographyUtils.ConcatenateBlocks(encryptedBlocks);
+                return (encryptedMessage, vectorOfPositions);
             }
-            // איחוד כל הבלוקים המוצפנים לוקטור אחד
-            int[] encryptedMessage = CryptographyUtils.ConcatenateBlocks(encryptedBlocks);
-            return (encryptedMessage, vectorOfPositions);
-        }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "שגיאה בתהליך ההצפנה");
@@ -197,6 +276,7 @@ namespace BL.encryption
 
             return adjacencyMatrix;
         }
+        
 
         /// <summary>
         /// המרה מ-byte[] ל-int[] לתאימות עם הקוד הקיים
@@ -232,20 +312,12 @@ namespace BL.encryption
             return vector;
         }
 
-        /// <summary>
-        /// מאחד בלוקים לוקטור אחד
-        /// </summary>
-
         //#endregion
 
         public List<int[]> ParseMessage(int[] message, int blocksCount)
         {
             List<int[]> blocks = new List<int[]>();
-            //----------------
-            // i think its not good. we need fill the key (length k - like the formula in the top of this page )
-            // we don't have to pass on the vP / only take value from VP by randomaly index.
-            // fix this loop!!(instead of int position in vectorOfPositions . write  for i =0 to k*13 by the article in algorithm 2 )
-
+          
             for (int i = 0; i < blocksCount; i++)
             {
                 int startIndex = i * _setting.BlockSize;

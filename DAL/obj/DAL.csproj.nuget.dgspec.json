@@ -73,6 +73,10 @@
             "MongoDB.Driver": {
               "target": "Package",
               "version": "[3.2.1, )"
+            },
+            "Portable.BouncyCastle": {
+              "target": "Package",
+              "version": "[1.9.0, )"
             }
           },
           "imports": [
@@ -145,6 +149,10 @@
             "MongoDB.Bson": {
               "target": "Package",
               "version": "[3.2.1, )"
+            },
+            "Portable.BouncyCastle": {
+              "target": "Package",
+              "version": "[1.9.0, )"
             }
           },
           "imports": [
@@ -217,6 +225,10 @@
             "MongoDB.Bson": {
               "target": "Package",
               "version": "[3.2.1, )"
+            },
+            "Portable.BouncyCastle": {
+              "target": "Package",
+              "version": "[1.9.0, )"
             }
           },
           "imports": [
@@ -292,6 +304,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Portable.BouncyCastle": {
+              "target": "Package",
+              "version": "[1.9.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

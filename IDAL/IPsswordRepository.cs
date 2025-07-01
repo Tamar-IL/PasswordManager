@@ -17,6 +17,9 @@ namespace IDAL
         Task<Passwords> UpdatePasswordAsync(ObjectId id, Passwords password);
         Task<bool> DeletePasswordAsync(string id);
         Task<Passwords> AddPasswordAsync(Passwords password);
+
+        Task<bool> PasswordExistsForUserAndSiteAsync(string userId, string siteId);
+
     }
 
 }

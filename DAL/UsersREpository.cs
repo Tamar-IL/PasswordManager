@@ -50,7 +50,7 @@ namespace DAL
 
             }
         }
-        public async Task<Users> GetUserByUserNameAsync(string userName)
+        public async Task<Users> GetUserByEmaileAsync(string email)
         {
             try
             {
@@ -61,11 +61,11 @@ namespace DAL
                 //    if (user.UserName == userName)
                 //        return user;
                 //}
-                return await collection.Find(p => p.UserName == userName).FirstOrDefaultAsync();
+                return await collection.Find(p => p.Email == email).FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred while updating the password with ID {userName}.", ex);
+                throw new Exception($"An error occurred while updating the password with ID {email}.", ex);
 
             }
         }
@@ -114,7 +114,9 @@ namespace DAL
         {
             try
             {
-                var result = await _dbService.GetCollection<UsersDTO>("Users").DeleteOneAsync(p => p.Id == id);
+              
+                var result = await _dbService.GetCollection<Users>("Users")
+                    .DeleteOneAsync(p => p.Id == id);
                 return result.DeletedCount > 0;
             }
             catch (Exception ex)
@@ -123,7 +125,6 @@ namespace DAL
 
             }
         }
-
-       
+        
     }
 }

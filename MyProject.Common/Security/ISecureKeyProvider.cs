@@ -1,28 +1,18 @@
 ﻿namespace MyProject.Common.Security
 {
-    /// <summary>
-    /// ממשק לספק מפתחות מאובטח
-    /// </summary>
+    // ממשק לספק מפתחות מאובטח
     public interface ISecureKeyProvider
     {
-        /// <summary>
-        /// מחזיר את המפתח הראשי להצפנה
-        /// </summary>
+        // מחזיר את המפתח הראשי להצפנה
         byte[] GetMasterKey();
 
-        /// <summary>
-        /// מחזיר מטריצת אתחול מאובטחת
-        /// </summary>
+        // מחזיר מטריצת אתחול מאובטחת
         int[,] GetInitializationMatrix();
 
-        /// <summary>
-        /// יוצר מפתח ראשי חדש
-        /// </summary>
+        // יוצר מפתח ראשי חדש
         void RegenerateMasterKey();
 
-        /// <summary>
-        /// בודק אם המפתח קיים
-        /// </summary>
+        // בודק אם המפתח קיים
         bool KeyExists();
     }
 }

@@ -8,9 +8,11 @@ using DAL;
 using MongoDB.Bson;
 using SharpCompress.Common;
 using Entities.models;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
+//[Authorize]
 public class PasswordsController : ControllerBase
 {
     //    שכבה מקבל    מחזיר
@@ -59,8 +61,8 @@ public class PasswordsController : ControllerBase
             return NotFound();
         return Ok(password);
     }
-    [HttpGet("byemail")]
-    public async Task<IActionResult> GetAllPasswordsForUserByUserIdAsync([FromQuery] string id)
+    [HttpGet("byemail/{id}")]
+    public async Task<IActionResult> GetAllPasswordsForUserByUserIdAsync(string id)
     {
         var password = await _passwordsService.GetAllPasswordsForUserByUserIdAsync(id);
         if (password == null)
@@ -86,6 +88,14 @@ public class PasswordsController : ControllerBase
                 return Ok(password);
             }
             //}
+        }
+        catch (InvalidOperationException ex) // שגיאת כפילות
+        {
+            return Conflict(new
+            {
+                message = ex.Message,
+                errorCode = "DUPLICATE_PASSWORD"
+            }); // HTTP 409 - Conflict
         }
         catch (Exception ex)
         {

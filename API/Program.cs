@@ -18,6 +18,10 @@ using Microsoft.Extensions.Options;
 using MyProject.Common;
 using MyProject.Common.Security;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using BL.NewFolder;
 
 
 namespace API
@@ -26,109 +30,177 @@ namespace API
     {
         public static void Main(string[] args)
         {
-         
-            string connectionString = "mongodb+srv://swenlly152:swenl152@cluster0.6yf8j.mongodb.net/?appName=Cluster0";
-            string dbName = "passwordManagement";
+
             var builder = WebApplication.CreateBuilder(args);
+            string connectionString = builder.Configuration["DB_setting:connectionString"];
+            string dbName = builder.Configuration["DB_setting:dbName"];
+            string _privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
+
+            var jwtSecretKey = builder.Configuration["MySetting:JwtSecretKey"];
+            var jwtIssuer = builder.Configuration["MySetting:JwtIssuer"];
+            var jwtAudience = builder.Configuration["MySetting:JwtAudience"];
+            var requireHttps = builder.Configuration.GetValue<bool>("MySetting:RequireHttps");
+            var csrfTokenName = builder.Configuration["MySetting:CsrfTokenName"];
+            var csrfCookieName = builder.Configuration["MySetting:CsrfTokenCookieName"];
+
+            var key = Encoding.UTF8.GetBytes(jwtSecretKey);
+
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
             builder.Logging.AddDebug();
-
             builder.Services.AddLogging();
-            string _privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
 
             builder.Services.AddScoped<IRSAencryption>(provider => new RSAencryption(_privateKeyPAth));
-
-            //builder.Services.AddScoped<IkeyGeneration>(provider => new KeyGeneration(p, q, s));
-            //builder.Services.AddScoped<IBBSRandomGenerator>(provider => new BBSRandomGenerator(p, q, s));
             builder.Services.AddScoped<IEncryptionProcess, EncryptionProcess>();
-          
             builder.Services.AddScoped<IWebSitesBL, WebSitesBL>();
             builder.Services.AddScoped<IUsersBL, UsersBL>();
             builder.Services.AddScoped<IPasswordsBL, PasswordsBL>();
-            
             builder.Services.AddSingleton<IRSAencryption>(provider =>
             new RSAencryption(builder.Configuration["cryptographySetting:PrivateKaeyPath"]));
+
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
             builder.Services.AddScoped<IWebSitesRepository, WebSitesRepository>();
             builder.Services.AddScoped<IPasswordsRepository, PasswordsRepository>();
-            builder.Services.AddSingleton<IMongoClient>(provider => new MongoClient(connectionString));
-            builder.Services.AddSingleton(provider => provider.GetRequiredService<IMongoClient>().GetDatabase(dbName));
-            builder.Services.AddSingleton<MongoDbService>(sp => new MongoDbService(connectionString, dbName));
-
-            //builder.Services.Configure<MySetting>(builder.Configuration.GetSection("MySetting"));
-            //builder.Services.AddScoped<MySetting>();
-            builder.Services.Configure<MySetting>(builder.Configuration.GetSection("MySetting"));
+            builder.Services.AddScoped<IAuthenticationBL, AuthenticationBL>();
+            builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IEncryptionProcess, EncryptionProcess>();
             builder.Services.AddScoped<IDecryptionProcess, DecryptionProcess>();
 
-            //builder.Services.AddSingleton<MongoDbService>(provider => new MongoDbService(connectionString, dbName));
+            builder.Services.AddSingleton<IMongoClient>(provider => new MongoClient(connectionString));
+            builder.Services.AddSingleton(provider => provider.GetRequiredService<IMongoClient>().GetDatabase(dbName));
+            builder.Services.AddSingleton<MongoDbService>(sp => new MongoDbService(connectionString, dbName));
+            // for make 
+            builder.Services.AddHttpClient();
+
+            builder.Services.Configure<MySetting>(builder.Configuration.GetSection("MySetting"));
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
-                    policy => policy
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173", "https://localhost:5173", "localhost:7249")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains();
+                });
             });
-            
             builder.Services.AddSecureKeyManagement();
-
             builder.Services.AddLogging(builder =>
             {
                 builder.AddConsole();
                 builder.SetMinimumLevel(LogLevel.Information);
             });
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = requireHttps;
+                options.SaveToken = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtIssuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwtAudience,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = csrfTokenName;
+                options.Cookie.Name = csrfCookieName;
+                options.Cookie.HttpOnly = false;
+                options.Cookie.SecurePolicy = requireHttps ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest;
+                //options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SameSite = SameSiteMode.None;
+            });
+
+            // הגדרת CSRF Protection
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = builder.Configuration["MySetting:CsrfTokenName"] ?? "X-CSRF-TOKEN";
+                options.Cookie.Name = builder.Configuration["MySetting:CsrfTokenCookieName"] ?? "__Secure-CsrfToken";
+                options.Cookie.HttpOnly = false;
+                options.Cookie.SecurePolicy = builder.Configuration.GetValue<bool>("MySetting:RequireHttps") ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest;
+                //options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SameSite = SameSiteMode.None;
+            });
+
+            //builder.Services.AddDistributedMemoryCache();
+
+            //builder.Services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromMinutes(20);
+            //    options.Cookie.HttpOnly = false;
+            //    options.Cookie.IsEssential = true;
+            //    options.Cookie.SameSite = SameSiteMode.Lax;
+            //    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            //    options.Cookie.Name = "MyAppSession";
+            //});
+
             var app = builder.Build();
-            var setting = app.Services.GetRequiredService<IOptions<MySetting>>().Value;
-            
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-          
+            app.UseHttpsRedirection();
             app.UseCors("AllowAll");
+            //app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseAntiforgery();
+            app.MapControllers();
+            {
+                //int[] frequencyArray = CreateFrequencyArray(input);
 
-            //int[] frequencyArray = CreateFrequencyArray(input);
+                //Console.WriteLine("\nתדירות התווים:");
+                //for (int i = 0; i < frequencyArray.Length; i++)
+                //{
+                //    if (frequencyArray[i] > 0)
+                //        Console.WriteLine($"{(char)(i + 'a')}: {frequencyArray[i]}");
+                //}
 
-            //Console.WriteLine("\nתדירות התווים:");
-            //for (int i = 0; i < frequencyArray.Length; i++)
-            //{
-            //    if (frequencyArray[i] > 0)
-            //        Console.WriteLine($"{(char)(i + 'a')}: {frequencyArray[i]}");
-            //}
-
-            ////----rsa--
-            //string privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
-            //RSAencryption rsaEncryption = new RSAencryption(_privateKeyPAth);
-            //var (publicKey, PrivateKay) = rsaEncryption.GeneratePairKey();
-            //byte[] encrypteData = rsaEncryption.Encrypt("32!676gsgh$^&@hdg", publicKey);
-            //string decryptText = rsaEncryption.Decrypt(encrypteData,PrivateKay);
-            //Console.WriteLine("orginalData:\n"+ "32!676gsgh$^&@hdg" + "\nencryptData:\n" + encrypteData + "\ndecryptData : \n" + decryptText);
-            // מבחן מהיר - הוסף בתחילת הפונקציה Login
-            ////--rsa----
+                ////----rsa--
+                //string privateKeyPAth = builder.Configuration["cryptographySetting:PrivateKaeyPath"];
+                //RSAencryption rsaEncryption = new RSAencryption(_privateKeyPAth);
+                //var (publicKey, PrivateKay) = rsaEncryption.GeneratePairKey();
+                //byte[] encrypteData = rsaEncryption.Encrypt("32!676gsgh$^&@hdg", publicKey);
+                //string decryptText = rsaEncryption.Decrypt(encrypteData,PrivateKay);
+                //Console.WriteLine("orginalData:\n"+ "32!676gsgh$^&@hdg" + "\nencryptData:\n" + encrypteData + "\ndecryptData : \n" + decryptText);
+                // מבחן מהיר - הוסף בתחילת הפונקציה Login
+                ////--rsa----
 
 
-            //int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
+                //int[] keyEncryptionKey = builder.Configuration.GetSection("Encryption:MasterKey").Get<int[]>(); // מערך בגודל 256
 
-            //int[,] initMatrix = GenerateRandomMatrix(13, 13);
-            ////int[,] initMatrix = GenerateRandomMatrix(5, 5);
+                //int[,] initMatrix = GenerateRandomMatrix(13, 13);
+                ////int[,] initMatrix = GenerateRandomMatrix(5, 5);
 
-            //byte[] masterKey = _keyProvider.GetMasterKey();
-            //int[,] initMatrix = _keyProvider.GetInitializationMatrix();
-            ////GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
-            ////generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
-            ////EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix,Options.Create(setting));
-            //EncryptionProcess cryptosystem = new EncryptionProcess(Options.Create(setting));
-            //DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix, Options.Create(setting));
-
+                //byte[] masterKey = _keyProvider.GetMasterKey();
+                //int[,] initMatrix = _keyProvider.GetInitializationMatrix();
+                ////GenerateKeyEncryption keyEncryption1 = new GenerateKeyEncryption(keyEncryptionKey, initMatrix);
+                ////generateKeyDecryption generateKeyDecryption1 = new generateKeyDecryption(keyEncryptionKey, initMatrix);
+                ////EncryptionProcess cryptosystem = new EncryptionProcess(keyEncryptionKey, initMatrix,Options.Create(setting));
+                //EncryptionProcess cryptosystem = new EncryptionProcess(Options.Create(setting));
+                //DecryptionProcess decryptosystem = new DecryptionProcess(keyEncryptionKey,initMatrix, Options.Create(setting));
+            }
+            // try to enc and dec
             using (var scope = app.Services.CreateScope())
             {
                 var keyProvider = scope.ServiceProvider.GetRequiredService<ISecureKeyProvider>();
@@ -137,16 +209,16 @@ namespace API
 
                 bool keyExists = keyProvider.KeyExists();
                 Console.WriteLine($"מפתחות קיימים: {keyExists}");
-                string message = "TestPassword123";
+                string message = "4574gwds%$%@^&#UGFDG743905794bjrkbgh";
 
                 Console.WriteLine("Original message: " + message);
 
                 // הצפנת ההודעה
-                var (encryptedData, vectorOfPositions) = encryptionProcess.Encrypt(message);
+                var (encryptedData, Positions) = encryptionProcess.Encrypt(message);
                 Console.WriteLine("הצפנה הושלמה");
 
                 // פענוח ההודעה
-                string decryptedMessage = decryptionProcess.Decrypt(encryptedData, vectorOfPositions);
+                string decryptedMessage = decryptionProcess.Decrypt(encryptedData, Positions);
 
                 Console.WriteLine("Original message: " + message);
                 Console.WriteLine("Decrypted message: " + decryptedMessage);
@@ -155,41 +227,40 @@ namespace API
                 Console.WriteLine("Original equals decrypted: " +
                     (message == decryptedMessage ? "Yes" : "No"));
             }
-            //    // הודעה לדוגמה
-            //    string message = "" +
-            //    "1234567890!@#$%^&*()qwertyuiop[]asdfghjkl;'zxcvbnm,./";
+            {
 
-            //Console.WriteLine("Original message: " + message);
+                //    // הודעה לדוגמה
+                //    string message = "" +
+                //    "1234567890!@#$%^&*()qwertyuiop[]asdfghjkl;'zxcvbnm,./";
 
-            //// הצפנת ההודעה
-            //var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
-            //Console.WriteLine("encryptPass:\n" + encryptedData);
+                //Console.WriteLine("Original message: " + message);
 
-            //for (int i = 0; i < encryptedData.Length; i++)
-            //{
-            //    Console.Write(+encryptedData[i]+" , ");
+                //// הצפנת ההודעה
+                //var (encryptedData, vectorOfPositions) = cryptosystem.Encrypt(message);
+                //Console.WriteLine("encryptPass:\n" + encryptedData);
 
-            //}
+                //for (int i = 0; i < encryptedData.Length; i++)
+                //{
+                //    Console.Write(+encryptedData[i]+" , ");
 
-            //// פענוח ההודעה
-            //string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
+                //}
 
-            //Console.WriteLine("\norginal message: " + message + "--end");
-            //Console.WriteLine("\ndecrypt message: " + decryptedMessage+"--end");
+                //// פענוח ההודעה
+                //string decryptedMessage = decryptosystem.Decrypt(encryptedData, vectorOfPositions);
 
-            //// בדיקה שההודעה המקורית זהה להודעה שפוענחה
-            //Console.WriteLine("\nOriginal equals decrypted: " +
-            //    (message == decryptedMessage ? "Yes" : "No"));
-            ////QuickTest();
-            app.UseHttpsRedirection();
-            app.UseAuthorization();
-            app.MapControllers();
+                //Console.WriteLine("\norginal message: " + message + "--end");
+                //Console.WriteLine("\ndecrypt message: " + decryptedMessage+"--end");
+
+                //// בדיקה שההודעה המקורית זהה להודעה שפוענחה
+                //Console.WriteLine("\nOriginal equals decrypted: " +
+                //    (message == decryptedMessage ? "Yes" : "No"));
+                ////QuickTest();
+            }
             app.Run();
         }
 
-        /// <summary>
-        /// יוצר מפתח אקראי באורך מבוקש
-        /// </summary>
+      
+        // יוצר מפתח אקראי באורך מבוקש
         private static int[] GenerateRandomKey(int length)
         {
             int[] key = new int[length];
@@ -197,15 +268,12 @@ namespace API
             for (int i = 0; i < length; i++)
             {
 
-                key[i] =  RandomNumberGenerator.GetInt32(0, 256);
+                key[i] = RandomNumberGenerator.GetInt32(0, 256);
             }
-
             return key;
         }
-
-        /// <summary>
-        /// יוצר מטריצה אקראית בגודל מבוקש
-        /// </summary>
+        // יוצר מטריצה אקראית בגודל מבוקש
+        
         private static int[,] GenerateRandomMatrix(int rows, int cols)
         {
             int[,] matrix = new int[rows, cols];

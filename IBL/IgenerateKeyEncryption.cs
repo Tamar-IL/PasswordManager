@@ -13,8 +13,5 @@ namespace IBL
     {
         int[] GenerateSeed(int initialValue);
         (int[][,] SubKeys, List<int> VectorOfPositions) GenerateSubKeysForEncryption(List<int[]> blocks);
-        
-       
-
     }
 }

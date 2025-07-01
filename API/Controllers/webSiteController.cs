@@ -5,9 +5,11 @@ using MongoDB.Driver;
 using AutoMapper;
 using MongoDB.Bson;
 using Entities.models;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class WebSitesController : ControllerBase
 {
     private readonly IWebSitesBL _webSitesService;
@@ -102,4 +104,5 @@ public class WebSitesController : ControllerBase
             return NotFound();
         return NoContent();
     }
+
 }

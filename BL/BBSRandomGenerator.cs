@@ -1,37 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MyProject.Common;
+using Org.BouncyCastle.Math;
 using System.Security.Cryptography;
-using System.Runtime.CompilerServices;
-using IBL;
-using MyProject.Common;
-
-
+using Org.BouncyCastle.Security; 
 
 namespace BL
 {
-    public static  class BBSRandomGenerator 
+    public static  class BBSRandomGenerator   
     {
-        private static readonly BigInteger P = BigInteger.Parse("98799821657648109045695379286138768173");
-        private static readonly BigInteger Q = BigInteger.Parse("65147279015126562838267191403654601389");
-        private static readonly BigInteger M = P * Q;
+        public static BigInteger GenerateBlumPrime(int bitLength, SecureRandom random)
+        {
+            
+            while (true)
+            {
+                // יצירת מספר ראשוני באורך הביטים הנתון
+                BigInteger prime = new BigInteger(bitLength, 100, random); // 100 הוא רמת הוודאות (iterations)
+
+                // בדיקה האם הוא מקיים P = 3 mod 4
+                if (prime.Mod(BigInteger.ValueOf(4)).Equals(BigInteger.ValueOf(3)))
+                {
+                    return prime;
+                }
+            }
+        }
+
+        public static Tuple<BigInteger, BigInteger> GenerateBlumPrimesPair(int bitLength)
+        {
+
+            SecureRandom random = new SecureRandom(); 
+
+            BigInteger p = GenerateBlumPrime(bitLength, random);
+            BigInteger q;
+
+            do
+            {
+                q = GenerateBlumPrime(bitLength, random);
+            } while (q.Equals(p)); // לוודא ש-P ו-Q שונים
+            
+            return new Tuple<BigInteger, BigInteger>(p, q);
+        }
+
         public static int[] GenerateBBSSequence(int seed, int length,MySetting _setting)
         {
-           
+            //(BigInteger P, BigInteger Q) = GenerateBlumPrimesPair(2048);
+            BigInteger P = new BigInteger(_setting.P);
+            BigInteger Q =  new BigInteger(_setting.Q);
+            var M = P.Multiply( Q);
+            //Console.WriteLine("p:" + P + "\nq:" + Q);
 
             int[] sequence = new int[length];
 
             // הבטחה שהזרע הוא חיובי
-            BigInteger x = new BigInteger(Math.Abs(seed));
-            x = (x * x) % M;  // x₀ = seed² mod m
-
-            for (int i = 0; i < length; i++)
+            BigInteger x = new BigInteger(Math.Abs(seed).ToString());
+            x = x.Multiply(x).Mod(M);  // x₀ = seed² mod m
+            int i = 0;
+            while (i < length)
             {
-                x = (x * x) % M;  // xₙ₊₁ = xₙ² mod m
-                sequence[i] = (int)(x % 256);  // מיפוי לטווח 0-255
+                x = x.Multiply(x).Mod(M);
+                int k = x.Mod(BigInteger.ValueOf(_setting.keySize)).IntValue;
+
+                if (k >= 2)
+                {
+                    sequence[i] = k;
+                    i++;
+                }
             }
 
             return sequence;
