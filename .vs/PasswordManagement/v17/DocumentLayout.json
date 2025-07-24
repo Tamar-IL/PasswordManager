@@ -1,0 +1,236 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|solutionrelative:api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|solutionrelative:api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|solutionrelative:api\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|solutionrelative:api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\bl\\newfolder\\usersbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|solutionrelative:bl\\newfolder\\usersbl.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\bl\\rsaformasterkey\\rsaencryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|solutionrelative:bl\\rsaformasterkey\\rsaencryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\api\\controllers\\passwordcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C623315-CF75-4DA7-9B14-41997F1AFA00}|API\\API.csproj|solutionrelative:api\\controllers\\passwordcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\bl\\encryption\\encryptionprocess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|solutionrelative:bl\\encryption\\encryptionprocess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\bl\\encryption\\generatekeyencryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|solutionrelative:bl\\encryption\\generatekeyencryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\bl\\decryption\\generatekeydecryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|solutionrelative:bl\\decryption\\generatekeydecryption.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|c:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (c)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\passwordmanagement\\bl\\decryption\\decryptionprocess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{65C14697-17F9-4E12-AF5C-11657A7209D6}|BL\\BL.csproj|solutionrelative:bl\\decryption\\decryptionprocess.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f53-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8b06f52-6d01-11d2-aa7d-00c04f990343}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "API\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAqwBoAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-12T21:33:56.896Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Program.cs",
+              "RelativeDocumentMoniker": "API\\Program.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Program.cs",
+              "RelativeToolTip": "API\\Program.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAqwE8AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-12T21:32:50.866Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Controllers\\UserController.cs",
+              "RelativeToolTip": "API\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-12T19:55:37.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-12T21:30:28.801Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UsersBL.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\NewFolder\\UsersBL.cs",
+              "RelativeDocumentMoniker": "BL\\NewFolder\\UsersBL.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\NewFolder\\UsersBL.cs",
+              "RelativeToolTip": "BL\\NewFolder\\UsersBL.cs",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAqwAgBAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-12T19:55:37.029Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "RSAencryption.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\RSAForMasterKey\\RSAencryption.cs",
+              "RelativeDocumentMoniker": "BL\\RSAForMasterKey\\RSAencryption.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\RSAForMasterKey\\RSAencryption.cs",
+              "RelativeToolTip": "BL\\RSAForMasterKey\\RSAencryption.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAADwv3EAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-12T20:38:26.149Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PasswordController.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Controllers\\PasswordController.cs",
+              "RelativeDocumentMoniker": "API\\Controllers\\PasswordController.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\API\\Controllers\\PasswordController.cs",
+              "RelativeToolTip": "API\\Controllers\\PasswordController.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAqwCMAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-12T19:55:37.113Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "generateKeyDecryption.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\decryption\\generateKeyDecryption.cs",
+              "RelativeDocumentMoniker": "BL\\decryption\\generateKeyDecryption.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\decryption\\generateKeyDecryption.cs",
+              "RelativeToolTip": "BL\\decryption\\generateKeyDecryption.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwC0AAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-10T09:51:00.048Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DecryptionProcess.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\decryption\\DecryptionProcess.cs",
+              "RelativeDocumentMoniker": "BL\\decryption\\DecryptionProcess.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\decryption\\DecryptionProcess.cs",
+              "RelativeToolTip": "BL\\decryption\\DecryptionProcess.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-10T00:43:25.449Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "EncryptionProcess.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\encryption\\EncryptionProcess.cs",
+              "RelativeDocumentMoniker": "BL\\encryption\\EncryptionProcess.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\encryption\\EncryptionProcess.cs",
+              "RelativeToolTip": "BL\\encryption\\EncryptionProcess.cs",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAkwJQAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T15:59:14.828Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GenerateKeyEncryption.cs",
+              "DocumentMoniker": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\encryption\\GenerateKeyEncryption.cs",
+              "RelativeDocumentMoniker": "BL\\encryption\\GenerateKeyEncryption.cs",
+              "ToolTip": "C:\\\u05D3\u05D9\u05E1\u05E7 \u05DE\u05E7\u05D5\u05DE\u05D9 (C)\\\u05EA\u05DB\u05E0\u05D5\u05EA\\\u05EA\u05DB\u05E0\u05D5\u05EA \u05E9\u05E0\u05D4 \u05D1\\\u05DE\u05E9\u05E8\u05D3 \u05D4\u05D7\u05D9\u05E0\u05D5\u05DA\\\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D2\u05DE\u05E8\\PasswordManagement\\BL\\encryption\\GenerateKeyEncryption.cs",
+              "RelativeToolTip": "BL\\encryption\\GenerateKeyEncryption.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAApwEYAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-09T15:59:13.438Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
